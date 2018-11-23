@@ -1,14 +1,7 @@
-// This #include statement was automatically added by the Particle IDE.
 #include <XPT2046_Touch.h>
-
-// This #include statement was automatically added by the Particle IDE.
 #include <Adafruit_mfGFX.h>
-
-
-// This #include statement was automatically added by the Particle IDE.
 #include "DFRobot_SHT20.h"
 DFRobot_SHT20 sht20;
-
 
 /***************************************************
   This is our GFX example for the Adafruit ILI9341 Breakout and Shield
@@ -237,7 +230,7 @@ Timer draw_temp_home(5000,checkStats);
 #define CS_PIN D5
 #define TIRQ_PIN D1
 
-XPT2046_Touchscreen ts(SPI1,CS_PIN, TIRQ_PIN);
+XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
 void showTouchCoordinates() {
     
@@ -264,9 +257,8 @@ void showTouchCoordinates() {
 }
 
     Button startGrowBtn(20,180,250,38, "Start a Grow",18,8);
-    Button lightTimeUpBtn(20,80,250,38, "UP",18,8);
 
-    Button buttons[2] {startGrowBtn,lightTimeUpBtn};
+    Button buttons[] {startGrowBtn};
 
 // END TOUCH
 
@@ -343,38 +335,18 @@ void setup() {
 void loop(void) {
     
     if(ts.touched()) {
-
-    tft.setTextColor(ILI9341_WHITE);
-    tft.setTextSize(2);
       
-    TS_Point p = ts.getPoint();
+      TS_Point p = ts.getPosition();
 
-    tft.fillRect(120,7,120,100,ILI9341_BLACK);
-    
-    tft.setCursor(120, 7);
-    tft.print("z: ");
-    tft.print(p.z);
-    
-    
-    tft.setCursor(120, 30);
-    tft.print("x: ");
-    tft.print(p.x);
-    
-    tft.setCursor(120, 50);
-    tft.print("y: ");
-    tft.print(p.y); 
-    
-    delay(30);
-      
-      /////////////////// 
+      //WAS A BUTTON TOUCHED?
       int c {0};
       for(c = 0; c < (sizeof(buttons) / sizeof(buttons[0])); ++c) {
-        if(buttons[c].isPushed(p.x,p.y)) {
+        if(buttons[c].isPressed(p.x,p.y)) {
           Serial.println("pushed");
         };  
       }
       
-    
+      delay(10); 
     
     }
 
