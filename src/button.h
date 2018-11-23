@@ -50,14 +50,14 @@ class Button {
   
   bool isPushed(int x,int y) {
     
-    if() {
+   // if() {
       
-    }
+   // }
     
     Serial.println(x);
     return true;
     
-  }
+  };
 
   
 };

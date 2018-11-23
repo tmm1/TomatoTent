@@ -53,26 +53,6 @@ void update_clock()
 };
 
 
-//BUTTON FUNCTIONS
-/*
-void create_button(uint16_t x0, uint16_t y0, uint16_t w, uint16_t h, String buttonText, uint16_t textOffsetLeft, uint16_t textOffsetTop) {
-    
-    
-    tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
-    
-    tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_OLIVE);
-    
-    tft.setCursor(x0 + textOffsetLeft,y0 + textOffsetTop);
-    tft.setTextColor(ILI9341_WHITE);
-    tft.setTextSize(3);
-
-    tft.print(buttonText);    
-  
-};
-*/
-// END BUTTON FUNCTIONS
-
-
 //START DISPLAY RELATED FUNCTIONS
 
 void check_temperature(){
@@ -252,15 +232,12 @@ Timer draw_temp_home(5000,checkStats);
 
 
 
-
 //TOUCH
 
 #define CS_PIN D5
-// MOSI=A5, MISO=A4, SCK=A3
 #define TIRQ_PIN D1
 
-//XPT2046_Touchscreen ts(SPI1, CS_PIN);  // Param 2 - NULL - No interrupts
-XPT2046_Touchscreen ts(SPI1,CS_PIN, TIRQ_PIN);  // Param 2 - Touch IRQ Pin - interrupt enabled polling
+XPT2046_Touchscreen ts(SPI1,CS_PIN, TIRQ_PIN);
 
 void showTouchCoordinates() {
     
