@@ -1,6 +1,7 @@
 #include <XPT2046_Touch.h>
 #include <Adafruit_mfGFX.h>
 #include "DFRobot_SHT20.h"
+
 DFRobot_SHT20 sht20;
 
 /***************************************************
@@ -22,6 +23,9 @@ DFRobot_SHT20 sht20;
 #define TFT_DC A1
 #define TFT_CS A2
 #define TFT_BRIGHTNESS_PIN WKP
+#include "tent.h"
+//Tent ttent;
+DisplayLight displayLight;
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
 #include "button.h"
@@ -232,30 +236,6 @@ Timer draw_temp_home(5000,checkStats);
 
 XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
-void showTouchCoordinates() {
-    
-    tft.setTextColor(ILI9341_WHITE);
-    tft.setTextSize(2);
-      
-    TS_Point p = ts.getPoint();
-
-    tft.fillRect(120,7,120,100,ILI9341_BLACK);
-    
-    tft.setCursor(120, 7);
-    tft.print("z: ");
-    tft.print(p.z);
-    
-    
-    tft.setCursor(120, 30);
-    tft.print("x: ");
-    tft.print(p.x);
-    
-    tft.setCursor(120, 50);
-    tft.print("y: ");
-    tft.print(p.y); 
-
-}
-
     Button startGrowBtn(20,180,250,38, "Start a Grow",18,8);
 
     Button buttons[] {startGrowBtn};
@@ -281,7 +261,8 @@ void setup() {
     tft.setRotation(3);
     //DISPLAY BRIGHNESS
     pinMode(TFT_BRIGHTNESS_PIN, OUTPUT);
-    analogWrite(TFT_BRIGHTNESS_PIN, 255);  //0 (dark) to 255 (max brightness)
+   // ttent.displayLightHigh();
+  
     //END TFT DISPLAY
     
     //TOUCH
@@ -297,9 +278,7 @@ void setup() {
     pinMode(FAN_SPEED_PIN, OUTPUT);
     analogWrite(FAN_SPEED_PIN,255);
     //END PINSS
-    
-    
-    
+
     draw_temp_home.start();
     
     // Init SHT20 Sensor
@@ -320,12 +299,14 @@ void setup() {
     //END REMOTE FUNCTIONS  
     
     //INTERRUPTS
-    //attachInterrupt(TIRQ_PIN, showTouchCoordinates, FALLING);
-    // END INTERRUPTS
+
+  // END INTERRUPTS
+  
+    displayLight.high();
 
     startGrowBtn.render();
 
-      Serial.begin();
+    Serial.begin();
 
     
 }
@@ -335,6 +316,8 @@ void setup() {
 void loop(void) {
     
     if(ts.touched()) {
+      
+      displayLight.high();
       
       TS_Point p = ts.getPosition();
 
