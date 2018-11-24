@@ -1,3 +1,22 @@
+#define CS_PIN D5
+#define TIRQ_PIN D1
+#define GROW_LIGHT_BRIGHTNESS_PIN TX
+#define GROW_LIGHT_ON_OFF_PIN D7
+#define FAN_SPEED_PIN RX
+#define FAN_SPEED_MAX 175
+#define FAN_SPEED_MIN 230
+#define TFT_DC A1
+#define TFT_CS A2
+#define TFT_BRIGHTNESS_PIN WKP
+
+double temp;
+double hum;
+double waterLevel;
+double fanSpeed = 0;
+
+double step;
+double difference_min_max;
+
 #include <XPT2046_Touch.h>
 #include <Adafruit_mfGFX.h>
 #include "DFRobot_SHT20.h"
@@ -20,29 +39,15 @@ DFRobot_SHT20 sht20;
  ****************************************************/
 
 #include "Adafruit_ILI9341.h"
-#define TFT_DC A1
-#define TFT_CS A2
-#define TFT_BRIGHTNESS_PIN WKP
-#include "tent.h"
-//Tent ttent;
-DisplayLight displayLight;
+
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
+
 #include "button.h"
+#include "tent.h"
+DisplayLight displayLight;
 
-#define GROW_LIGHT_BRIGHTNESS_PIN TX
-#define GROW_LIGHT_ON_OFF_PIN D7
-#define FAN_SPEED_PIN RX
-#define FAN_SPEED_MAX 175
-#define FAN_SPEED_MIN 230
 
-double temp;
-double hum;
-double waterLevel;
-double fanSpeed = 0;
-
-double step;
-double difference_min_max;
 
 void update_clock()
 {
@@ -231,9 +236,6 @@ Timer draw_temp_home(5000,checkStats);
 
 //TOUCH
 
-#define CS_PIN D5
-#define TIRQ_PIN D1
-
 XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
     Button startGrowBtn(20,180,250,38, "Start a Grow",18,8);
@@ -299,6 +301,7 @@ void setup() {
     //END REMOTE FUNCTIONS  
     
     //INTERRUPTS
+  
 
   // END INTERRUPTS
   
