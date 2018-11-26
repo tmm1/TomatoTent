@@ -14,8 +14,6 @@ double hum;
 double waterLevel;
 double fanSpeed = 0;
 
-double step;
-double difference_min_max;
 
 #include <XPT2046_Touch.h>
 #include <Adafruit_mfGFX.h>
@@ -45,127 +43,19 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
 
 #include "button.h"
 #include "tent.h"
+#include "screen.h"
+
 DisplayLight displayLight;
+Tent tent;
+Screen screen;
+SystemStatus systemStatus;
 
 
-
-void update_clock()
-{
-    drawTime();
-};
+Timer draw_temp_home(5000,&Tent::checkStats,tent);
 
 
 //START DISPLAY RELATED FUNCTIONS
 
-void check_temperature(){
-    double currentTemp = sht20.readTemperature();
-    
-    if ((temp == 0) || (temp != currentTemp)){
-        temp = currentTemp;
-        draw_temperature_home();
-    }
-}
-
-void draw_temperature_home() {
-    
-    //reset screen
-    tft.fillRect(50,60,141,25,ILI9341_BLACK);
-    
-    //Temperature
-    tft.setCursor(50, 60);
-    tft.setTextColor(ILI9341_GREEN);
-    tft.setTextSize(3);
-
-    tft.print(temp);    
-    tft.print(" C");
-}
-
-void check_humidity(){
-    
-    double currentHumidity = sht20.readHumidity();
-    
-    if ((hum == 0) || (hum != currentHumidity)){
-        hum = currentHumidity;
-        draw_humidity_home();
-    }
-}
-
-void draw_humidity_home() {
-    
-
-    /////// Humidity
-    tft.fillRect(50,110,141,25,ILI9341_BLACK);
-    
-    tft.setCursor(50, 110);
-    tft.setTextColor(ILI9341_BLUE);
-    tft.setTextSize(3);
-
-    tft.print(hum);    
-    tft.print(" %");
-}
-
-void check_waterlevel(){
-    
-    double currentWaterLevel = sht20.readHumidity();
-
-    if ((waterLevel == 0) || (waterLevel != currentWaterLevel)){
-        waterLevel = currentWaterLevel;
-        draw_waterlevel_home();
-    }
-}
-
-void draw_waterlevel_home() {
-
-    const float waterLevelBoxHeight = 150;
-    const int waterLevelBoxTop = 60;
-
-    int waterLevelHeight = floor((waterLevelBoxHeight / 100)*waterLevel);
-    
-    int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight)+waterLevelBoxTop-1;
-    
-    //outside box
-    tft.drawRect(280, waterLevelBoxTop, 25, waterLevelBoxHeight, ILI9341_CYAN);
-    
-    //reset the box
-    tft.fillRect(281, waterLevelBoxTop+1, 23, waterLevelBoxHeight-2, ILI9341_BLACK);
-     
-    //draw current water level 
-    tft.fillRect(281, waterLevelTop, 23, waterLevelHeight, ILI9341_BLUE);
-    
-}
-
-
-void check_fan() {
-    
-    fanSpeed = FAN_SPEED_MIN;
-    difference_min_max = FAN_SPEED_MIN - FAN_SPEED_MAX;
-    step = ceil(difference_min_max/6);
-    
-    if(temp > 20 || hum > 40) {
-        fanSpeed -= step;
-    }
-    if(temp > 22 || hum > 50) {
-        fanSpeed -= step;
-    }
-    if(temp > 24 || hum > 60) {
-        fanSpeed -= step;
-    }
-    if(temp > 26 || hum > 70) {
-        fanSpeed -= step;
-    }
-    if(temp > 28 || hum > 80) {
-        fanSpeed -= step;
-    }
-    if(temp > 30 || hum > 90) {
-        fanSpeed -= step;
-    }
-    //for sensor fail
-    if(temp > 200 || hum > 200) {
-        fanSpeed = FAN_SPEED_MIN;
-    }
-    
-    analogWrite(FAN_SPEED_PIN,fanSpeed);
-}
 
 
 // DRAWS CURRENT TIME
@@ -173,76 +63,26 @@ void check_fan() {
 void drawTime() {
     
     String currentTime = Time.format(Time.now(), "%l:%M %P %S");
-    
         
-        tft.fillRect(190,7,140,18,ILI9341_BLACK);
+    tft.fillRect(190,7,140,18,ILI9341_BLACK);
     
-        tft.setCursor(190, 7);
-        tft.setTextColor(ILI9341_WHITE);
-        tft.setTextSize(2);
+    tft.setCursor(190, 7);
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(2);
 
-        tft.print(currentTime);
+    tft.print(currentTime);
 
 }
 
-//END DRAW CURRENT TIME
-
-//CLOUD FUNCTIONS
-
-bool success = Particle.function("growLight", growLight);
-
-int growLight(String brightness) {
-    
-    //SET TO HIGH BRIGHTNESS
-    if(brightness == "HIGH") {
-        analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 255);
-        digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
-        
-        //analogWrite(FAN_SPEED_PIN,FAN_SPEED_MAX);
-    } 
-    //SET to low Brightness
-    if(brightness == "LOW") {
-        analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 20);
-        digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
-        //analogWrite(FAN_SPEED_PIN,FAN_SPEED_MIN);
-    }
-    //SWITCH OFF
-    if(brightness == "OFF") {
-        digitalWrite(GROW_LIGHT_ON_OFF_PIN, LOW);
-       // analogWrite(FAN_SPEED_PIN,255);
-    }
-  
-    return 1;    
-}
-
-
-//END CLOUD FUNCTIONS
-
-void checkStats(){
-    check_temperature();
-    check_humidity();
-    check_waterlevel();
-    check_fan();
-}
-
-
-// START CREATING TIMERS
-
-Timer draw_temp_home(5000,checkStats);
-
-// END CREATING TIMERS
 
 
 
-//TOUCH
 
-XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
+    XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
-    Button startGrowBtn(20,180,250,38, "Start a Grow",18,8);
 
-    Button buttons[] {startGrowBtn};
 
-// END TOUCH
+
 
 
 void setup() {
@@ -258,26 +98,22 @@ void setup() {
     //END SET WIFI
     
     Time.zone(+8);
-    //TFT Display
+
     tft.begin();
     tft.setRotation(3);
     //DISPLAY BRIGHNESS
     pinMode(TFT_BRIGHTNESS_PIN, OUTPUT);
-   // ttent.displayLightHigh();
-  
-    //END TFT DISPLAY
-    
-    //TOUCH
-     ts.begin();
-    ts.setRotation(3);
-    
-    //PINS
     pinMode(GROW_LIGHT_BRIGHTNESS_PIN, OUTPUT);
     pinMode(GROW_LIGHT_ON_OFF_PIN, OUTPUT);
-    growLight("OFF");
+    pinMode(FAN_SPEED_PIN, OUTPUT);
+
+    
+    //TOUCH
+    ts.begin();
+    ts.setRotation(3);
     
     //fan
-    pinMode(FAN_SPEED_PIN, OUTPUT);
+    
     analogWrite(FAN_SPEED_PIN,255);
     //END PINSS
 
@@ -288,30 +124,33 @@ void setup() {
     delay(255); 
     sht20.checkSHT20();
     
-    tft.fillScreen(ILI9341_BLACK);
+   
     
     //REMOTE FUNCTIONS
     Particle.variable("temperatureC", temp);
     Particle.variable("humidity", hum);
     Particle.variable("fanSpeed", fanSpeed);
     
-    Particle.variable("step", step);
-    Particle.variable("differenc", difference_min_max);
-    
     //END REMOTE FUNCTIONS  
     
-    //INTERRUPTS
-  
-
-  // END INTERRUPTS
+    screen.homeScreen();
   
     displayLight.high();
 
-    startGrowBtn.render();
-
     Serial.begin();
+  
+  
+    EEPROM.get(0, systemStatus);
+  
+    if(systemStatus.dayCounter > -1) {   //is a grow in progress?
+     
+      if(systemStatus.isDay) {  //was the light on when we left?
+        tent.growLight("HIGH");  
+      }
+    }
+  
+  
 
-    
 }
 
 
@@ -328,7 +167,24 @@ void loop(void) {
       int c {0};
       for(c = 0; c < (sizeof(buttons) / sizeof(buttons[0])); ++c) {
         if(buttons[c].isPressed(p.x,p.y)) {
-          Serial.println("pushed");
+          String buttonName = buttons[c].getName();
+          
+          //all the buttons
+          if(buttonName == "startGrowBtn" && buttons[c].pressed == false) {
+            buttons[c].pressed = true;
+
+            tent.growLight("LOW");
+ 
+            systemStatus.dayCounter = 0;
+            systemStatus.isDay = true;
+            systemStatus.minutesLeftPhotoperiod = (18*60);
+            
+            EEPROM.put(0, systemStatus);
+
+            
+          }
+          
+          
         };  
       }
       

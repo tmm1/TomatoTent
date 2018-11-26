@@ -1,5 +1,8 @@
 class Button {
   
+  private:
+  
+  String name;
   uint16_t x0;
   uint16_t y0;
   uint16_t w;
@@ -7,12 +10,12 @@ class Button {
   String buttonText;
   uint16_t textOffsetLeft;
   uint16_t textOffsetTop;
-  bool pressed;
   
   public:
-  
-  Button(uint16_t x0, uint16_t y0, uint16_t w, uint16_t h, String buttonText, uint16_t textOffsetLeft, uint16_t textOffsetTop)
-  :x0{x0},y0{y0},w{w},h{h},buttonText{buttonText},textOffsetLeft{textOffsetLeft},textOffsetTop{textOffsetTop} {
+  bool pressed;
+  Button() { }
+  Button(String name, uint16_t x0, uint16_t y0, uint16_t w, uint16_t h, String buttonText, uint16_t textOffsetLeft, uint16_t textOffsetTop)
+  :name{name},x0{x0},y0{y0},w{w},h{h},buttonText{buttonText},textOffsetLeft{textOffsetLeft},textOffsetTop{textOffsetTop} {
    this->pressed = false;
   };
   
@@ -32,7 +35,9 @@ class Button {
   void renderPressed() {
     tft.drawRect(x0,y0,w,h,ILI9341_RED);
   }
-
+  String getName() {
+    return name;
+  };
   uint16_t getx0() {
     return x0;
   };
@@ -55,29 +60,22 @@ class Button {
     return textOffsetTop;
   };
   
-
-  
   bool isPressed(int x,int y) {
     
    if( (x > this->getx0() && x < (this->getx0()+this->getW()) ) && (y > this->gety0() && (y < (this->gety0()+this->getH()) ) )  ) {
      
-     this->pressed = true;
      this->renderPressed();
-     
-    Serial.println(x);
-    return true;
+     return true;
      
    } else {
      if(this->pressed) {
-       this->render();
        this->pressed = false;
      }
     return false;
    }
-    
-
-    
+     
   };
+
 
   
 };
