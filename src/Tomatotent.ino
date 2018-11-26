@@ -45,45 +45,60 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
 #include "tent.h"
 #include "screen.h"
 
+  struct SystemStatus {
+     int dayCounter;
+     bool isDay;
+     int minutesInPhotoperiod;
+     int dayDuration;
+  };
+
+SystemStatus systemStatus = { -1, false, 0, 5 };
 DisplayLight displayLight;
 Tent tent;
 Screen screen;
-SystemStatus systemStatus;
+
 
 
 Timer draw_temp_home(5000,&Tent::checkStats,tent);
 
-
-//START DISPLAY RELATED FUNCTIONS
-
-
-
-// DRAWS CURRENT TIME
-
-void drawTime() {
-    
-    String currentTime = Time.format(Time.now(), "%l:%M %P %S");
+void countMinute() {
+  
+  systemStatus.minutesInPhotoperiod = systemStatus.minutesInPhotoperiod+1;
+  
+  Serial.println(systemStatus.minutesInPhotoperiod);
+  Serial.println(systemStatus.dayDuration);
+  
+  if(systemStatus.isDay) {
+    if(systemStatus.minutesInPhotoperiod >= systemStatus.dayDuration) {   //day is over
+      tent.growLight("OFF");
+      systemStatus.isDay = false;
+      systemStatus.minutesInPhotoperiod = 0;
+    };     
+  } else {
+    //if(systemStatus.minutesInPhotoperiod > ((24*60) - systemStatus.dayDuration)) {   //night is over
+    if(systemStatus.minutesInPhotoperiod >= 2) {   //night is over
+      tent.growLight("HIGH");
+      systemStatus.isDay = true;
+      systemStatus.minutesInPhotoperiod = 0;
+    }; 
+  }
+  
+    EEPROM.put(0, systemStatus);
+  
         
-    tft.fillRect(190,7,140,18,ILI9341_BLACK);
+    tft.fillRect(10,10,140,18,ILI9341_BLACK);
     
-    tft.setCursor(190, 7);
+    tft.setCursor(10, 10);
     tft.setTextColor(ILI9341_WHITE);
     tft.setTextSize(2);
 
-    tft.print(currentTime);
+    tft.print("- "+String((systemStatus.dayDuration - systemStatus.minutesInPhotoperiod)));  
 
-}
-
-
-
-
+};
+//starts the timer for the GrowLight Photoperiod
+Timer minuteCounter(60000,countMinute);   //once per minute
 
     XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
-
-
-
-
-
 
 void setup() {
     
@@ -134,22 +149,21 @@ void setup() {
     //END REMOTE FUNCTIONS  
     
     screen.homeScreen();
-  
     displayLight.high();
-
-    Serial.begin();
   
+    EEPROM.get(0, systemStatus); // get system status after re-start
   
-    EEPROM.get(0, systemStatus);
-  
-    if(systemStatus.dayCounter > -1) {   //is a grow in progress?
+    if(systemStatus.dayCounter > -1) {   //was a grow in progress before we restarted?
      
-      if(systemStatus.isDay) {  //was the light on when we left?
+      if(systemStatus.isDay) {  //was the light on when we restarted?
         tent.growLight("HIGH");  
       }
+      countMinute();  //after restart
+      minuteCounter.start();
+      
     }
-  
-  
+    
+    Serial.begin();
 
 }
 
@@ -159,11 +173,11 @@ void loop(void) {
     
     if(ts.touched()) {
       
-      displayLight.high();
+      displayLight.high(); // Switch on Displaylight on touch
       
       TS_Point p = ts.getPosition();
 
-      //WAS A BUTTON TOUCHED?
+      //WAS A BUTTON TOUCHED - And which one?
       int c {0};
       for(c = 0; c < (sizeof(buttons) / sizeof(buttons[0])); ++c) {
         if(buttons[c].isPressed(p.x,p.y)) {
@@ -176,11 +190,12 @@ void loop(void) {
             tent.growLight("LOW");
  
             systemStatus.dayCounter = 0;
-            systemStatus.isDay = true;
-            systemStatus.minutesLeftPhotoperiod = (18*60);
             
+            EEPROM.clear();
             EEPROM.put(0, systemStatus);
-
+            
+            countMinute(); // First time on new grow
+            minuteCounter.start();
             
           }
           
@@ -192,6 +207,4 @@ void loop(void) {
     
     }
 
-}
-
-
+};

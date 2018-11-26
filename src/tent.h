@@ -1,25 +1,19 @@
 #include "application.h"
 using namespace std;
 
-  struct SystemStatus {
-     int dayCounter{-1};
-     bool isDay;
-     int minutesLeftPhotoperiod;
-  };
-
 
 class Tent {
   
   private:
   double step;
   double difference_min_max;
-
   public:
+  
+
   
   Tent() {
     Particle.function("growLight", &Tent::growLight, this);
   }
-  
 
     void check_temperature(){
         double currentTemp = sht20.readTemperature();
@@ -217,6 +211,20 @@ class DisplayLight
         { 
             tp = new Timer (50000, &DisplayLight::low, *this, 1);
             tp1 = new Timer (60000, &DisplayLight::off, *this, 1);
-        }        
-        
+        };
+        /*
+        void drawTime() {
+    
+            String currentTime = Time.format(Time.now(), "%l:%M %P %S");
+
+            tft.fillRect(190,7,140,18,ILI9341_BLACK);
+
+            tft.setCursor(190, 7);
+            tft.setTextColor(ILI9341_WHITE);
+            tft.setTextSize(2);
+
+            tft.print(currentTime);
+
+        };
+        */
 };
