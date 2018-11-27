@@ -15,7 +15,7 @@ class Screen {
     buttons[0] = startGrowBtn;
     startGrowBtn.render();
  
-  }
+  };
   
   
   
