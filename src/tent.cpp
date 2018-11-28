@@ -1,5 +1,5 @@
-#include "tent.h"
 #include <Particle.h>
+#include "tent.h"
 
   Tent::Tent() {
     Particle.function("growLight", &Tent::growLight, this);
