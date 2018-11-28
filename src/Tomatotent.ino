@@ -44,6 +44,8 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
 SystemStatus systemStatus;
 
 #include "button.h"
+Button buttons[1];
+
 #include "tent.h"
 #include "screen.h"
 

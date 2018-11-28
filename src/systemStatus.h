@@ -1,7 +1,7 @@
 #ifndef SYSTEMSTATUS_H
 #define SYSTEMSTATUS_H
 
-#include "application.h"
+#include <Particle.h>
 
 class SystemStatus {
 /*  

@@ -1,7 +1,7 @@
 #ifndef TENT_H
 #define TENT_H
 
-#include "application.h"
+#include <Particle.h>
 
 class Tent {
   
@@ -9,6 +9,10 @@ class Tent {
   double difference_min_max;
   
   public:
+         unsigned long lastTime;
+        int brightness;
+        Timer *tp;
+        Timer *tp1;
   
   Tent();
 
@@ -24,9 +28,9 @@ class Tent {
     
     void displayLightLow(void);
     void displayLightOff(void);
-    bool displayLightHigh ();
+    bool displayLightHigh();
   
-    void drawTime();
+   // void drawTime();
    
 };
 #endif

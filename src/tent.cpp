@@ -1,10 +1,5 @@
-include "tent.h"
-using namespace std;
-
-        unsigned long lastTime = 0;
-        int brightness;
-        Timer *tp;
-        Timer *tp1;
+#include "tent.h"
+#include <Particle.h>
 
   Tent::Tent() {
     Particle.function("growLight", &Tent::growLight, this);
@@ -193,7 +188,7 @@ using namespace std;
         }
         
 
-        
+       /* 
         void Tent::drawTime() {
     
             String currentTime = Time.format(Time.now(), "%l:%M %P %S");
@@ -206,7 +201,7 @@ using namespace std;
 
             tft.print(currentTime);
 
-        }
+        } */
         
 };
 
