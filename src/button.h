@@ -1,5 +1,5 @@
-#ifndef SCREEN_H
-#define SCREEN_H
+#ifndef BUTTON_H
+#define BUTTON_H
 
 #include <Particle.h>
 

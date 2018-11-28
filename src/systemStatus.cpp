@@ -27,15 +27,13 @@ int SystemStatus::getMinutesInPhotoperiod() {
   return 1;
 }
 int SystemStatus::getDayDuration() {
-  return 100;
+  return 1;
 }
-
+/*
 void SystemStatus::setIsDay(bool isDay) {
    
 }
 void SystemStatus::setMinutesInPhotoperiod(int minutesInPhotoperiod) {
   
 }
-void SystemStatus::save() {
-  
-}
+*/

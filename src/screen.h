@@ -7,7 +7,7 @@ class Screen {
 
   public:
   Screen();
-  //void homeScreen();
- // void countMinute(); 
+  void homeScreen();
+  void countMinute(); 
 };
 #endif

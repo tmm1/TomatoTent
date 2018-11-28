@@ -47,9 +47,9 @@ SystemStatus systemStatus;
 Button buttons[1];
 
 #include "tent.h"
-#include "screen.h"
-
 Tent tent;
+
+#include "screen.h"
 Screen screen;
 
 Timer draw_temp_home(5000,&Tent::checkStats,tent);
@@ -136,6 +136,7 @@ void loop(void) {
 
       //WAS A BUTTON TOUCHED - And which one?
       uint8_t c {0};
+      /*
       for(c = 0; c < (sizeof(buttons) / sizeof(buttons[0])); ++c) {
         if(buttons[c].isPressed(p.x,p.y)) {
           String buttonName = buttons[c].getName();
@@ -160,7 +161,7 @@ void loop(void) {
           
         };  
       }
-      
+      */
       delay(10); 
     
     }
