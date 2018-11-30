@@ -4,9 +4,7 @@ SystemStatus::SystemStatus() {
     
     //int dayCounter =-1, bool isDay = false, int minutesInPhotoperiod = 0, int dayDuration = (18*60)
   
- // SystemStatusStruct _systemStatus = { dayCounter, isDay, minutesInPhotoperiod, dayDuration };
-
-
+   //status.dayCounter = -1;// = { -1, false, 0, (18*60) };
     
     
    //EEPROM.get(0, systemStatus); // get system status after re-start
@@ -16,7 +14,8 @@ SystemStatus::SystemStatus() {
 }
   
 int SystemStatus::getDayCounter() {
-  //return this->dayCounter;
+ // Serial.println(status.dayCounter);
+  //return status.dayCounter;
   return 1;
 }
 bool SystemStatus::isDay() {

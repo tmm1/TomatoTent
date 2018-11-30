@@ -46,7 +46,7 @@ class Tent {
     
     void displayLightLow(void);
     void displayLightOff(void);
-    bool displayLightHigh();
+    bool displayLightHigh(void);
   
    // void drawTime();
    

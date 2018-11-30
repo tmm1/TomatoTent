@@ -1,4 +1,3 @@
-#include <Particle.h>
 #include "tent.h"
 
   Tent::Tent() {
@@ -169,7 +168,7 @@
             lastTime = now;
             
             while(displayBrightness < 255) {
-              brightness += 5;
+              displayBrightness += 5;
               analogWrite(TFT_BRIGHTNESS_PIN, displayBrightness);
               delay(5);
             }            

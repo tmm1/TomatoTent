@@ -92,8 +92,6 @@ void setup() {
     delay(255); 
     sht20.checkSHT20();
     
-   Serial.println("boing");
-    
     //REMOTE FUNCTIONS
     //Particle.variable("temperatureC", temp);
     //Particle.variable("humidity", hum);
@@ -103,6 +101,8 @@ void setup() {
     
     screen.homeScreen(buttons);
     tent.displayLightHigh();
+  
+  Serial.println("boing");
     
     if(systemStatus.getDayCounter() > -1) {   //was a grow in progress before we restarted?
     
@@ -139,8 +139,10 @@ void loop(void) {
             buttons[c].pressed = true;
 
             tent.growLight("LOW");
+            
+            //xSerial.println();
  
-           // systemStatus.dayCounter() = 0;
+            //systemStatus.dayCounter() = 0;
             
             //EEPROM.clear();
            // systemStatus = { -1, false, 0, (18*60) };
