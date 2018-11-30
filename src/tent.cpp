@@ -147,36 +147,34 @@
     }
 
 
-};
-
 
         void Tent::displayLightLow(void) {
           
-          while(brightness > 30) {
-            brightness -= 5;
-            analogWrite(TFT_BRIGHTNESS_PIN, brightness);
+          while(displayBrightness > 30) {
+            displayBrightness -= 5;
+            analogWrite(TFT_BRIGHTNESS_PIN, displayBrightness);
             delay(10);
           }
                     
         }
-        void off(void) {
+        void Tent::displayLightOff(void) {
           analogWrite(TFT_BRIGHTNESS_PIN, 0);
         } 
 
 
-        bool Tent::displayLightHigh ()
+        bool Tent::displayLightHigh()
         {
         	unsigned long now = millis();
           if ((now - lastTime) >= 15000 || lastTime == 0) {
             lastTime = now;
             
-            while(brightness < 255) {
+            while(displayBrightness < 255) {
               brightness += 5;
-              analogWrite(TFT_BRIGHTNESS_PIN, brightness);
+              analogWrite(TFT_BRIGHTNESS_PIN, displayBrightness);
               delay(5);
             }            
 
-            analogWrite(TFT_BRIGHTNESS_PIN, brightness);
+            analogWrite(TFT_BRIGHTNESS_PIN, displayBrightness);
             tp->reset ();
             tp1->reset ();
             return true;
@@ -202,7 +200,3 @@
             tft.print(currentTime);
 
         } */
-        
-};
-
-#endif

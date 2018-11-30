@@ -1,7 +1,7 @@
 #ifndef SYSTEMSTATUS_H
 #define SYSTEMSTATUS_H
 
-#include <Particle.h>
+#include "Particle.h"
 
 class SystemStatus {
 /*  
@@ -14,14 +14,12 @@ class SystemStatus {
 */
   
   public:
-  SystemStatus();
-  int getDayCounter();
-  bool isDay();
-  int getMinutesInPhotoperiod();
-  int getDayDuration();
-  /*
+  SystemStatus(void);
+  int getDayCounter(void);
+  bool isDay(void);
+  int getMinutesInPhotoperiod(void);
+  int getDayDuration(void);
   void setIsDay(bool);
   void setMinutesInPhotoperiod(int);
-*/
 };
 #endif

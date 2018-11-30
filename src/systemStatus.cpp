@@ -1,5 +1,4 @@
-#include <Particle.h>
-#include "systemStatus.h" 
+#include <systemStatus.h>
 
 SystemStatus::SystemStatus() {
     
@@ -29,11 +28,9 @@ int SystemStatus::getMinutesInPhotoperiod() {
 int SystemStatus::getDayDuration() {
   return 1;
 }
-/*
 void SystemStatus::setIsDay(bool isDay) {
    
 }
 void SystemStatus::setMinutesInPhotoperiod(int minutesInPhotoperiod) {
   
 }
-*/

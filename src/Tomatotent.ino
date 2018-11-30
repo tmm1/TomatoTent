@@ -1,13 +1,7 @@
 #define CS_PIN D5
 #define TIRQ_PIN D1
-#define GROW_LIGHT_BRIGHTNESS_PIN TX
-#define GROW_LIGHT_ON_OFF_PIN D7
-#define FAN_SPEED_PIN RX
-#define FAN_SPEED_MAX 175
-#define FAN_SPEED_MIN 230
 #define TFT_DC A1
 #define TFT_CS A2
-#define TFT_BRIGHTNESS_PIN WKP
 
 double temp;
 double hum;
@@ -98,16 +92,16 @@ void setup() {
     delay(255); 
     sht20.checkSHT20();
     
-   
+   Serial.println("boing");
     
     //REMOTE FUNCTIONS
-    Particle.variable("temperatureC", temp);
-    Particle.variable("humidity", hum);
-    Particle.variable("fanSpeed", fanSpeed);
+    //Particle.variable("temperatureC", temp);
+    //Particle.variable("humidity", hum);
+    //Particle.variable("fanSpeed", fanSpeed);
     
     //END REMOTE FUNCTIONS  
     
-    screen.homeScreen();
+    screen.homeScreen(buttons);
     tent.displayLightHigh();
     
     if(systemStatus.getDayCounter() > -1) {   //was a grow in progress before we restarted?
@@ -121,7 +115,6 @@ void setup() {
     }
    
     Serial.begin();
-
 }
 
 
@@ -135,8 +128,8 @@ void loop(void) {
       TS_Point p = ts.getPosition();
 
       //WAS A BUTTON TOUCHED - And which one?
-      uint8_t c {0};
-      /*
+     uint8_t c {0};
+      
       for(c = 0; c < (sizeof(buttons) / sizeof(buttons[0])); ++c) {
         if(buttons[c].isPressed(p.x,p.y)) {
           String buttonName = buttons[c].getName();
@@ -161,7 +154,7 @@ void loop(void) {
           
         };  
       }
-      */
+  
       delay(10); 
     
     }
