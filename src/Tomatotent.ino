@@ -8,7 +8,6 @@ double hum;
 double waterLevel;
 double fanSpeed = 0;
 
-
 #include <XPT2046_Touch.h>
 #include <Adafruit_mfGFX.h>
 #include "DFRobot_SHT20.h"
@@ -35,16 +34,15 @@ double fanSpeed = 0;
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
 DFRobot_SHT20 sht20;
-SystemStatus systemStatus;
 Button buttons[1];
 Tent tent;
 Screen screen;
-
+SystemStatus systemStatus;
 
 Timer draw_temp_home(5000,&Tent::checkStats,tent);
 
-//starts the timer for the GrowLight Photoperiod
-Timer minuteCounter(60000,&Screen::countMinute, screen);   //once per minute
+//sets the timer for the GrowLight Photoperiod
+Timer minuteCounter(60000,&SystemStatus::countMinute, systemStatus);   //once per minute
 
 XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
@@ -101,10 +99,7 @@ void setup() {
   
     //check the EEPROM if a grow was in process after startup
     
-  
-  if(systemStatus.get()) {
-    
-  }
+  /*
   
   
     if(systemStatus.getDayCounter() > -1) {   //was a grow in progress before we restarted?
@@ -116,7 +111,7 @@ void setup() {
       minuteCounter.start();
        
     }
-   
+   */
     Serial.begin();
 }
 
@@ -140,9 +135,9 @@ void loop(void) {
                     
           //all the buttons
           if( (buttons[c].getName() == "startGrowBtn") && (buttons[c].getStatus() == "none")) {
+            buttons[c].setStatus("pressed");
             
             tent.growLight("LOW");
-            buttons[c].setStatus("pressed");
             Serial.println(buttons[c].getName());
  
             //systemStatus.dayCounter() = 0;
@@ -151,8 +146,8 @@ void loop(void) {
            // systemStatus = { -1, false, 0, (18*60) };
             //EEPROM.put(0, systemStatus);
             
-            //screen.countMinute(); // First time on new grow
-            //minuteCounter.start();
+            systemStatus.countMinute(); // First time on new grow
+            minuteCounter.start();
             
           }
           
