@@ -16,6 +16,7 @@ class Button {
   String buttonText;
   uint16_t textOffsetLeft;
   uint16_t textOffsetTop;
+  String currentStatus;
   
   public:
   bool pressed;
@@ -34,7 +35,9 @@ class Button {
    uint16_t getTextOffsetLeft();
    uint16_t getTextOffsetTop();
   
-  bool isPressed(int x,int y);
+    bool isPressed(int x,int y);
+    void setStatus(String status);
+    String getStatus();
     
 };
 #endif

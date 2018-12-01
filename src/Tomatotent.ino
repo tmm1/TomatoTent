@@ -12,8 +12,11 @@ double fanSpeed = 0;
 #include <XPT2046_Touch.h>
 #include <Adafruit_mfGFX.h>
 #include "DFRobot_SHT20.h"
-
-DFRobot_SHT20 sht20;
+#include "systemStatus.h"
+#include "button.h"
+#include "tent.h"
+#include "screen.h"
+#include "Adafruit_ILI9341.h"
 
 /***************************************************
   This is our GFX example for the Adafruit ILI9341 Breakout and Shield
@@ -30,21 +33,13 @@ DFRobot_SHT20 sht20;
   MIT license, all text above must be included in any redistribution
  ****************************************************/
 
-#include "Adafruit_ILI9341.h"
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
-
-
-#include "systemStatus.h"
+DFRobot_SHT20 sht20;
 SystemStatus systemStatus;
-
-#include "button.h"
 Button buttons[1];
-
-#include "tent.h"
 Tent tent;
-
-#include "screen.h"
 Screen screen;
+
 
 Timer draw_temp_home(5000,&Tent::checkStats,tent);
 
@@ -100,10 +95,18 @@ void setup() {
     //END REMOTE FUNCTIONS  
     
     screen.homeScreen(buttons);
-    tent.displayLightHigh();
   
-  Serial.println("boing");
+    tent.displayLightHigh();
     
+  
+    //check the EEPROM if a grow was in process after startup
+    
+  
+  if(systemStatus.get()) {
+    
+  }
+  
+  
     if(systemStatus.getDayCounter() > -1) {   //was a grow in progress before we restarted?
     
       if(systemStatus.isDay()) {  //was the light on when we restarted?
@@ -126,21 +129,21 @@ void loop(void) {
       tent.displayLightHigh(); // Switch on Displaylight on touch
       
       TS_Point p = ts.getPosition();
+      
 
       //WAS A BUTTON TOUCHED - And which one?
      uint8_t c {0};
       
       for(c = 0; c < (sizeof(buttons) / sizeof(buttons[0])); ++c) {
+        
         if(buttons[c].isPressed(p.x,p.y)) {
-          String buttonName = buttons[c].getName();
-          
+                    
           //all the buttons
-          if(buttonName == "startGrowBtn" && buttons[c].pressed == false) {
-            buttons[c].pressed = true;
-
-            tent.growLight("LOW");
+          if( (buttons[c].getName() == "startGrowBtn") && (buttons[c].getStatus() == "none")) {
             
-            //xSerial.println();
+            tent.growLight("LOW");
+            buttons[c].setStatus("pressed");
+            Serial.println(buttons[c].getName());
  
             //systemStatus.dayCounter() = 0;
             
@@ -148,8 +151,8 @@ void loop(void) {
            // systemStatus = { -1, false, 0, (18*60) };
             //EEPROM.put(0, systemStatus);
             
-            screen.countMinute(); // First time on new grow
-            minuteCounter.start();
+            //screen.countMinute(); // First time on new grow
+            //minuteCounter.start();
             
           }
           
