@@ -2,9 +2,13 @@
 #define SYSTEMSTATUS_H
 
 #include "Particle.h"
+#include "math.h"
 
 #include "Adafruit_ILI9341.h"
 extern Adafruit_ILI9341 tft;
+
+#include "tent.h"
+extern Tent tent;
 
 class SystemStatus {
  
@@ -15,14 +19,18 @@ class SystemStatus {
      int dayDuration; //how long is the light on?  Starts out at 18 hrs (18*60)
   };
   
+  Status status;
+  
   public:
   SystemStatus(void);
-  int getDayCounter(void);
+  int getDayCount(void);
   bool isDay(void);
   int getMinutesInPhotoperiod(void);
   int getDayDuration(void);
+  void setDayCount(int);
   void setIsDay(bool);
   void setMinutesInPhotoperiod(int);
   void countMinute();
+  void save();
 };
 #endif

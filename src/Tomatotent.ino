@@ -42,7 +42,7 @@ SystemStatus systemStatus;
 Timer draw_temp_home(5000,&Tent::checkStats,tent);
 
 //sets the timer for the GrowLight Photoperiod
-Timer minuteCounter(60000,&SystemStatus::countMinute, systemStatus);   //once per minute
+Timer minuteCounter(6000,&SystemStatus::countMinute, systemStatus);   //once per minute
 
 XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
@@ -97,21 +97,17 @@ void setup() {
     tent.displayLightHigh();
     
   
-    //check the EEPROM if a grow was in process after startup
-    
-  /*
-  
-  
-    if(systemStatus.getDayCounter() > -1) {   //was a grow in progress before we restarted?
+    //was there a grow in process before (re)booting? 
+    if(systemStatus.getDayCount() > -1) {
     
       if(systemStatus.isDay()) {  //was the light on when we restarted?
         tent.growLight("HIGH");  
       }
-      screen.countMinute();  //after restart
+      systemStatus.countMinute();  //after restart
       minuteCounter.start();
        
     }
-   */
+
     Serial.begin();
 }
 
@@ -140,12 +136,8 @@ void loop(void) {
             tent.growLight("LOW");
             Serial.println(buttons[c].getName());
  
-            //systemStatus.dayCounter() = 0;
-            
-            //EEPROM.clear();
-           // systemStatus = { -1, false, 0, (18*60) };
-            //EEPROM.put(0, systemStatus);
-            
+            systemStatus.setDayCount(1);
+                        
             systemStatus.countMinute(); // First time on new grow
             minuteCounter.start();
             

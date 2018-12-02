@@ -9,6 +9,9 @@ extern Adafruit_ILI9341 tft;
 #include <button.h>
 extern Button button;
 
+#include "systemStatus.h"
+extern SystemStatus systemStatus;
+
 class Screen {
 
   public:

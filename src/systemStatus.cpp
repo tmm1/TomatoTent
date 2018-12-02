@@ -2,56 +2,55 @@
 
 SystemStatus::SystemStatus() {
     
- Status status;
  EEPROM.get(0, status);
   
- Serial.println(status.dayCounter);   
 }
   
-int SystemStatus::getDayCounter() {
- // Serial.println(status.dayCounter);
-  //return status.dayCounter;
-  return 1;
+int SystemStatus::getDayCount() {
+  return this->status.dayCounter;
 }
 bool SystemStatus::isDay() {
-  return true;
+  return this->status.isDay;;
 }
 int SystemStatus::getMinutesInPhotoperiod() {
-  return 1;
+  return this->status.minutesInPhotoperiod;
 }
 int SystemStatus::getDayDuration() {
-  return 1;
+  return this->status.dayDuration;
+}
+void SystemStatus::setDayCount(int dayCount) {
+  this->status.dayCounter = dayCount;
 }
 void SystemStatus::setIsDay(bool isDay) {
-   
+  this->status.isDay = isDay;
+  this->save();
 }
 void SystemStatus::setMinutesInPhotoperiod(int minutesInPhotoperiod) {
-  
-}
-
-  
+  this->status.minutesInPhotoperiod = minutesInPhotoperiod;
+  this->save();
+}  
 void SystemStatus::countMinute() {
  
-  int minutesInPhotoperiod = this->getMinutesInPhotoperiod()+1;
+  this->setMinutesInPhotoperiod(this->getMinutesInPhotoperiod()+1);
+  
+  Serial.println(this->getMinutesInPhotoperiod());
   
   if(this->isDay()) {
     if(this->getMinutesInPhotoperiod() >= this->getDayDuration()) {   //day is over
-      //tent.growLight("OFF");
+      tent.growLight("OFF");
       this->setIsDay(false);
       this->setMinutesInPhotoperiod(0);
     };     
   } else {
     if(this->getMinutesInPhotoperiod() > ((24*60) - this->getDayDuration())) {   //night is over
-      //tent.growLight("HIGH");
+      this->setDayCount(this->getDayCount()+1);
+      tent.growLight("HIGH");
       this->setIsDay(true);
       this->setMinutesInPhotoperiod(0);
     }; 
   }
-
-    //EEPROM.put(0, systemStatus);
-  
        
-    int hoursLeft = (this->getDayDuration() - this->getMinutesInPhotoperiod()) / 60;
+    int hoursLeft = floor((this->getDayDuration() - this->getMinutesInPhotoperiod()) / 60);
     int minutesLeft = (this->getDayDuration() - this->getMinutesInPhotoperiod()) % 60;
   
     tft.fillRect(10,10,140,18,ILI9341_BLACK);
@@ -60,7 +59,12 @@ void SystemStatus::countMinute() {
     tft.setTextColor(ILI9341_YELLOW);
     tft.setTextSize(2);
 
-    tft.print("* "+String(hoursLeft)+":"+String(minutesLeft));  
+    tft.print("* "+String(hoursLeft)+":"+String(minutesLeft));
+  
+    this->save();
 
 }
 
+void SystemStatus::save() {
+  EEPROM.put(0, this->status);
+}
