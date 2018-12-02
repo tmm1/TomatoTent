@@ -17,5 +17,7 @@ class Screen {
   public:
   Screen();
   void homeScreen(Button *buttons);
+  void cancelScreen(Button *buttons);
+  void clear();
 };
 #endif

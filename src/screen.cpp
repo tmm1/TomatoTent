@@ -4,9 +4,9 @@
 Screen::Screen() {}
   
 void Screen::homeScreen(Button *buttons) {
-    
-    tft.fillScreen(ILI9341_BLACK);
   
+    this->clear();
+      
     if(systemStatus.getDayCount() == -1) {
       
       Button startGrowBtn("startGrowBtn", 20,180,250,38, "Start a Grow",18,8);
@@ -22,6 +22,19 @@ void Screen::homeScreen(Button *buttons) {
       tft.setTextSize(3);
 
       tft.print("Day "+String(systemStatus.getDayCount()));
+      
+      Button cancelBtn("cancelBtn", 20,180,250,38, "",18,8);
+      buttons[1] = cancelBtn;
+      cancelBtn.render();
 
   }
+}
+
+void Screen::cancelScreen(Button *buttons) {
+  this->clear();
+  
+}
+
+void Screen::clear() {
+  tft.fillScreen(ILI9341_BLACK);
 }

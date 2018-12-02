@@ -34,7 +34,7 @@ double fanSpeed = 0;
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
 DFRobot_SHT20 sht20;
-Button buttons[1];
+Button buttons[2];
 Tent tent;
 Screen screen;
 SystemStatus systemStatus;
@@ -134,7 +134,6 @@ void loop(void) {
             buttons[c].setStatus("pressed");
             
             tent.growLight("LOW");
-            Serial.println(buttons[c].getName());
  
             systemStatus.setDayCount(1);
                         
@@ -142,6 +141,15 @@ void loop(void) {
             minuteCounter.start();
             
           }
+          
+          if( (buttons[c].getName() == "cancelBtn") && (buttons[c].getStatus() == "none")) {
+            buttons[c].setStatus("pressed");
+            screen.cancelScreen(buttons);
+
+
+          }          
+          
+          
           
           
         };  
