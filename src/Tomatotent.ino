@@ -34,7 +34,8 @@ double fanSpeed = 0;
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
 DFRobot_SHT20 sht20;
-Button buttons[2];
+Button buttons[5];
+int Button::buttonCount = 0;
 Tent tent;
 Screen screen;
 SystemStatus systemStatus;
@@ -124,13 +125,13 @@ void loop(void) {
 
       //WAS A BUTTON TOUCHED - And which one?
      uint8_t c {0};
-      
+
       for(c = 0; c < (sizeof(buttons) / sizeof(buttons[0])); ++c) {
         
         if(buttons[c].isPressed(p.x,p.y)) {
                     
           //all the buttons
-          if( (buttons[c].getName() == "startGrowBtn") && (buttons[c].getStatus() == "none")) {
+          if( (buttons[c].getName() == "startGrowBtn") && (buttons[c].getStatus() == "none") ) {
             buttons[c].setStatus("pressed");
             
             tent.growLight("LOW");
@@ -140,18 +141,23 @@ void loop(void) {
             systemStatus.countMinute(); // First time on new grow
             minuteCounter.start();
             
+            break;
+            
           }
           
-          if( (buttons[c].getName() == "cancelBtn") && (buttons[c].getStatus() == "none")) {
+          if( (buttons[c].getName() == "dayCounterBtn") && (buttons[c].getStatus() == "none") ) {
             buttons[c].setStatus("pressed");
             screen.cancelScreen(buttons);
+            break;
+          }
+          
+          if( (buttons[c].getName() == "cancelScreenOkBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             screen.homeScreen(buttons);
+             break;
+          }
+          
 
-
-          }          
-          
-          
-          
-          
         };  
       }
   

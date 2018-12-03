@@ -7,8 +7,7 @@
    this->currentStatus = "none";
   };
   
-  void Button::render() {
-        
+  void Button::render() { 
       if(this->getName() == "startGrowBtn") {
         tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
 
@@ -21,7 +20,19 @@
         tft.print(buttonText);
       }
     
-      if(this->getName() == "cancelBtn") {}    
+      if(this->getName() == "dayCounterBtn") {}
+    
+      if(this->getName() == "cancelScreenOkBtn") {
+        tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
+
+        tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_OLIVE);
+
+        tft.setCursor(x0 + textOffsetLeft,y0 + textOffsetTop);
+        tft.setTextColor(ILI9341_WHITE);
+        tft.setTextSize(3);
+
+        tft.print(buttonText);      
+      }
   }
   
   void Button::renderPressed() {

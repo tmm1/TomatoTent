@@ -18,6 +18,6 @@ class Screen {
   Screen();
   void homeScreen(Button *buttons);
   void cancelScreen(Button *buttons);
-  void clear();
+  void clear(Button *buttons);
 };
 #endif
