@@ -20,6 +20,7 @@ int SystemStatus::getDayDuration() {
 }
 void SystemStatus::setDayCount(int dayCount) {
   this->status.dayCounter = dayCount;
+  this->save();
 }
 void SystemStatus::setIsDay(bool isDay) {
   this->status.isDay = isDay;
@@ -32,9 +33,7 @@ void SystemStatus::setMinutesInPhotoperiod(int minutesInPhotoperiod) {
 void SystemStatus::countMinute() {
  
   this->setMinutesInPhotoperiod(this->getMinutesInPhotoperiod()+1);
-  
-  Serial.println(this->getMinutesInPhotoperiod());
-  
+    
   int hoursLeft;
   int minutesLeft;
   
@@ -61,16 +60,27 @@ void SystemStatus::countMinute() {
       hoursLeft = floor((((24*60)-this->getDayDuration()) - this->getMinutesInPhotoperiod()) / 60);
       minutesLeft = (((24*60)-this->getDayDuration()) - this->getMinutesInPhotoperiod()) % 60;
   }
+  
+  this->save();
        
   
-    tft.fillRect(10,10,140,18,ILI9341_BLACK);
+  tft.fillRect(10,10,90,18,ILI9341_BLACK);
     
-    tft.setCursor(10, 10);
-    tft.setTextSize(2);
+  tft.setCursor(10, 10);
+  tft.setTextSize(2);
 
-    tft.print("* "+String(hoursLeft)+":"+String(minutesLeft));
+  tft.print("* "+String(hoursLeft)+":"+String(minutesLeft));
   
-    this->save();
+  tft.setCursor(16, 27);
+  tft.setTextSize(1);
+  if(this->isDay()) {
+    tft.print("until sunset");
+  } else {
+    tft.print("until sunrise");
+  }
+  
+  
+  
 
 }
 

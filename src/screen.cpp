@@ -3,9 +3,10 @@
 
 Screen::Screen() {}
   
-void Screen::homeScreen(Button *buttons) {
+void Screen::homeScreen(Button *buttons, String &currentScreen) {
   
     this->clear(buttons);
+    currentScreen = "homeScreen";
       
     if(systemStatus.getDayCount() == -1) {
       
@@ -17,7 +18,7 @@ void Screen::homeScreen(Button *buttons) {
       
       tft.drawRect(20,180,250,38,ILI9341_BLACK);
 
-      tft.setCursor(20,180);
+      tft.setCursor(70,180);
       tft.setTextColor(ILI9341_WHITE);
       tft.setTextSize(3);
 
@@ -26,13 +27,18 @@ void Screen::homeScreen(Button *buttons) {
       Button dayCounterBtn("dayCounterBtn", 20,180,250,38, "",18,8);
       buttons[1] = dayCounterBtn;
       dayCounterBtn.render();
-
+      
+      Button timerBtn("timerBtn", 20,180,250,38, "",18,8);
+      buttons[2] = timerBtn;
+      timerBtn.render();
+      
   }
 }
 
-void Screen::cancelScreen(Button *buttons) {
+void Screen::cancelScreen(Button *buttons, String &currentScreen) {
 
   this->clear(buttons);
+  currentScreen = "cancelScreen";
   
   tft.setCursor(20,70);
   tft.setTextColor(ILI9341_WHITE);
@@ -45,9 +51,58 @@ void Screen::cancelScreen(Button *buttons) {
   tft.setCursor(20,120);
   tft.print("after about 110 days.");
 
-  Button cancelScreenOkBtn("cancelScreenOkBtn", 20,180,250,38, "Ok",28,8);
+  Button cancelScreenOkBtn("cancelScreenOkBtn", 20,180,250,38, "Ok",110,8);
   buttons[0] = cancelScreenOkBtn;
   cancelScreenOkBtn.render();
+  
+  Button terminateBtn("terminateBtn", 120,10,185,28, "Terminate Grow",10,7);
+  buttons[1] = terminateBtn;
+  terminateBtn.render();  
+}
+
+
+void Screen::cancelConfirmationScreen(Button *buttons, String &currentScreen) {
+  
+  this->clear(buttons);
+  currentScreen = "cancelConfirmationScreen";
+  
+  tft.setCursor(10,50);
+  tft.setTextColor(ILI9341_RED);
+  tft.setTextSize(3);
+  tft.print("Really Terminate?");
+  
+  Button terminateYesBtn("terminateYesBtn", 70,120,180,28, "Yes",78,7);
+  buttons[0] = terminateYesBtn;
+  terminateYesBtn.render();
+  
+  Button terminateNoBtn("terminateNoBtn", 70,180,180,38, "No",75,8);
+  buttons[1] = terminateNoBtn;
+  terminateNoBtn.render();  
+}
+
+void Screen::timerScreen(Button *buttons, String &currentScreen) {
+  
+  this->clear(buttons);
+  currentScreen = "cancelConfirmationScreen";
+  
+  tft.setCursor(10,50);
+  tft.setTextColor(ILI9341_WHITE);
+  tft.setTextSize(2);
+  tft.print("Light Timer");
+  /*
+  Button terminateYesBtn("terminateYesBtn", 70,120,180,28, "Yes",78,7);
+  buttons[0] = terminateYesBtn;
+  terminateYesBtn.render();
+  
+  Button terminateYesBtn("terminateYesBtn", 70,120,180,28, "Yes",78,7);
+  buttons[0] = terminateYesBtn;
+  terminateYesBtn.render();
+  
+  Button terminateYesBtn("terminateYesBtn", 70,120,180,28, "Yes",78,7);
+  buttons[0] = terminateYesBtn;
+  terminateYesBtn.render();
+  */
+  
 }
 
 void Screen::clear(Button *buttons) {

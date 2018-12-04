@@ -7,6 +7,7 @@ double temp;
 double hum;
 double waterLevel;
 double fanSpeed = 0;
+String currentScreen = "homeScreen";
 
 #include <XPT2046_Touch.h>
 #include <Adafruit_mfGFX.h>
@@ -93,7 +94,7 @@ void setup() {
     
     //END REMOTE FUNCTIONS  
     
-    screen.homeScreen(buttons);
+    screen.homeScreen(buttons,currentScreen);
   
     tent.displayLightHigh();
     
@@ -122,6 +123,8 @@ void loop(void) {
       
       TS_Point p = ts.getPosition();
       
+      Serial.println(currentScreen);
+      
 
       //WAS A BUTTON TOUCHED - And which one?
      uint8_t c {0};
@@ -130,14 +133,14 @@ void loop(void) {
         
         if(buttons[c].isPressed(p.x,p.y)) {
                     
-          //all the buttons
           if( (buttons[c].getName() == "startGrowBtn") && (buttons[c].getStatus() == "none") ) {
             buttons[c].setStatus("pressed");
             
-            tent.growLight("LOW");
- 
+            tent.growLight("HIGH");
             systemStatus.setDayCount(1);
-                        
+            systemStatus.setMinutesInPhotoperiod(0);
+            screen.homeScreen(buttons, currentScreen);
+                    
             systemStatus.countMinute(); // First time on new grow
             minuteCounter.start();
             
@@ -147,17 +150,43 @@ void loop(void) {
           
           if( (buttons[c].getName() == "dayCounterBtn") && (buttons[c].getStatus() == "none") ) {
             buttons[c].setStatus("pressed");
-            screen.cancelScreen(buttons);
+            screen.cancelScreen(buttons, currentScreen);
             break;
           }
           
           if( (buttons[c].getName() == "cancelScreenOkBtn") && (buttons[c].getStatus() == "none") ) {
              buttons[c].setStatus("pressed");
-             screen.homeScreen(buttons);
+             screen.homeScreen(buttons, currentScreen);
              break;
           }
           
-
+          if( (buttons[c].getName() == "terminateBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             screen.cancelConfirmationScreen(buttons, currentScreen);
+             break;
+          }
+          
+          if( (buttons[c].getName() == "terminateYesBtn") && (buttons[c].getStatus() == "none") ) {
+            buttons[c].setStatus("pressed");
+            
+            tent.growLight("OFF");
+            systemStatus.setDayCount(-1);            
+            minuteCounter.stop();
+            screen.homeScreen(buttons, currentScreen);
+            break;
+          }  
+          
+          if( (buttons[c].getName() == "terminateNoBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             screen.homeScreen(buttons, currentScreen);
+             break;
+          }
+          
+          if( (buttons[c].getName() == "timerBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             screen.timerScreen(buttons, currentScreen);
+             break;
+          }           
         };  
       }
   

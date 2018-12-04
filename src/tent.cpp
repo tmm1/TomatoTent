@@ -16,21 +16,24 @@
     }
 
     void Tent::draw_temperature_home() {
+      
+        if(currentScreen == "homeScreen") {
 
-        //reset screen
-        tft.fillRect(50,60,141,25,ILI9341_BLACK);
+          //reset screen
+          tft.fillRect(50,60,141,25,ILI9341_BLACK);
 
-        //Temperature
-        tft.setCursor(50, 60);
-        tft.setTextColor(ILI9341_GREEN);
-        tft.setTextSize(3);
+          //Temperature
+          tft.setCursor(50, 60);
+          tft.setTextColor(ILI9341_GREEN);
+          tft.setTextSize(3);
 
-        tft.print(temp);    
-        tft.print(" C");
+          tft.print(temp);    
+          tft.print(" C");
+        }
     }
 
     void Tent::check_humidity(){
-
+      
         double currentHumidity = sht20.readHumidity();
 
         if ((hum == 0) || (hum != currentHumidity)){
@@ -41,6 +44,7 @@
 
     void Tent::draw_humidity_home() {
 
+        if(currentScreen == "homeScreen") {
 
         /////// Humidity
         tft.fillRect(50,110,141,25,ILI9341_BLACK);
@@ -51,6 +55,7 @@
 
         tft.print(hum);    
         tft.print(" %");
+        }
     }
 
     void Tent::check_waterlevel(){
@@ -64,6 +69,8 @@
     }
 
     void Tent::draw_waterlevel_home() {
+      
+              if(currentScreen == "homeScreen") {
 
         const float waterLevelBoxHeight = 150;
         const int waterLevelBoxTop = 60;
@@ -80,6 +87,7 @@
 
         //draw current water level 
         tft.fillRect(281, waterLevelTop, 23, waterLevelHeight, ILI9341_BLUE);
+              }
 
     }
 

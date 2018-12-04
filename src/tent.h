@@ -19,6 +19,7 @@ extern double temp;
 extern double hum;
 extern double waterLevel;
 extern double fanSpeed;
+extern String currentScreen;
 
 class Tent {
   

@@ -16,8 +16,10 @@ class Screen {
 
   public:
   Screen();
-  void homeScreen(Button *buttons);
-  void cancelScreen(Button *buttons);
+  void homeScreen(Button *buttons, String &currentScreen);
+  void cancelScreen(Button *buttons, String &currentScreen);
+  void cancelConfirmationScreen(Button *buttons, String &currentScreen);
+  void timerScreen(Button *buttons, String &currentScreen);
   void clear(Button *buttons);
 };
 #endif
