@@ -28,7 +28,7 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       buttons[1] = dayCounterBtn;
       dayCounterBtn.render();
       
-      Button timerBtn("timerBtn", 20,180,250,38, "",18,8);
+      Button timerBtn("timerBtn", 10,10,90,28, "",18,8);
       buttons[2] = timerBtn;
       timerBtn.render();
       
@@ -83,25 +83,34 @@ void Screen::cancelConfirmationScreen(Button *buttons, String &currentScreen) {
 void Screen::timerScreen(Button *buttons, String &currentScreen) {
   
   this->clear(buttons);
-  currentScreen = "cancelConfirmationScreen";
+  currentScreen = "timerScreen";
   
-  tft.setCursor(10,50);
+  tft.setCursor(110,8);
   tft.setTextColor(ILI9341_WHITE);
-  tft.setTextSize(2);
+  tft.setTextSize(3);
   tft.print("Light Timer");
-  /*
-  Button terminateYesBtn("terminateYesBtn", 70,120,180,28, "Yes",78,7);
-  buttons[0] = terminateYesBtn;
-  terminateYesBtn.render();
   
-  Button terminateYesBtn("terminateYesBtn", 70,120,180,28, "Yes",78,7);
-  buttons[0] = terminateYesBtn;
-  terminateYesBtn.render();
+  int dayDuration = systemStatus.getDayDuration();
   
-  Button terminateYesBtn("terminateYesBtn", 70,120,180,28, "Yes",78,7);
-  buttons[0] = terminateYesBtn;
-  terminateYesBtn.render();
-  */
+  tft.setCursor(10,70);
+  tft.print(String(dayDuration/60)+" Hours ON");
+  
+  int nightDuration = (24*60)-dayDuration;
+  tft.setCursor(10,140);
+  tft.print(String(nightDuration/60)+" Hours OFF");  
+  
+  
+  Button timerUpBtn("timerUpBtn", 240,50,40,40, "",0,0);
+  buttons[0] = timerUpBtn;
+  timerUpBtn.render();
+  
+  Button timerDownBtn("timerDownBtn", 240,130,40,40, "",0,0);
+  buttons[1] = timerDownBtn;
+  timerDownBtn.render();
+  
+  Button timerOkBtn("timerOkBtn", 20,180,250,38, "Ok",110,8);
+  buttons[2] = timerOkBtn;
+  timerOkBtn.render();
   
 }
 

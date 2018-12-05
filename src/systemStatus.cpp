@@ -18,6 +18,12 @@ int SystemStatus::getMinutesInPhotoperiod() {
 int SystemStatus::getDayDuration() {
   return this->status.dayDuration;
 }
+
+void SystemStatus::setDayDuration(int dayDuration) {
+  this->status.dayDuration = dayDuration;
+  this->save();
+}
+
 void SystemStatus::setDayCount(int dayCount) {
   this->status.dayCounter = dayCount;
   this->save();

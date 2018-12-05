@@ -32,6 +32,7 @@ class SystemStatus {
   void setDayCount(int);
   void setIsDay(bool);
   void setMinutesInPhotoperiod(int);
+  void setDayDuration(int);
   void countMinute();
   void save();
 };

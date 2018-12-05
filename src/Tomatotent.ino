@@ -1,5 +1,5 @@
 #define CS_PIN D5
-#define TIRQ_PIN D1
+#define TIRQ_PIN A0
 #define TFT_DC A1
 #define TFT_CS A2
 
@@ -148,11 +148,19 @@ void loop(void) {
             
           }
           
+          if( (buttons[c].getName() == "timerBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             screen.timerScreen(buttons, currentScreen);
+             break;
+          } 
+          
           if( (buttons[c].getName() == "dayCounterBtn") && (buttons[c].getStatus() == "none") ) {
             buttons[c].setStatus("pressed");
             screen.cancelScreen(buttons, currentScreen);
             break;
           }
+          
+          //CANCEL SCREEN
           
           if( (buttons[c].getName() == "cancelScreenOkBtn") && (buttons[c].getStatus() == "none") ) {
              buttons[c].setStatus("pressed");
@@ -181,17 +189,75 @@ void loop(void) {
              screen.homeScreen(buttons, currentScreen);
              break;
           }
+       
           
-          if( (buttons[c].getName() == "timerBtn") && (buttons[c].getStatus() == "none") ) {
+          //TIMER SCREEN
+          if( (buttons[c].getName() == "timerUpBtn") && (buttons[c].getStatus() == "none") ) {
              buttons[c].setStatus("pressed");
-             screen.timerScreen(buttons, currentScreen);
+            
+            int dayDuration = systemStatus.getDayDuration() + 60;
+            
+            if(dayDuration > 1440) {
+              dayDuration = 60;  
+            }
+            
+            systemStatus.setDayDuration(dayDuration);
+            
+            tft.fillRect(10,70,200,22,ILI9341_BLACK);
+            tft.setTextColor(ILI9341_WHITE);
+            tft.setTextSize(3);
+            tft.setCursor(10,70);
+            tft.print(String(dayDuration/60)+" Hours ON");
+            
+            tft.setCursor(10,140);
+            tft.fillRect(10,140,215,22,ILI9341_BLACK);
+            int nightDuration = (24*60)-dayDuration;
+            tft.print(String(nightDuration/60)+" Hours OFF");
+                        
+            break;
+          } 
+          if( (buttons[c].getName() == "timerDownBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+            
+            int dayDuration = systemStatus.getDayDuration() - 60;
+            
+            if(dayDuration <= 0) {
+              dayDuration = 1440;  
+            }
+            
+            systemStatus.setDayDuration(dayDuration);
+            
+            tft.fillRect(10,70,200,22,ILI9341_BLACK);
+            tft.setTextColor(ILI9341_WHITE);
+            tft.setTextSize(3);
+            tft.setCursor(10,70);
+            tft.print(String(dayDuration/60)+" Hours ON");
+            
+            tft.setCursor(10,140);
+            tft.fillRect(10,140,215,22,ILI9341_BLACK);
+            int nightDuration = (24*60)-dayDuration;
+            tft.print(String(nightDuration/60)+" Hours OFF");            
+            break;
+          }
+          if( (buttons[c].getName() == "timerOkBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             screen.homeScreen(buttons, currentScreen);
              break;
-          }           
+          }  
         };  
       }
   
       delay(10); 
     
+    } else {
+      uint8_t d {0};
+      for(d = 0; d < (sizeof(buttons) / sizeof(buttons[0])); ++d) {
+        if(buttons[d].getStatus() == "pressed") {
+          buttons[d].render();
+          buttons[d].setStatus("none");
+        }
+      }
+
     }
 
-};
+}
