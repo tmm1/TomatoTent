@@ -28,14 +28,15 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       buttons[1] = dayCounterBtn;
       dayCounterBtn.render();
       
-      Button timerBtn("timerBtn", 10,10,90,28, "",18,8);
+      Button timerBtn("timerBtn", 10,10,115,25, "",18,8);
       buttons[2] = timerBtn;
       timerBtn.render();
+      
+      systemStatus.drawTimerStatus();
       
   }
   
       tent.drawStats();
-      systemStatus.drawTimerStatus();
   
 }
 
@@ -89,13 +90,14 @@ void Screen::timerScreen(Button *buttons, String &currentScreen) {
   this->clear(buttons);
   currentScreen = "timerScreen";
   
-  tft.setCursor(110,8);
-  tft.setTextColor(ILI9341_WHITE);
+  tft.setCursor(20,8);
+  tft.setTextColor(ILI9341_GREEN);
   tft.setTextSize(3);
   tft.print("Light Timer");
   
   int dayDuration = systemStatus.getDayDuration();
   
+  tft.setTextColor(ILI9341_WHITE);
   tft.setCursor(10,70);
   tft.print(String(dayDuration/60)+" Hours ON");
   

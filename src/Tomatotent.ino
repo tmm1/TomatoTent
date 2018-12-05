@@ -44,7 +44,7 @@ SystemStatus systemStatus;
 Timer draw_temp_home(5000,&Tent::checkStats,tent);
 
 //sets the timer for the GrowLight Photoperiod
-Timer minuteCounter(6000,&SystemStatus::countMinute, systemStatus);   //once per minute
+Timer minuteCounter(60000,&SystemStatus::countMinute, systemStatus);   //once per minute
 
 XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
@@ -139,6 +139,8 @@ void loop(void) {
             tent.growLight("HIGH");
             systemStatus.setDayCount(1);
             systemStatus.setMinutesInPhotoperiod(0);
+            systemStatus.setDayDuration(18*60);
+            
             screen.homeScreen(buttons, currentScreen);
                     
             systemStatus.countMinute(); // First time on new grow

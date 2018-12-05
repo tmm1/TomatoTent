@@ -8,6 +8,8 @@
 
   void Tent::check_temperature(){
         double currentTemp = sht20.readTemperature();
+    
+        currentTemp = (currentTemp * 1.8) + 32;
 
         if ((temp == 0) || (temp != currentTemp)){
             temp = currentTemp;
@@ -27,8 +29,9 @@
           tft.setTextColor(ILI9341_GREEN);
           tft.setTextSize(3);
 
-          tft.print(temp);    
-          tft.print(" C");
+          tft.print(temp);
+          tft.setTextSize(2);
+          tft.print(" F");
         }
     }
 
@@ -53,7 +56,8 @@
           tft.setTextColor(ILI9341_BLUE);
           tft.setTextSize(3);
 
-          tft.print(hum);    
+          tft.print(hum);
+          tft.setTextSize(2);
           tft.print(" %");
         }
     }
@@ -80,7 +84,7 @@
           int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight)+waterLevelBoxTop-1;
 
           //outside box
-          tft.drawRect(280, waterLevelBoxTop, 25, waterLevelBoxHeight, ILI9341_CYAN);
+          tft.drawRect(280, waterLevelBoxTop, 25, waterLevelBoxHeight, ILI9341_DARKGREY);
 
           //reset the box
           tft.fillRect(281, waterLevelBoxTop+1, 23, waterLevelBoxHeight-2, ILI9341_BLACK);

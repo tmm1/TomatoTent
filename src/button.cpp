@@ -77,7 +77,7 @@
       }
     
       if(this->getName() == "timerDownBtn") {
-        tft.fillTriangle(240, 130, 260, 170, 280, 130, ILI9341_RED);    
+        tft.fillTriangle(240, 170, 260, 130, 280, 170, ILI9341_RED);    
       } 
     
       if(this->getName() == "timerOkBtn") {
@@ -103,7 +103,7 @@
       tft.fillTriangle(240, 95, 260, 55, 280, 95, ILI9341_WHITE);
     }
     if(this->getName() == "timerDownBtn") {
-        tft.fillTriangle(240, 130, 260, 170, 280, 130, ILI9341_WHITE);    
+        tft.fillTriangle(240, 170, 260, 130, 280, 170, ILI9341_WHITE);    
     }            
     
     
