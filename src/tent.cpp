@@ -46,15 +46,15 @@
 
         if(currentScreen == "homeScreen") {
 
-        /////// Humidity
-        tft.fillRect(50,110,141,25,ILI9341_BLACK);
+          /////// Humidity
+          tft.fillRect(50,110,141,25,ILI9341_BLACK);
 
-        tft.setCursor(50, 110);
-        tft.setTextColor(ILI9341_BLUE);
-        tft.setTextSize(3);
+          tft.setCursor(50, 110);
+          tft.setTextColor(ILI9341_BLUE);
+          tft.setTextSize(3);
 
-        tft.print(hum);    
-        tft.print(" %");
+          tft.print(hum);    
+          tft.print(" %");
         }
     }
 
@@ -70,24 +70,24 @@
 
     void Tent::draw_waterlevel_home() {
       
-              if(currentScreen == "homeScreen") {
+        if(currentScreen == "homeScreen") {
 
-        const float waterLevelBoxHeight = 150;
-        const int waterLevelBoxTop = 60;
+          const float waterLevelBoxHeight = 150;
+          const int waterLevelBoxTop = 60;
 
-        int waterLevelHeight = floor((waterLevelBoxHeight / 100)*waterLevel);
+          int waterLevelHeight = floor((waterLevelBoxHeight / 100)*waterLevel);
 
-        int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight)+waterLevelBoxTop-1;
+          int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight)+waterLevelBoxTop-1;
 
-        //outside box
-        tft.drawRect(280, waterLevelBoxTop, 25, waterLevelBoxHeight, ILI9341_CYAN);
+          //outside box
+          tft.drawRect(280, waterLevelBoxTop, 25, waterLevelBoxHeight, ILI9341_CYAN);
 
-        //reset the box
-        tft.fillRect(281, waterLevelBoxTop+1, 23, waterLevelBoxHeight-2, ILI9341_BLACK);
+          //reset the box
+          tft.fillRect(281, waterLevelBoxTop+1, 23, waterLevelBoxHeight-2, ILI9341_BLACK);
 
-        //draw current water level 
-        tft.fillRect(281, waterLevelTop, 23, waterLevelHeight, ILI9341_BLUE);
-              }
+          //draw current water level 
+          tft.fillRect(281, waterLevelTop, 23, waterLevelHeight, ILI9341_BLUE);
+        }
 
     }
 
@@ -125,13 +125,18 @@
     }  
 
   
-    void Tent::checkStats(){
+    void Tent::checkStats(){   //checks & draws stats
       this->check_temperature();
       this->check_humidity();
       this->check_waterlevel();
       this->check_fan();
     }
-  
+
+    void Tent::drawStats(){  //only draws stats
+      this->draw_temperature_home();
+      this->draw_humidity_home();
+      this->draw_waterlevel_home();
+    }  
   
      int Tent::growLight(String brightness) {
 

@@ -33,6 +33,10 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       timerBtn.render();
       
   }
+  
+      tent.drawStats();
+      systemStatus.drawTimerStatus();
+  
 }
 
 void Screen::cancelScreen(Button *buttons, String &currentScreen) {

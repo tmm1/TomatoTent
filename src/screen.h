@@ -4,13 +4,15 @@
 #include <Particle.h>
 
 #include <Adafruit_ILI9341.h>
-extern Adafruit_ILI9341 tft;
-
 #include <button.h>
-extern Button button;
-
 #include "systemStatus.h"
+#include "tent.h"
+
+extern Adafruit_ILI9341 tft;
+extern Button button;
 extern SystemStatus systemStatus;
+extern Tent tent;
+
 
 class Screen {
 

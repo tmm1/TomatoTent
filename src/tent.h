@@ -28,12 +28,11 @@ class Tent {
   int displayBrightness = 0;
   
   public:
-         unsigned long lastTime = 0;
-        int brightness;
-        Timer *tp;
-        Timer *tp1;
-  
-  Tent();
+    Tent();
+    unsigned long lastTime = 0;
+    int brightness;
+    Timer *tp;
+    Timer *tp1;
 
     void check_temperature();
     void draw_temperature_home();
@@ -41,8 +40,9 @@ class Tent {
     void draw_humidity_home();
     void check_waterlevel();
     void draw_waterlevel_home();
-    void check_fan();  
+    void check_fan();
     void checkStats();
+    void drawStats();
     int growLight(String brightness);
     
     void displayLightLow(void);
