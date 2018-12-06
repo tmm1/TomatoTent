@@ -29,7 +29,7 @@
           tft.setTextColor(ILI9341_GREEN);
           tft.setTextSize(3);
 
-          tft.print(temp);
+          tft.print(String::format("%.1f",temp));
           tft.setTextSize(2);
           tft.print(" F");
         }
@@ -55,8 +55,9 @@
           tft.setCursor(50, 110);
           tft.setTextColor(ILI9341_BLUE);
           tft.setTextSize(3);
-
-          tft.print(hum);
+          
+          tft.print(String::format("%.1f",hum));
+          
           tft.setTextSize(2);
           tft.print(" %");
         }

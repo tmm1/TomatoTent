@@ -82,7 +82,7 @@ void SystemStatus::drawTimerStatus() {
       minutesLeft = (((24*60)-this->getDayDuration()) - this->getMinutesInPhotoperiod()) % 60;
     }
   
-    if(hoursLeft < 0) {
+    if(hoursLeft < 0 || minutesLeft < 0) {
       
       this->countMinute();  
       
