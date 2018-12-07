@@ -8,6 +8,8 @@ double hum;
 double waterLevel;
 double fanSpeed = 0;
 String currentScreen = "homeScreen";
+unsigned long lastTime2 = 0;
+bool dimmerButtonPressed = false;
 
 #include <XPT2046_Touch.h>
 #include <Adafruit_mfGFX.h>
@@ -69,6 +71,7 @@ void setup() {
     pinMode(GROW_LIGHT_BRIGHTNESS_PIN, OUTPUT);
     pinMode(GROW_LIGHT_ON_OFF_PIN, OUTPUT);
     pinMode(FAN_SPEED_PIN, OUTPUT);
+    pinMode(DIM_PIN, INPUT_PULLUP);
 
     
     //TOUCH
@@ -112,6 +115,7 @@ void setup() {
        
     }
 
+     
     Serial.begin();
   
 }
@@ -266,6 +270,18 @@ void loop(void) {
     }
   
   
-  //
+    if(dimmerButtonPressed) {  
 
+      unsigned long now = millis();
+
+      if ((now - lastTime2) >= 1000 || lastTime2 == 0) {
+
+        lastTime2 = now;  
+
+        tent.dimGrowLight();
+
+      }
+      dimmerButtonPressed = false;
+
+  }
 }

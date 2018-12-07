@@ -7,8 +7,7 @@
     
     this->growLightStatus = "OFF";
   
-    pinMode(DIM_PIN, INPUT_PULLUP);
-    attachInterrupt(DIM_PIN, &Tent::dimGrowLight,this,FALLING);
+    attachInterrupt(DIM_PIN, &Tent::setDimButtonPressed,this,FALLING);
   }
 
   void Tent::check_temperature(){
@@ -171,28 +170,46 @@
         return 1;    
     }
 
-     void Tent::dimGrowLight() {
-       
-       unsigned long now = millis();
-       bool switched = false;
-       
-       if ((now - lastTime2) >= 1000 || lastTime2 == 0) {
-        
-         lastTime2 = now;
-            
-        if(this->growLightStatus == "HIGH" && !switched) {
-          this->growLight("LOW");
-          this->growLightStatus = "LOW";
-          switched = true;
-        }
+    String Tent::getGrowLightStatus() {
+      return this->growLightStatus;
+    }
 
-        if(this->growLightStatus == "LOW" && !switched) {
-          this->growLight("HIGH");
-          this->growLightStatus = "HIGH";
+    void Tent::setDimButtonPressed() {
+      dimmerButtonPressed = true;
+    }
+
+     void Tent::dimGrowLight() {
+         
+        this->displayLightHigh();
+            
+        if(this->growLightStatus == "HIGH") {
+          
+            this->growLight("LOW");
+          
+            this->drawDimmedIndicator();
+          
+         } else {
+          
+            if(this->growLightStatus == "LOW") {
+              
+              this->growLight("HIGH");
+          
+              tft.fillRoundRect(0, 220, 320, 20, 5,ILI9341_BLACK);
+              
+            }
+
         }
-       }
-      
+       
      }
+
+    void Tent::drawDimmedIndicator() {
+            tft.fillRoundRect(0, 220, 320, 25, 5,ILI9341_RED);
+          
+            tft.setCursor(135, 222);
+            tft.setTextColor(ILI9341_WHITE);
+            tft.setTextSize(2);
+            tft.print("Dimmed");
+    }
 
      void Tent::displayLightLow(void) {
           

@@ -21,6 +21,7 @@ extern double hum;
 extern double waterLevel;
 extern double fanSpeed;
 extern String currentScreen;
+extern bool dimmerButtonPressed;
 
 class Tent {
   
@@ -32,7 +33,6 @@ class Tent {
   public:
     Tent();
     unsigned long lastTime = 0;
-    unsigned long lastTime2 = 0;
     Timer *tp;
     Timer *tp1;
 
@@ -46,7 +46,10 @@ class Tent {
     void checkStats();
     void drawStats();
     int growLight(String brightness);
+    String getGrowLightStatus();
+    void setDimButtonPressed();
     void dimGrowLight();
+    void drawDimmedIndicator();
     void displayLightLow(void);
     void displayLightOff(void);
     bool displayLightHigh(void);

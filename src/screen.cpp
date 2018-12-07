@@ -30,6 +30,10 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       
       systemStatus.drawTimerStatus();
       
+      if(tent.getGrowLightStatus() == "LOW") {
+        tent.drawDimmedIndicator();  
+      }
+      
   }
     tent.drawStats();
   
@@ -58,6 +62,10 @@ void Screen::cancelScreen(Button *buttons, String &currentScreen) {
   Button terminateBtn("terminateBtn", 120,10,185,28, "Terminate Grow",10,7);
   buttons[1] = terminateBtn;
   terminateBtn.render();  
+  
+  if(tent.getGrowLightStatus() == "LOW") {
+    tent.drawDimmedIndicator();  
+  }
 }
 
 
@@ -113,6 +121,9 @@ void Screen::timerScreen(Button *buttons, String &currentScreen) {
   buttons[2] = timerOkBtn;
   timerOkBtn.render();
   
+  if(tent.getGrowLightStatus() == "LOW") {
+    tent.drawDimmedIndicator();  
+  }  
 }
 
 void Screen::clear(Button *buttons) {
