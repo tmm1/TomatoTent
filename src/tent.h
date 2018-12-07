@@ -12,6 +12,7 @@
 #define FAN_SPEED_MAX 175
 #define FAN_SPEED_MIN 230
 #define TFT_BRIGHTNESS_PIN WKP
+#define DIM_PIN DAC
 
 extern DFRobot_SHT20 sht20;
 extern Adafruit_ILI9341 tft;
@@ -26,11 +27,12 @@ class Tent {
   double step;
   double difference_min_max;
   int displayBrightness = 0;
+  String growLightStatus;
   
   public:
     Tent();
     unsigned long lastTime = 0;
-    int brightness;
+    unsigned long lastTime2 = 0;
     Timer *tp;
     Timer *tp1;
 
@@ -44,7 +46,7 @@ class Tent {
     void checkStats();
     void drawStats();
     int growLight(String brightness);
-    
+    void dimGrowLight();
     void displayLightLow(void);
     void displayLightOff(void);
     bool displayLightHigh(void);

@@ -91,7 +91,9 @@ void setup() {
     //Particle.variable("temperatureC", temp);
     //Particle.variable("humidity", hum);
     //Particle.variable("fanSpeed", fanSpeed);
-    
+
+      //attachInterrupt(D2, &Robot::handler, this, CHANGE);
+  
     //END REMOTE FUNCTIONS  
     
     screen.homeScreen(buttons,currentScreen);
@@ -111,6 +113,7 @@ void setup() {
     }
 
     Serial.begin();
+  
 }
 
 
@@ -261,5 +264,8 @@ void loop(void) {
       }
 
     }
+  
+  
+  //
 
 }

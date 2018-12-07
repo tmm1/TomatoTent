@@ -4,6 +4,11 @@
     Particle.function("growLight", &Tent::growLight, this);
     tp = new Timer (50000, &Tent::displayLightLow, *this, 1);
     tp1 = new Timer (60000, &Tent::displayLightOff, *this, 1);
+    
+    this->growLightStatus = "OFF";
+  
+    pinMode(DIM_PIN, INPUT_PULLUP);
+    attachInterrupt(DIM_PIN, &Tent::dimGrowLight,this,FALLING);
   }
 
   void Tent::check_temperature(){
@@ -53,7 +58,7 @@
           tft.fillRect(50,110,141,25,ILI9341_BLACK);
 
           tft.setCursor(50, 110);
-          tft.setTextColor(ILI9341_BLUE);
+          tft.setTextColor(ILI9341_PINK);
           tft.setTextSize(3);
           
           tft.print(String::format("%.1f",hum));
@@ -149,23 +154,47 @@
         if(brightness == "HIGH") {
             analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 255);
             digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
+            this->growLightStatus = "HIGH";
         } 
         //SET to low Brightness
         if(brightness == "LOW") {
-            analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 20);
-            digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
+          analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 20);
+          digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
+          this->growLightStatus = "LOW";
         }
         //SWITCH OFF
         if(brightness == "OFF") {
-            digitalWrite(GROW_LIGHT_ON_OFF_PIN, LOW);
+          digitalWrite(GROW_LIGHT_ON_OFF_PIN, LOW);
+          this->growLightStatus = "OFF";
         }
 
         return 1;    
     }
 
+     void Tent::dimGrowLight() {
+       
+       unsigned long now = millis();
+       bool switched = false;
+       
+       if ((now - lastTime2) >= 1000 || lastTime2 == 0) {
+        
+         lastTime2 = now;
+            
+        if(this->growLightStatus == "HIGH" && !switched) {
+          this->growLight("LOW");
+          this->growLightStatus = "LOW";
+          switched = true;
+        }
 
+        if(this->growLightStatus == "LOW" && !switched) {
+          this->growLight("HIGH");
+          this->growLightStatus = "HIGH";
+        }
+       }
+      
+     }
 
-        void Tent::displayLightLow(void) {
+     void Tent::displayLightLow(void) {
           
           while(displayBrightness > 30) {
             displayBrightness -= 5;

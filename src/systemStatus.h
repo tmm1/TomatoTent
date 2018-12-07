@@ -35,6 +35,7 @@ class SystemStatus {
   void setDayDuration(int);
   void countMinute();
   void drawTimerStatus();
+  void drawDayCounter();
   void save();
 };
 #endif

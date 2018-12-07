@@ -18,11 +18,7 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       
       tft.drawRect(20,180,250,38,ILI9341_BLACK);
 
-      tft.setCursor(70,180);
-      tft.setTextColor(ILI9341_WHITE);
-      tft.setTextSize(3);
-
-      tft.print("Day "+String(systemStatus.getDayCount()));
+      systemStatus.drawDayCounter();
       
       Button dayCounterBtn("dayCounterBtn", 20,180,250,38, "",18,8);
       buttons[1] = dayCounterBtn;
@@ -35,8 +31,7 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       systemStatus.drawTimerStatus();
       
   }
-  
-      tent.drawStats();
+    tent.drawStats();
   
 }
 

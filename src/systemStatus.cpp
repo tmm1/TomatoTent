@@ -51,7 +51,11 @@ void SystemStatus::countMinute() {
   } else {
  
     if(this->getMinutesInPhotoperiod() > ((24*60) - this->getDayDuration())) {   //night is over
+      
       this->setDayCount(this->getDayCount()+1);
+      
+      this->drawDayCounter();
+    
       tent.growLight("HIGH");
       this->setIsDay(true);
       this->setMinutesInPhotoperiod(0);
@@ -110,6 +114,14 @@ void SystemStatus::drawTimerStatus() {
       }
     }
     
+}
+
+void SystemStatus::drawDayCounter() {
+      tft.setCursor(70,180);
+      tft.setTextColor(ILI9341_WHITE);
+      tft.setTextSize(3);
+
+      tft.print("Day "+String(this->getDayCount()));
 }
 
 
