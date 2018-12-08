@@ -4,7 +4,8 @@
 #include "Particle.h"
 
 #include "DFRobot_SHT20.h"
-#include <Adafruit_ILI9341.h>
+#include "Adafruit_ILI9341.h"
+#include "icons.h"
 
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
 #define GROW_LIGHT_ON_OFF_PIN D7
@@ -42,6 +43,7 @@ class Tent {
     void draw_humidity_home();
     void check_waterlevel();
     void draw_waterlevel_home();
+    void draw_wifi();
     void check_fan();
     void checkStats();
     void drawStats();

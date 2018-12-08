@@ -87,7 +87,10 @@
           int waterLevelHeight = floor((waterLevelBoxHeight / 100)*waterLevel);
 
           int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight)+waterLevelBoxTop-1;
-
+          
+          //icon
+          tft.drawBitmap(278, 30, iconWateringCan_24x24, 24, 24, ILI9341_WHITE);
+          
           //outside box
           tft.drawRect(280, waterLevelBoxTop, 25, waterLevelBoxHeight, ILI9341_DARKGREY);
 
@@ -98,6 +101,13 @@
           tft.fillRect(281, waterLevelTop, 23, waterLevelHeight, ILI9341_BLUE);
         }
 
+    }
+
+    void Tent::draw_wifi() {
+      
+          tft.drawBitmap(289, 5, iconWifi_24x24, 24, 24, ILI9341_WHITE);
+
+      
     }
 
 
@@ -209,6 +219,8 @@
             tft.setTextColor(ILI9341_WHITE);
             tft.setTextSize(2);
             tft.print("Dimmed");
+
+            tft.drawBitmap(112, 222, iconBulb_16x16, 16, 16, ILI9341_WHITE);       
     }
 
      void Tent::displayLightLow(void) {

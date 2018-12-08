@@ -274,7 +274,7 @@ void loop(void) {
 
       unsigned long now = millis();
 
-      if ((now - lastTime2) >= 1000 || lastTime2 == 0) {
+      if ((now - lastTime2) >= 1000 || lastTime2 == 0) {    
 
         lastTime2 = now;  
 

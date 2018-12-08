@@ -1,10 +1,12 @@
 Including:
     src/button.h
+    src/icons.h
     src/screen.h
     src/systemStatus.h
     src/tent.h
     src/Tomatotent.ino
     src/button.cpp
+    src/icons.cpp
     src/screen.cpp
     src/systemStatus.cpp
     src/tent.cpp

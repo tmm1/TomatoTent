@@ -36,6 +36,7 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       
   }
     tent.drawStats();
+    tent.draw_wifi();
   
 }
 
