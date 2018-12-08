@@ -117,22 +117,22 @@
         difference_min_max = FAN_SPEED_MIN - FAN_SPEED_MAX;
         step = ceil(difference_min_max/6);
 
-        if(temp > 20 || hum > 40) {
+        if(temp > 70 || hum > 40) {
             fanSpeed -= step;
         }
-        if(temp > 22 || hum > 50) {
+        if(temp > 72 || hum > 50) {
             fanSpeed -= step;
         }
-        if(temp > 24 || hum > 60) {
+        if(temp > 74 || hum > 60) {
             fanSpeed -= step;
         }
-        if(temp > 26 || hum > 70) {
+        if(temp > 76 || hum > 70) {
             fanSpeed -= step;
         }
-        if(temp > 28 || hum > 80) {
+        if(temp > 78 || hum > 80) {
             fanSpeed -= step;
         }
-        if(temp > 30 || hum > 90) {
+        if(temp > 80 || hum > 90) {
             fanSpeed -= step;
         }
         //for sensor fail
@@ -204,7 +204,7 @@
               
               this->growLight("HIGH");
           
-              tft.fillRoundRect(0, 220, 320, 20, 5,ILI9341_BLACK);
+              tft.fillRoundRect(0, 220, 320, 25, 5,ILI9341_BLACK);
               
             }
 
@@ -213,6 +213,7 @@
      }
 
     void Tent::drawDimmedIndicator() {
+      
             tft.fillRoundRect(0, 220, 320, 25, 5,ILI9341_RED);
           
             tft.setCursor(135, 222);
@@ -220,7 +221,8 @@
             tft.setTextSize(2);
             tft.print("Dimmed");
 
-            tft.drawBitmap(112, 222, iconBulb_16x16, 16, 16, ILI9341_WHITE);       
+            tft.drawBitmap(112, 222, iconBulb_16x16, 16, 16, ILI9341_WHITE); 
+      
     }
 
      void Tent::displayLightLow(void) {
