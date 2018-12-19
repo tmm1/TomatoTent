@@ -12,4 +12,4 @@ Including:
     src/tent.cpp
     project.properties
 attempting to flash firmware to your device ranger_boomer
-Flash device OK:  Update started
+Flash device failed: Device not discoverable or is offline

@@ -50,6 +50,11 @@ Timer minuteCounter(60000,&SystemStatus::countMinute, systemStatus);   //once pe
 
 XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
+STARTUP(
+  pinMode(FAN_SPEED_PIN, OUTPUT);
+  analogWrite(FAN_SPEED_PIN, 0, 25000);
+)
+
 void setup() {
     
     /*SET WIFI 
@@ -70,7 +75,6 @@ void setup() {
     pinMode(TFT_BRIGHTNESS_PIN, OUTPUT);
     pinMode(GROW_LIGHT_BRIGHTNESS_PIN, OUTPUT);
     pinMode(GROW_LIGHT_ON_OFF_PIN, OUTPUT);
-    pinMode(FAN_SPEED_PIN, OUTPUT);
     pinMode(DIM_PIN, INPUT_PULLUP);
 
     
