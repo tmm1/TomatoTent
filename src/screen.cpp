@@ -33,7 +33,7 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       if(tent.getGrowLightStatus() == "LOW") {
         tent.drawDimmedIndicator();  
       }
-      
+    
   }
     tent.drawStats();
     tent.draw_wifi();

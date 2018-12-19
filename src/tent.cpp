@@ -89,7 +89,7 @@
           int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight)+waterLevelBoxTop-1;
           
           //icon
-          tft.drawBitmap(278, 30, iconWateringCan_24x24, 24, 24, ILI9341_WHITE);
+          tft.drawBitmap(280, 30, iconWateringCan_24x24, 24, 24, ILI9341_GREEN);
           
           //outside box
           tft.drawRect(280, waterLevelBoxTop, 25, waterLevelBoxHeight, ILI9341_DARKGREY);

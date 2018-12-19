@@ -108,8 +108,6 @@ void setup() {
       if(systemStatus.isDay()) {  //was the light on when we restarted?
         tent.growLight("HIGH");  
       }
-      tent.checkStats(); //after restart
-      draw_temp_home.start(); 
       
       systemStatus.countMinute();  //after restart
       minuteCounter.start();
@@ -117,6 +115,9 @@ void setup() {
     } else {
       systemStatus.init();  
     }
+  
+    tent.checkStats(); //First time right away
+    draw_temp_home.start();
      
     Serial.begin();
   
@@ -149,9 +150,6 @@ void loop(void) {
             systemStatus.setDayCount(1);
             
             screen.homeScreen(buttons, currentScreen);
-            
-            tent.checkStats(); //First time right away
-            draw_temp_home.start();
                     
             systemStatus.countMinute(); // First time on new grow
             minuteCounter.start();
@@ -190,10 +188,10 @@ void loop(void) {
             buttons[c].setStatus("pressed");
             
             tent.growLight("OFF");
-            draw_temp_home.stop();
-            tent.fan("OFF");
-            systemStatus.init();            
+           // draw_temp_home.stop();
+           // tent.fan("OFF");
             minuteCounter.stop();
+            systemStatus.init();            
             screen.homeScreen(buttons, currentScreen);
             break;
           }  
