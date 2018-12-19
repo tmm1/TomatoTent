@@ -36,6 +36,7 @@ class SystemStatus {
   void countMinute();
   void drawTimerStatus();
   void drawDayCounter();
+  void init();
   void save();
 };
 #endif

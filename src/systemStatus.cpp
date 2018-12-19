@@ -63,8 +63,6 @@ void SystemStatus::countMinute() {
    
   }
   
-  this->save();
-  
   if(currentScreen == "homeScreen") {     
     this->drawTimerStatus();
   }
@@ -124,6 +122,16 @@ void SystemStatus::drawDayCounter() {
       tft.print("Day "+String(this->getDayCount()));
 }
 
+void SystemStatus::init() {
+    
+  this->status.dayCounter = -1; //counting days the grow was active. Starting from 1
+  this->status.isDay = true; // true if the light is on
+  this->status.minutesInPhotoperiod = 0; //how long has the system been in current photoperiod?  E.g. 31 minutes in NIGHT
+  this->status.dayDuration = 18*60; //how long is the light on?  Starts out at 18 hrs (18*60)
+  
+  this->save();
+  
+}
 
 void SystemStatus::save() {
   EEPROM.put(0, this->status);

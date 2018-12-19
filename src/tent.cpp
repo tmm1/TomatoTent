@@ -161,13 +161,13 @@
 
         //SET TO HIGH BRIGHTNESS
         if(brightness == "HIGH") {
-            analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 255);
+            analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 255, 25000);
             digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
             this->growLightStatus = "HIGH";
         } 
         //SET to low Brightness
         if(brightness == "LOW") {
-          analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 20);
+          analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 20, 25000);
           digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
           this->growLightStatus = "LOW";
         }

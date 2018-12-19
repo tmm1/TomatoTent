@@ -81,11 +81,7 @@ void setup() {
     //TOUCH
     ts.begin();
     ts.setRotation(3);
-    
-    //fan
-    
-    analogWrite(FAN_SPEED_PIN,255);
-    //END PINSS
+    //END TOUCH
 
     draw_temp_home.start();
     
@@ -117,8 +113,9 @@ void setup() {
       systemStatus.countMinute();  //after restart
       minuteCounter.start();
        
+    } else {
+      systemStatus.init();  
     }
-
      
     Serial.begin();
   
@@ -191,7 +188,7 @@ void loop(void) {
             buttons[c].setStatus("pressed");
             
             tent.growLight("OFF");
-            systemStatus.setDayCount(-1);            
+            systemStatus.init();            
             minuteCounter.stop();
             screen.homeScreen(buttons, currentScreen);
             break;
