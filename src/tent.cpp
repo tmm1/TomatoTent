@@ -143,6 +143,11 @@
         analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
     }  
 
+    void Tent::fan(String fanStatus) {
+        if(fanStatus == "OFF") {
+            analogWrite(FAN_SPEED_PIN,0, 25000);
+        } 
+    }
   
     void Tent::checkStats(){   //checks & draws stats
       this->check_temperature();

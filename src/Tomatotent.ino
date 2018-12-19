@@ -82,8 +82,6 @@ void setup() {
     ts.begin();
     ts.setRotation(3);
     //END TOUCH
-
-    draw_temp_home.start();
     
     // Init SHT20 Sensor
     sht20.initSHT20();
@@ -110,6 +108,9 @@ void setup() {
       if(systemStatus.isDay()) {  //was the light on when we restarted?
         tent.growLight("HIGH");  
       }
+      tent.checkStats(); //after restart
+      draw_temp_home.start(); 
+      
       systemStatus.countMinute();  //after restart
       minuteCounter.start();
        
@@ -146,10 +147,11 @@ void loop(void) {
             
             tent.growLight("HIGH");
             systemStatus.setDayCount(1);
-            systemStatus.setMinutesInPhotoperiod(0);
-            systemStatus.setDayDuration(18*60);
             
             screen.homeScreen(buttons, currentScreen);
+            
+            tent.checkStats(); //First time right away
+            draw_temp_home.start();
                     
             systemStatus.countMinute(); // First time on new grow
             minuteCounter.start();
@@ -188,6 +190,8 @@ void loop(void) {
             buttons[c].setStatus("pressed");
             
             tent.growLight("OFF");
+            draw_temp_home.stop();
+            tent.fan("OFF");
             systemStatus.init();            
             minuteCounter.stop();
             screen.homeScreen(buttons, currentScreen);

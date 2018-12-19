@@ -55,7 +55,14 @@ void Screen::cancelScreen(Button *buttons, String &currentScreen) {
   
   tft.setCursor(20,120);
   tft.print("after about 110 days.");
-
+  
+  /* Include if you want to know your free memory
+  tft.setTextSize(1);
+  tft.setCursor(50,140);
+  uint32_t freemem = System.freeMemory();
+  tft.print(freemem);
+  */
+  
   Button cancelScreenOkBtn("cancelScreenOkBtn", 20,180,250,38, "Ok",110,8);
   buttons[0] = cancelScreenOkBtn;
   cancelScreenOkBtn.render();

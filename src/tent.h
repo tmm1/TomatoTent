@@ -45,6 +45,7 @@ class Tent {
     void draw_waterlevel_home();
     void draw_wifi();
     void check_fan();
+    void fan(String fanStatus);
     void checkStats();
     void drawStats();
     int growLight(String brightness);
