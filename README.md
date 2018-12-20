@@ -13,7 +13,8 @@ It looks like we may (hopefully) have this availalbe in April 2019.
 You could buy one done-for-you (beginning of next year), 
 or you could build one yourself.
 
---> [Enter your email here](https://www.how-to-marijuana.com/mini-marijuana-grow-box.html) to get updates.Enter
+--> [Enter your email here](https://www.how-to-marijuana.com/mini-marijuana-grow-box.html) to get updates.
+
 
 
 Cheers,
