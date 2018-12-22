@@ -38,7 +38,6 @@ bool dimmerButtonPressed = false;
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
 DFRobot_SHT20 sht20;
 Button buttons[5];
-int Button::buttonCount = 0;
 Tent tent;
 Screen screen;
 SystemStatus systemStatus;
