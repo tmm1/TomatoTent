@@ -105,8 +105,7 @@
 
     void Tent::draw_wifi() {
       
-          tft.drawBitmap(289, 5, iconWifi_24x24, 24, 24, ILI9341_WHITE);
-
+          tft.drawBitmap(289, 5, iconWifi_24x24, 24, 24, ILI9341_DARKGREY);
       
     }
 

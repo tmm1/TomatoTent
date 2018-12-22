@@ -7,10 +7,21 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
   
     this->clear(buttons);
     currentScreen = "homeScreen";
-      
+  
     if(systemStatus.getDayCount() == -1) {
       
-      Button startGrowBtn("startGrowBtn", 20,180,250,38, "Start a Grow",18,8);
+      tft.setTextColor(ILI9341_LIGHTGREY);
+      tft.setTextSize(2);
+
+      tft.setCursor(126,15);
+      tft.print("Hello!");
+      
+      tft.setCursor(75,40);
+      tft.print("I'm Tomatotent");
+
+      tft.drawBitmap(110, 65, tomato_filled_100, 100, 100, ILI9341_RED);
+      
+      Button startGrowBtn("startGrowBtn", 35,180,250,38, "Start a Grow",18,8);
       buttons[0] = startGrowBtn;
       startGrowBtn.render();
       
@@ -29,15 +40,34 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       timerBtn.render();
       
       systemStatus.drawTimerStatus();
+      tent.drawStats();
       
       if(tent.getGrowLightStatus() == "LOW") {
         tent.drawDimmedIndicator();  
       }
     
   }
-    tent.drawStats();
     tent.draw_wifi();
   
+}
+
+void Screen::growStartedScreen(Button *buttons, String &currentScreen) {
+  
+  this->clear(buttons);
+  currentScreen = "growStartedScreen";
+  
+  tft.fillScreen(ILI9341_OLIVE);
+  
+  tft.setTextColor(ILI9341_WHITE);
+  tft.setTextSize(3);
+  
+  tft.setCursor(50,30);
+  tft.print("Your Grow");
+  tft.setCursor(60,90);
+  tft.print("has started!");
+  
+  tft.drawBitmap(124, 160, plant_filled_72x72, 72, 72, ILI9341_WHITE);
+    
 }
 
 void Screen::cancelScreen(Button *buttons, String &currentScreen) {

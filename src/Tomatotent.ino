@@ -92,8 +92,6 @@ void setup() {
     //Particle.variable("temperatureC", temp);
     //Particle.variable("humidity", hum);
     //Particle.variable("fanSpeed", fanSpeed);
-
-      //attachInterrupt(D2, &Robot::handler, this, CHANGE);
   
     //END REMOTE FUNCTIONS  
     
@@ -109,6 +107,9 @@ void setup() {
         tent.growLight("HIGH");  
       }
       
+      tent.checkStats(); //First time right away
+      draw_temp_home.start();
+      
       systemStatus.countMinute();  //after restart
       minuteCounter.start();
        
@@ -116,13 +117,10 @@ void setup() {
       systemStatus.init();  
     }
   
-    tent.checkStats(); //First time right away
-    draw_temp_home.start();
      
     Serial.begin();
   
 }
-
 
 
 void loop(void) {
@@ -149,8 +147,15 @@ void loop(void) {
             tent.growLight("HIGH");
             systemStatus.setDayCount(1);
             
+            screen.growStartedScreen(buttons, currentScreen);
+            
+            delay(5000);
+            
             screen.homeScreen(buttons, currentScreen);
-                    
+            
+            tent.checkStats(); //First time right away
+            draw_temp_home.start();
+            
             systemStatus.countMinute(); // First time on new grow
             minuteCounter.start();
             
@@ -188,9 +193,10 @@ void loop(void) {
             buttons[c].setStatus("pressed");
             
             tent.growLight("OFF");
-           // draw_temp_home.stop();
-           // tent.fan("OFF");
+            draw_temp_home.stop();
+            tent.fan("OFF");
             minuteCounter.stop();
+            
             systemStatus.init();            
             screen.homeScreen(buttons, currentScreen);
             break;
