@@ -139,6 +139,8 @@
             fanSpeed = FAN_SPEED_MIN;
         }
 
+        Serial.print(fanSpeed);
+      
         analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
     }  
 
