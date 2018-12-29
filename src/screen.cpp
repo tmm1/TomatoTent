@@ -23,7 +23,6 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       
       Button startGrowBtn("startGrowBtn", 35,180,250,38, "Start a Grow",18,8);
       buttons[0] = startGrowBtn;
-      startGrowBtn.render();
       
     } else { // a grow is in progress
       
@@ -33,11 +32,9 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       
       Button dayCounterBtn("dayCounterBtn", 20,180,250,38, "",18,8);
       buttons[1] = dayCounterBtn;
-      dayCounterBtn.render();
       
       Button timerBtn("timerBtn", 10,10,115,25, "",18,8);
       buttons[2] = timerBtn;
-      timerBtn.render();
       
       systemStatus.drawTimerStatus();
       tent.drawStats();
@@ -49,7 +46,6 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
   }
       Button wifiBtn("wifiBtn", 260,0,60,30, "",18,8);
       buttons[3] = wifiBtn;
-      wifiBtn.render(); 
 }
 
 void Screen::growStartedScreen(Button *buttons, String &currentScreen) {
@@ -96,11 +92,9 @@ void Screen::cancelScreen(Button *buttons, String &currentScreen) {
   
   Button cancelScreenOkBtn("cancelScreenOkBtn", 20,180,250,38, "Ok",110,8);
   buttons[0] = cancelScreenOkBtn;
-  cancelScreenOkBtn.render();
   
   Button terminateBtn("terminateBtn", 120,10,185,28, "Terminate Grow",10,7);
   buttons[1] = terminateBtn;
-  terminateBtn.render();  
   
   if(tent.getGrowLightStatus() == "LOW") {
     tent.drawDimmedIndicator();  
@@ -120,11 +114,9 @@ void Screen::cancelConfirmationScreen(Button *buttons, String &currentScreen) {
   
   Button terminateYesBtn("terminateYesBtn", 70,120,180,28, "Yes",78,7);
   buttons[0] = terminateYesBtn;
-  terminateYesBtn.render();
   
   Button terminateNoBtn("terminateNoBtn", 70,180,180,38, "No",75,8);
   buttons[1] = terminateNoBtn;
-  terminateNoBtn.render();  
 }
 
 void Screen::timerScreen(Button *buttons, String &currentScreen) {
@@ -150,15 +142,12 @@ void Screen::timerScreen(Button *buttons, String &currentScreen) {
   
   Button timerUpBtn("timerUpBtn", 240,50,40,40, "",0,0);
   buttons[0] = timerUpBtn;
-  timerUpBtn.render();
   
   Button timerDownBtn("timerDownBtn", 240,130,40,40, "",0,0);
   buttons[1] = timerDownBtn;
-  timerDownBtn.render();
   
   Button timerOkBtn("timerOkBtn", 20,180,250,38, "Ok",110,8);
   buttons[2] = timerOkBtn;
-  timerOkBtn.render();
   
   if(tent.getGrowLightStatus() == "LOW") {
     tent.drawDimmedIndicator();  

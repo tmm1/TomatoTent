@@ -272,14 +272,14 @@ void loop(void) {
           
           if( (buttons[c].getName() == "wifiOnBtn") && (buttons[c].getStatus() == "none") ) {
              buttons[c].setStatus("pressed");
-             WiFi.on();
-             Particle.connect()
+             Particle.connect();
              screen.homeScreen(buttons, currentScreen);
              break;
           }
           
           if( (buttons[c].getName() == "wifiOffBtn") && (buttons[c].getStatus() == "none") ) {
              buttons[c].setStatus("pressed");
+             Particle.disconnect();
              WiFi.off();
              screen.homeScreen(buttons, currentScreen);
              break;
