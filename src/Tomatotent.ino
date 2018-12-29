@@ -50,6 +50,7 @@ Timer minuteCounter(60000,&SystemStatus::countMinute, systemStatus);   //once pe
 XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
 STARTUP(
+  SYSTEM_MODE(SEMI_AUTOMATIC);
   pinMode(FAN_SPEED_PIN, OUTPUT);
   analogWrite(FAN_SPEED_PIN, 0, 25000);
 )
@@ -256,11 +257,40 @@ void loop(void) {
             tft.print(String(nightDuration/60)+" Hours OFF");            
             break;
           }
+          
           if( (buttons[c].getName() == "timerOkBtn") && (buttons[c].getStatus() == "none") ) {
              buttons[c].setStatus("pressed");
              screen.homeScreen(buttons, currentScreen);
              break;
-          }  
+          } 
+          
+          if( (buttons[c].getName() == "wifiBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             screen.wifiScreen(buttons, currentScreen);
+             break;
+          } 
+          
+          if( (buttons[c].getName() == "wifiOnBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             WiFi.on();
+             Particle.connect()
+             screen.homeScreen(buttons, currentScreen);
+             break;
+          }
+          
+          if( (buttons[c].getName() == "wifiOffBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             WiFi.off();
+             screen.homeScreen(buttons, currentScreen);
+             break;
+          }
+          
+          if( (buttons[c].getName() == "wifiOkBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             screen.homeScreen(buttons, currentScreen);
+             break;
+          }
+          
         };  
       }
   

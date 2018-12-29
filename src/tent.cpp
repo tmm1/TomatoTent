@@ -103,12 +103,6 @@
 
     }
 
-    void Tent::draw_wifi() {
-      
-          tft.drawBitmap(289, 5, iconWifi_24x24, 24, 24, ILI9341_DARKGREY);
-      
-    }
-
 
     void Tent::check_fan() {
 
@@ -140,8 +134,9 @@
         }
 
         Serial.print(fanSpeed);
-      
-        analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
+        
+        analogWrite(FAN_SPEED_PIN,80, 25000);
+        //analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
     }  
 
     void Tent::fan(String fanStatus) {

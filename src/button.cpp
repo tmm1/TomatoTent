@@ -5,6 +5,7 @@
   :name{name},x0{x0},y0{y0},w{w},h{h},buttonText{buttonText},textOffsetLeft{textOffsetLeft},textOffsetTop{textOffsetTop} {
    this->pressed = false;
    this->currentStatus = "none";
+    this->render();
   };
   
   void Button::render() { 
@@ -92,7 +93,40 @@
         tft.print(buttonText); 
         
       }
-  
+    
+      if(this->getName() == "wifiBtn") {
+        
+        tft.drawBitmap(289, 5, iconWifi_24x24, 24, 24, ILI9341_DARKGREY);
+        
+      }  
+    
+    
+      if(this->getName() == "wifiOnBtn") {
+        tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
+        tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_OLIVE);
+        tft.setCursor(x0 + textOffsetLeft,y0 + textOffsetTop);
+        tft.setTextColor(ILI9341_WHITE);
+        tft.setTextSize(3);
+        tft.print(buttonText); 
+      }
+    
+      if(this->getName() == "wifiOffBtn") {
+        tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
+        tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_OLIVE);
+        tft.setCursor(x0 + textOffsetLeft,y0 + textOffsetTop);
+        tft.setTextColor(ILI9341_WHITE);
+        tft.setTextSize(3);
+        tft.print(buttonText); 
+      }
+    
+      if(this->getName() == "wifiOkBtn") {
+        tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
+        tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_OLIVE);
+        tft.setCursor(x0 + textOffsetLeft,y0 + textOffsetTop);
+        tft.setTextColor(ILI9341_WHITE);
+        tft.setTextSize(3);
+        tft.print(buttonText); 
+      }     
   }
   
   void Button::renderPressed() {

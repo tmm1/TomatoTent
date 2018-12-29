@@ -14,10 +14,10 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       tft.setTextSize(2);
 
       tft.setCursor(126,15);
-      tft.print("Hello!");
+      tft.print("Hi,");
       
       tft.setCursor(75,40);
-      tft.print("I'm Tomatotent");
+      tft.print("nice to meet you.");
 
       tft.drawBitmap(110, 65, tomato_filled_100, 100, 100, ILI9341_RED);
       
@@ -45,10 +45,11 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       if(tent.getGrowLightStatus() == "LOW") {
         tent.drawDimmedIndicator();  
       }
-    
+         
   }
-    tent.draw_wifi();
-  
+      Button wifiBtn("wifiBtn", 260,0,60,30, "",18,8);
+      buttons[3] = wifiBtn;
+      wifiBtn.render(); 
 }
 
 void Screen::growStartedScreen(Button *buttons, String &currentScreen) {
@@ -162,6 +163,21 @@ void Screen::timerScreen(Button *buttons, String &currentScreen) {
   if(tent.getGrowLightStatus() == "LOW") {
     tent.drawDimmedIndicator();  
   }  
+}
+
+void Screen::wifiScreen(Button *buttons, String &currentScreen) {
+  
+  this->clear(buttons);
+  currentScreen = "wifiScreen";
+  
+  Button wifiOnBtn("wifiOnBtn", 20,40,250,38, "On",110,8);
+  buttons[0] = wifiOnBtn;
+  
+  Button wifiOffBtn("wifiOffBtn", 20,100,250,38, "Off",110,8);
+  buttons[1] = wifiOffBtn;
+  
+  Button wifiOkBtn("wifiOkBtn", 20,180,250,38, "Ok",110,8);
+  buttons[2] = wifiOkBtn;
 }
 
 void Screen::clear(Button *buttons) {

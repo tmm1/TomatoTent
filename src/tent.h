@@ -43,7 +43,6 @@ class Tent {
     void draw_humidity_home();
     void check_waterlevel();
     void draw_waterlevel_home();
-    void draw_wifi();
     void check_fan();
     void fan(String fanStatus);
     void checkStats();
