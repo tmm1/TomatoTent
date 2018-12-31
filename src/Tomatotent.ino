@@ -11,15 +11,14 @@ String currentScreen = "homeScreen";
 unsigned long lastTime2 = 0;
 bool dimmerButtonPressed = false;
 
-#include <XPT2046_Touch.h>
-#include <Adafruit_mfGFX.h>
+#include "XPT2046_Touch.h"
+#include "Adafruit_mfGFX.h"
 #include "DFRobot_SHT20.h"
 #include "systemStatus.h"
 #include "button.h"
 #include "tent.h"
 #include "screen.h"
 #include "Adafruit_ILI9341.h"
-
 /***************************************************
   This is our GFX example for the Adafruit ILI9341 Breakout and Shield
   ----> http://www.adafruit.com/products/1651
@@ -49,12 +48,14 @@ Timer minuteCounter(60000,&SystemStatus::countMinute, systemStatus);   //once pe
 
 XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
+
+
 STARTUP(
   SYSTEM_MODE(SEMI_AUTOMATIC);
   pinMode(FAN_SPEED_PIN, OUTPUT);
   analogWrite(FAN_SPEED_PIN, 0, 25000);
 )
-
+  
 void setup() {
     
     /*SET WIFI 

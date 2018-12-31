@@ -135,8 +135,7 @@
 
         Serial.print(fanSpeed);
         
-        analogWrite(FAN_SPEED_PIN,80, 25000);
-        //analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
+        analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
     }  
 
     void Tent::fan(String fanStatus) {
