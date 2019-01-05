@@ -132,8 +132,6 @@
         if(temp > 200 || hum > 200) {
             fanSpeed = FAN_SPEED_MIN;
         }
-
-        Serial.print(fanSpeed);
         
         analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
     }  

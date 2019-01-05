@@ -48,8 +48,6 @@ Timer minuteCounter(60000,&SystemStatus::countMinute, systemStatus);   //once pe
 
 XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
-
-
 STARTUP(
   SYSTEM_MODE(SEMI_AUTOMATIC);
   pinMode(FAN_SPEED_PIN, OUTPUT);

@@ -17,7 +17,7 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       tft.print("Hi,");
       
       tft.setCursor(75,40);
-      tft.print("nice to meet you.");
+      tft.print("I'm Tomatotent.");
 
       tft.drawBitmap(110, 65, tomato_filled_100, 100, 100, ILI9341_RED);
       
