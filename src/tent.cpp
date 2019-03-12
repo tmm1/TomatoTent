@@ -1,13 +1,14 @@
 #include "tent.h"
 
   Tent::Tent() {
-    Particle.function("growLight", &Tent::growLight, this);
+
     tp = new Timer (50000, &Tent::displayLightLow, *this, 1);
     tp1 = new Timer (60000, &Tent::displayLightOff, *this, 1);
     
     this->growLightStatus = "OFF";
   
     attachInterrupt(DIM_PIN, &Tent::setDimButtonPressed,this,FALLING);
+   
   }
 
   void Tent::check_temperature(){
