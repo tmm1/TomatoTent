@@ -37,6 +37,7 @@ class Tent {
     Timer *tp;
     Timer *tp1;
 
+    void begin();
     void check_temperature();
     void draw_temperature_home();
     void check_humidity();

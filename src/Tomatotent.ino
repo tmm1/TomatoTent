@@ -61,9 +61,8 @@ void setup() {
         Set through Particle phone app or here in-code
         Needs to be set only once then will remember
     */
-  // WiFi.setCredentials("WiFi-9L3X", "97953215");
-   // WiFi.setCredentials("CIRCUITWEST", "Timelord14");
-   // WiFi.setCredentials("Pasta", "Agam2804");
+   //WiFi.setCredentials("WiFi-9L3X", "97953215");
+   //WiFi.setCredentials("CIRCUITWEST", "Timelord14");
     //END SET WIFI
     
     Time.zone(+8);
@@ -96,7 +95,7 @@ void setup() {
     
     screen.homeScreen(buttons,currentScreen);
   
-    tent.displayLightHigh();
+    tent.begin();
     
   
     //was there a grow in process before (re)booting? 

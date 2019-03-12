@@ -1,15 +1,20 @@
 #include "tent.h"
 
   Tent::Tent() {
-
-    tp = new Timer (50000, &Tent::displayLightLow, *this, 1);
-    tp1 = new Timer (60000, &Tent::displayLightOff, *this, 1);
     
     this->growLightStatus = "OFF";
-  
-    attachInterrupt(DIM_PIN, &Tent::setDimButtonPressed,this,FALLING);
    
   }
+
+void Tent::begin() {
+  tp = new Timer (10000, &Tent::displayLightLow, *this, 1);
+  tp1 = new Timer (12000, &Tent::displayLightOff, *this, 1);
+  
+  this->displayLightHigh();
+  
+  attachInterrupt(DIM_PIN, &Tent::setDimButtonPressed,this,FALLING);
+  
+}
 
   void Tent::check_temperature(){
         double currentTemp = sht20.readTemperature();
@@ -225,14 +230,19 @@
     }
 
      void Tent::displayLightLow(void) {
-          
+          /*
           while(displayBrightness > 30) {
             displayBrightness -= 5;
             analogWrite(TFT_BRIGHTNESS_PIN, displayBrightness);
             delay(10);
           }
-                    
-        }
+       */
+             Serial.println("LOW");
+
+         analogWrite(TFT_BRIGHTNESS_PIN, 50);
+
+      }
+
         void Tent::displayLightOff(void) {
           analogWrite(TFT_BRIGHTNESS_PIN, 0);
         } 
@@ -251,8 +261,8 @@
             }            
 
             analogWrite(TFT_BRIGHTNESS_PIN, displayBrightness);
-            tp->reset ();
-            tp1->reset ();
+            tp->start ();
+            tp1->start ();
             return true;
 
           } else {
