@@ -69,7 +69,7 @@ void setup() {
     Time.zone(+8);
 
     tft.begin();
-    tft.setRotation(3);
+    tft.setRotation(1);
     //DISPLAY BRIGHNESS
     pinMode(TFT_BRIGHTNESS_PIN, OUTPUT);
     pinMode(GROW_LIGHT_BRIGHTNESS_PIN, OUTPUT);
@@ -79,7 +79,7 @@ void setup() {
     
     //TOUCH
     ts.begin();
-    ts.setRotation(3);
+    ts.setRotation(1);
     //END TOUCH
     
     // Init SHT20 Sensor
