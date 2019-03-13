@@ -31,12 +31,14 @@ class Tent {
   int displayBrightness = 0;
   String growLightStatus;
   
+  
   public:
     Tent();
     unsigned long lastTime = 0;
     Timer *tp;
     Timer *tp1;
-
+    bool checkStats;
+  
     void begin();
     void check_temperature();
     void draw_temperature_home();
@@ -46,7 +48,9 @@ class Tent {
     void draw_waterlevel_home();
     void check_fan();
     void fan(String fanStatus);
-    void checkStats();
+    void doCheckStats();
+    bool getCheckStats();
+    void resetCheckStats();
     void drawStats();
     int growLight(String brightness);
     String getGrowLightStatus();

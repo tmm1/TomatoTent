@@ -7,8 +7,8 @@
   }
 
 void Tent::begin() {
-  tp = new Timer (10000, &Tent::displayLightLow, *this, 1);
-  tp1 = new Timer (12000, &Tent::displayLightOff, *this, 1);
+  tp = new Timer (50000, &Tent::displayLightLow, *this, 1);
+  tp1 = new Timer (60000, &Tent::displayLightOff, *this, 1);
   
   this->displayLightHigh();
   
@@ -140,6 +140,7 @@ void Tent::begin() {
         }
         
         analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
+      
     }  
 
     void Tent::fan(String fanStatus) {
@@ -148,11 +149,16 @@ void Tent::begin() {
         } 
     }
   
-    void Tent::checkStats(){   //checks & draws stats
-      this->check_temperature();
-      this->check_humidity();
-      this->check_waterlevel();
-      this->check_fan();
+    void Tent::doCheckStats(){   //checks & draws stats
+      this->checkStats = true;
+    }
+
+    bool Tent::getCheckStats() {
+      return this->checkStats;
+    }
+
+    void Tent::resetCheckStats() {
+      this->checkStats = false;
     }
 
     void Tent::drawStats(){  //only draws stats
@@ -230,16 +236,12 @@ void Tent::begin() {
     }
 
      void Tent::displayLightLow(void) {
-          /*
+          
           while(displayBrightness > 30) {
             displayBrightness -= 5;
             analogWrite(TFT_BRIGHTNESS_PIN, displayBrightness);
             delay(10);
           }
-       */
-             Serial.println("LOW");
-
-         analogWrite(TFT_BRIGHTNESS_PIN, 50);
 
       }
 
@@ -260,7 +262,6 @@ void Tent::begin() {
               delay(5);
             }            
 
-            analogWrite(TFT_BRIGHTNESS_PIN, displayBrightness);
             tp->start ();
             tp1->start ();
             return true;

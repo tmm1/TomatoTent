@@ -41,15 +41,16 @@ Tent tent;
 Screen screen;
 SystemStatus systemStatus;
 
-Timer draw_temp_home(5000,&Tent::checkStats,tent);
+Timer draw_temp_home(7000,&Tent::doCheckStats,tent);
 
 //sets the timer for the GrowLight Photoperiod
 Timer minuteCounter(60000,&SystemStatus::countMinute, systemStatus);   //once per minute
 
 XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
+SYSTEM_MODE(SEMI_AUTOMATIC);
+
 STARTUP(
-  SYSTEM_MODE(SEMI_AUTOMATIC);
   pinMode(FAN_SPEED_PIN, OUTPUT);
   analogWrite(FAN_SPEED_PIN, 0, 25000);
 )
@@ -105,7 +106,7 @@ void setup() {
         tent.growLight("HIGH");  
       }
       
-      tent.checkStats(); //First time right away
+      tent.doCheckStats(); //First time right away
       draw_temp_home.start();
       
       systemStatus.countMinute();  //after restart
@@ -121,7 +122,8 @@ void setup() {
 }
 
 
-void loop(void) {
+void loop(void) {  
+  
     
     if(ts.touched()) {
       
@@ -151,7 +153,7 @@ void loop(void) {
             
             screen.homeScreen(buttons, currentScreen);
             
-            tent.checkStats(); //First time right away
+            tent.doCheckStats(); //First time right away
             draw_temp_home.start();
             
             systemStatus.countMinute(); // First time on new grow
@@ -320,4 +322,17 @@ void loop(void) {
       dimmerButtonPressed = false;
 
   }
+  
+  
+  if(tent.getCheckStats()) {
+      tent.check_temperature();
+      tent.check_humidity();
+      tent.check_waterlevel();
+      tent.check_fan();
+      tent.resetCheckStats();
+  }  
+  
+  
+  
+  
 }
