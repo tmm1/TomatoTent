@@ -139,7 +139,10 @@ void Tent::begin() {
             fanSpeed = FAN_SPEED_MIN;
         }
         
-        analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
+      analogWrite(FAN_SPEED_PIN,255-fanSpeed, 25000);
+      //analogWrite(FAN_SPEED_PIN,200,25000);
+      
+        Serial.println(String(fanSpeed));
       
     }  
 
