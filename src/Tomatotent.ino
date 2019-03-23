@@ -1,4 +1,13 @@
-
+#include "Particle.h"
+#include "softap_http.h"
+#include "XPT2046_Touch.h"
+#include "Adafruit_mfGFX.h"
+#include "DFRobot_SHT20.h"
+#include "systemStatus.h"
+#include "button.h"
+#include "tent.h"
+#include "screen.h"
+#include "Adafruit_ILI9341.h"
 
 #define CS_PIN D5
 #define TIRQ_PIN A0
@@ -13,17 +22,9 @@ String currentScreen = "homeScreen";
 unsigned long lastTime2 = 0;
 bool dimmerButtonPressed = false;
 
-#include "XPT2046_Touch.h"
-#include "Adafruit_mfGFX.h"
-#include "DFRobot_SHT20.h"
-#include "systemStatus.h"
-#include "button.h"
-#include "tent.h"
-#include "screen.h"
-#include "Adafruit_ILI9341.h"
 
-#include "Particle.h"
-#include "softap_http.h"
+
+
 /***************************************************
   This is our GFX example for the Adafruit ILI9341 Breakout and Shield
   ----> http://www.adafruit.com/products/1651
