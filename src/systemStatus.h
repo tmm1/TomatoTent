@@ -2,6 +2,7 @@
 #define SYSTEMSTATUS_H
 
 #include "Particle.h"
+#include <Arduino.h>
 #include "math.h"
 #include "Adafruit_ILI9341.h"
 #include "tent.h"

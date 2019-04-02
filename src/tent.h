@@ -2,7 +2,7 @@
 #define TENT_H
 
 #include "Particle.h"
-
+#include <Arduino.h>
 #include "DFRobot_SHT20.h"
 #include "Adafruit_ILI9341.h"
 #include "icons.h"

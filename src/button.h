@@ -2,6 +2,7 @@
 #define BUTTON_H
 
 #include <Particle.h>
+#include <Arduino.h>
 #include <Adafruit_ILI9341.h>
 #include "icons.h"
 

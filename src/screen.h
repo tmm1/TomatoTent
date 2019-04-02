@@ -2,6 +2,7 @@
 #define SCREEN_H
 
 #include <Particle.h>
+#include <Arduino.h>
 
 #include <Adafruit_ILI9341.h>
 #include <button.h>
