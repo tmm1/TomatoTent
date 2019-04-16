@@ -49,7 +49,7 @@ Tent tent;
 Screen screen;
 SystemStatus systemStatus;
 
-Timer draw_temp_home(7000,&Tent::doCheckStats,tent);
+Timer draw_temp_home(7003,&Tent::doCheckStats,tent);
 
 //sets the timer for the GrowLight Photoperiod
 Timer minuteCounter(60000,&SystemStatus::countMinute, systemStatus);   //once per minute
@@ -136,9 +136,6 @@ void myPage(const char* url, ResponseCallback* cb, void* cbArg, Reader* body, Wr
 // Include the rest of your application below,
 // including your setup and loop functions
 
-
-
-
 STARTUP(
   softap_set_application_page_handler(myPage, nullptr);
   pinMode(FAN_SPEED_PIN, OUTPUT);
@@ -169,7 +166,7 @@ void setup() {
     
     //TOUCH
     ts.begin();
-    ts.setRotation(1);
+    ts.setRotation(3);  // 1 for 2.4 screen, 3 for 2.8
     //END TOUCH
     
     // Init SHT20 Sensor
@@ -221,7 +218,14 @@ void loop(void) {
       
       TS_Point p = ts.getPosition();
       
-      Serial.println(currentScreen);
+      //calibration
+      p.x = (p.x)+20;
+      p.y = (p.y)-10;
+      
+      //Serial.println(currentScreen);
+      
+      Serial.println(p.x);
+      Serial.println(p.y);
       
 
       //WAS A BUTTON TOUCHED - And which one?
@@ -417,7 +421,7 @@ void loop(void) {
   if(tent.getCheckStats()) {
       tent.check_temperature();
       tent.check_humidity();
-      tent.check_waterlevel();
+      //tent.check_waterlevel(); // removed for stand alone controller
       tent.check_fan();
       tent.resetCheckStats();
   }  

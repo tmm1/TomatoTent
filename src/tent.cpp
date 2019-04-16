@@ -168,7 +168,7 @@ void Tent::begin() {
     void Tent::drawStats(){  //only draws stats
       this->draw_temperature_home();
       this->draw_humidity_home();
-      this->draw_waterlevel_home();
+      //this->draw_waterlevel_home();  removed for stand alone controller
     }  
   
      int Tent::growLight(String brightness) {

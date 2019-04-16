@@ -10,8 +10,8 @@
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
 #define GROW_LIGHT_ON_OFF_PIN D7
 #define FAN_SPEED_PIN RX
-#define FAN_SPEED_MAX 150   //max 255
-#define FAN_SPEED_MIN 30    //max 255
+#define FAN_SPEED_MAX 200   //max 255
+#define FAN_SPEED_MIN 100    //max 255    and will not start below 25
 #define TFT_BRIGHTNESS_PIN WKP
 #define DIM_PIN DAC
 
