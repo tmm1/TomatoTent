@@ -10,8 +10,8 @@
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
 #define GROW_LIGHT_ON_OFF_PIN D7
 #define FAN_SPEED_PIN RX
-#define FAN_SPEED_MAX 200   //max 255
-#define FAN_SPEED_MIN 100    //max 255    and will not start below 25
+#define FAN_SPEED_MAX 100   //max 255
+#define FAN_SPEED_MIN 30    //max 255    and will not start below 25
 #define TFT_BRIGHTNESS_PIN WKP
 #define DIM_PIN DAC
 
@@ -20,14 +20,12 @@ extern Adafruit_ILI9341 tft;
 extern double temp;
 extern double hum;
 extern double waterLevel;
-extern double fanSpeed;
+extern int fanSpeed;
 extern String currentScreen;
 extern bool dimmerButtonPressed;
 
 class Tent {
   
-  double step;
-  double difference_min_max;
   int displayBrightness = 0;
   String growLightStatus;
   
@@ -46,7 +44,6 @@ class Tent {
     void draw_humidity_home();
     void check_waterlevel();
     void draw_waterlevel_home();
-    void check_fan();
     void fan(String fanStatus);
     void doCheckStats();
     bool getCheckStats();

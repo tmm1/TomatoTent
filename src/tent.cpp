@@ -110,42 +110,6 @@ void Tent::begin() {
     }
 
 
-    void Tent::check_fan() {
-
-        fanSpeed = FAN_SPEED_MIN;
-        difference_min_max = FAN_SPEED_MAX - FAN_SPEED_MIN;
-        step = ceil(difference_min_max/6);
-
-        if(temp > 70 || hum > 40) {
-            fanSpeed += step;
-        }
-        if(temp > 72 || hum > 50) {
-            fanSpeed += step;
-        }
-        if(temp > 74 || hum > 60) {
-            fanSpeed += step;
-        }
-        if(temp > 76 || hum > 70) {
-            fanSpeed += step;
-        }
-        if(temp > 78 || hum > 80) {
-            fanSpeed += step;
-        }
-        if(temp > 80 || hum > 90) {
-            fanSpeed += step;
-        }
-        //for sensor fail
-        if(temp > 200 || hum > 200) {
-            fanSpeed = FAN_SPEED_MIN;
-        }
-        
-      analogWrite(FAN_SPEED_PIN,255-fanSpeed, 25000);
-      //analogWrite(FAN_SPEED_PIN,fanSpeed,25000);
-      
-        Serial.println(String(fanSpeed));
-      
-    }  
-
     void Tent::fan(String fanStatus) {
         if(fanStatus == "OFF") {
             analogWrite(FAN_SPEED_PIN,255, 25000);
@@ -168,7 +132,7 @@ void Tent::begin() {
     void Tent::drawStats(){  //only draws stats
       this->draw_temperature_home();
       this->draw_humidity_home();
-      //this->draw_waterlevel_home();  removed for stand alone controller
+      this->draw_waterlevel_home();  //remove for stand alone controller
     }  
   
      int Tent::growLight(String brightness) {

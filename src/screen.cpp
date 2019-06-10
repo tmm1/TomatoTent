@@ -36,6 +36,11 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       Button timerBtn("timerBtn", 10,10,115,25, "",18,8);
       buttons[2] = timerBtn;
       
+      Button fanBtn("fanBtn", 145,10,115,35, "",18,8);
+      buttons[3] = fanBtn;
+      
+      tft.drawBitmap(145, 4, fan_36, 36, 36, ILI9341_WHITE); 
+      
       systemStatus.drawTimerStatus();
       tent.drawStats();
       
@@ -45,7 +50,7 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
          
   }
       Button wifiBtn("wifiBtn", 260,0,60,30, "",18,8);
-      buttons[3] = wifiBtn;
+      buttons[4] = wifiBtn;
 }
 
 void Screen::growStartedScreen(Button *buttons, String &currentScreen) {
@@ -83,12 +88,12 @@ void Screen::cancelScreen(Button *buttons, String &currentScreen) {
   tft.setCursor(20,120);
   tft.print("after about 110 days.");
   
-  /* Include if you want to know your free memory
+  /* Include if you want to know your free memory */
   tft.setTextSize(1);
   tft.setCursor(50,140);
   uint32_t freemem = System.freeMemory();
   tft.print(freemem);
-  */
+  
   
   Button cancelScreenOkBtn("cancelScreenOkBtn", 20,180,250,38, "Ok",110,8);
   buttons[0] = cancelScreenOkBtn;
@@ -167,6 +172,30 @@ void Screen::wifiScreen(Button *buttons, String &currentScreen) {
   
   Button wifiOkBtn("wifiOkBtn", 20,180,250,38, "Ok",110,8);
   buttons[2] = wifiOkBtn;
+}
+
+void Screen::fanScreen(Button *buttons, String &currentScreen) {
+  
+  this->clear(buttons);
+  currentScreen = "fanScreen";
+  
+  tft.setCursor(20,8);
+  tft.setTextColor(ILI9341_GREEN);
+  tft.setTextSize(3);
+  tft.print("Fan Speed");
+  
+  Button fanUpBtn("fanUpBtn", 240,50,40,40, "",0,0);
+  buttons[0] = fanUpBtn;
+  
+  Button fanDownBtn("fanDownBtn", 240,130,40,40, "",0,0);
+  buttons[1] = fanDownBtn;
+  
+  Button fanOkBtn("fanOkBtn", 20,180,250,38, "Ok",110,8);
+  buttons[2] = fanOkBtn;
+
+  tft.setCursor(10,120);
+  tft.print(String(map(fanSpeed,0,255,0,100)));
+  
 }
 
 void Screen::clear(Button *buttons) {

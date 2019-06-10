@@ -19,7 +19,7 @@
 double temp;
 double hum;
 double waterLevel;
-double fanSpeed = 0;
+int fanSpeed = 0;
 String currentScreen = "homeScreen";
 unsigned long lastTime2 = 0;
 bool dimmerButtonPressed = false;
@@ -385,6 +385,33 @@ void loop(void) {
              break;
           }
           
+          if( (buttons[c].getName() == "fanBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             screen.fanScreen(buttons, currentScreen);
+             break;
+          } 
+          
+          if( (buttons[c].getName() == "fanUpBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             
+             int currentFanPercent = map(fanSpeed,0,255,0,100);
+             currentFanPercent += 5;
+            
+             systemStatus.setFanMode(currentFanPercent);
+             systemStatus.check_fan();
+             break;
+          } 
+          
+          if( (buttons[c].getName() == "fanDownBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+              break;
+          } 
+          
+          if( (buttons[c].getName() == "fanOkBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             screen.homeScreen(buttons, currentScreen);
+             break;
+          }
         };  
       }
   
@@ -421,8 +448,8 @@ void loop(void) {
   if(tent.getCheckStats()) {
       tent.check_temperature();
       tent.check_humidity();
-      //tent.check_waterlevel(); // removed for stand alone controller
-      tent.check_fan();
+      tent.check_waterlevel(); // removed for stand alone controller
+      systemStatus.check_fan();
       tent.resetCheckStats();
   }  
   

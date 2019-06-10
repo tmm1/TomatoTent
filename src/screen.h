@@ -25,6 +25,7 @@ class Screen {
   void cancelConfirmationScreen(Button *buttons, String &currentScreen);
   void timerScreen(Button *buttons, String &currentScreen);
   void wifiScreen(Button *buttons, String &currentScreen);
+  void fanScreen(Button *buttons, String &currentScreen);
   void clear(Button *buttons);
 };
 #endif
