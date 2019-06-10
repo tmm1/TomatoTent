@@ -130,14 +130,44 @@
     
       if(this->getName() == "fanBtn") {}
     
+      if(this->getName() == "fanAutoBtn") {
+                  
+        tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
+
+        if(systemStatus.getFanAutoMode()) {
+          tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_OLIVE);
+        } else {
+          tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_BLACK);           
+        }
+        tft.setCursor(x0 + textOffsetLeft,y0 + textOffsetTop);
+        tft.setTextColor(ILI9341_WHITE);
+        tft.setTextSize(2);
+        tft.print(buttonText); 
+      }
+    
+      if(this->getName() == "fanManualBtn") {
+        
+        tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
+        
+        if(!systemStatus.getFanAutoMode()) {
+          tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_OLIVE);
+        } else {
+          tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_BLACK);           
+        }
+        tft.setCursor(x0 + textOffsetLeft,y0 + textOffsetTop);
+        tft.setTextColor(ILI9341_WHITE);
+        tft.setTextSize(2);
+        tft.print(buttonText);
+      }
+    
       if(this->getName() == "fanUpBtn") {
         tft.fillTriangle(240, 95, 260, 55, 280, 95, ILI9341_RED);
         tft.drawTriangle(240, 95, 260, 55, 280, 95, ILI9341_LIGHTGREY);
       }
     
       if(this->getName() == "fanDownBtn") {
-        tft.fillTriangle(240, 170, 260, 130, 280, 170, ILI9341_RED); 
-        tft.drawTriangle(240, 170, 260, 130, 280, 170, ILI9341_LIGHTGREY);
+        tft.fillTriangle(240, 110, 260, 150, 280, 110, ILI9341_RED); 
+        tft.drawTriangle(240, 110, 260, 150, 280, 110, ILI9341_LIGHTGREY);
       } 
     
       if(this->getName() == "fanOkBtn") {
@@ -147,7 +177,8 @@
         tft.setTextColor(ILI9341_WHITE);
         tft.setTextSize(3);
         tft.print(buttonText); 
-      }    
+      }
+    
   }
   
   void Button::renderPressed() {
@@ -168,7 +199,7 @@
     }
     
     if(this->getName() == "fanDownBtn") {
-        tft.fillTriangle(240, 170, 260, 130, 280, 170, ILI9341_WHITE);    
+        tft.fillTriangle(240, 110, 260, 150, 280, 110, ILI9341_WHITE);    
     }     
     
   }

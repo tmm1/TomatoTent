@@ -19,7 +19,6 @@
 double temp;
 double hum;
 double waterLevel;
-int fanSpeed = 0;
 String currentScreen = "homeScreen";
 unsigned long lastTime2 = 0;
 bool dimmerButtonPressed = false;
@@ -317,7 +316,7 @@ void loop(void) {
             
             tft.fillRect(10,70,200,22,ILI9341_BLACK);
             tft.setTextColor(ILI9341_WHITE);
-            tft.setTextSize(3);
+            tft.setTextSize(2);
             tft.setCursor(10,70);
             tft.print(String(dayDuration/60)+" Hours ON");
             
@@ -341,7 +340,7 @@ void loop(void) {
             
             tft.fillRect(10,70,200,22,ILI9341_BLACK);
             tft.setTextColor(ILI9341_WHITE);
-            tft.setTextSize(3);
+            tft.setTextSize(2);
             tft.setCursor(10,70);
             tft.print(String(dayDuration/60)+" Hours ON");
             
@@ -391,20 +390,62 @@ void loop(void) {
              break;
           } 
           
+          if( (buttons[c].getName() == "fanAutoBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             systemStatus.setFanAutoMode(1);
+             buttons[0].render();
+             buttons[1].render();
+             systemStatus.check_fan();
+             break;
+          }
+          
+          if( (buttons[c].getName() == "fanManualBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             systemStatus.setFanAutoMode(0);
+             buttons[0].render();
+             buttons[1].render();
+             systemStatus.check_fan();
+             break;
+          }         
+          
           if( (buttons[c].getName() == "fanUpBtn") && (buttons[c].getStatus() == "none") ) {
              buttons[c].setStatus("pressed");
-             
-             int currentFanPercent = map(fanSpeed,0,255,0,100);
-             currentFanPercent += 5;
+             float fanSpeedPercent = systemStatus.getFanSpeed();
             
-             systemStatus.setFanMode(currentFanPercent);
-             systemStatus.check_fan();
+             //set to manual
+             systemStatus.setFanAutoMode(0);
+            
+             buttons[0].render();
+             buttons[1].render();
+            
+             if(fanSpeedPercent < 100) {
+            
+                fanSpeedPercent += 5;
+            
+                systemStatus.setFanSpeed(fanSpeedPercent);
+                systemStatus.check_fan();
+             }
              break;
           } 
           
           if( (buttons[c].getName() == "fanDownBtn") && (buttons[c].getStatus() == "none") ) {
              buttons[c].setStatus("pressed");
-              break;
+             float fanSpeedPercent = systemStatus.getFanSpeed();
+            
+             //set to manual
+              systemStatus.setFanAutoMode(0);
+            
+             buttons[0].render();
+             buttons[1].render();
+            
+             if(fanSpeedPercent > 15) {
+            
+                fanSpeedPercent -= 5;
+            
+                systemStatus.setFanSpeed(fanSpeedPercent);
+                systemStatus.check_fan();
+             }
+             break;
           } 
           
           if( (buttons[c].getName() == "fanOkBtn") && (buttons[c].getStatus() == "none") ) {

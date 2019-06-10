@@ -125,83 +125,94 @@ void SystemStatus::drawDayCounter() {
       tft.print("Day "+String(this->getDayCount()));
 }
 
-int SystemStatus::getFanMode() {
-  return this->status.fanMode;
+void SystemStatus::drawFanSpeed() {
+       //write status to screen
+       tft.fillRect(210, 10, 56, 35, ILI9341_BLACK);
+       
+       tft.setCursor(210, 10);
+       tft.setTextSize(2);
+       tft.setTextColor(ILI9341_WHITE); 
+       
+       tft.print(String(String::format("%.0f",this->status.fanSpeed)));
+
+       tft.print("%");
+       
+       tft.setTextSize(1);
+       if(this->status.fanAutoMode) {
+         tft.setCursor(195, 30);
+         tft.print("automatic");
+       } else {
+         tft.setCursor(210, 30);
+         tft.print("manual");
+       }
 }
 
-void SystemStatus::setFanMode(int fanMode) {
-  this->status.fanMode = fanMode;
+bool SystemStatus::getFanAutoMode() {
+  return this->status.fanAutoMode;
+}
+
+void SystemStatus::setFanAutoMode(bool fanAutoMode) {
+  this->status.fanAutoMode = fanAutoMode;
   this->save();
 }
 
+float SystemStatus::getFanSpeed() {
+  return this->status.fanSpeed;
+}
+
+void SystemStatus::setFanSpeed(float fanSpeed) {
+  this->status.fanSpeed = fanSpeed;
+  this->save();
+}
 
 void SystemStatus::check_fan() {
       
-      if(this->status.fanMode != -1) {
+      if(this->status.fanAutoMode == 0) { //manual
         
-        fanSpeed = map(this->status.fanMode, 0, 100, 0, 255);
+        int fanSpeed = map(this->status.fanSpeed, 0.0, 100.0, 0.0, 255.0);
         
         analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
 
       } else {
 
-        fanSpeed = FAN_SPEED_MIN;
-        difference_min_max = FAN_SPEED_MAX - FAN_SPEED_MIN;
-        step = ceil(difference_min_max/6);
+        float fanSpeedPercent = FAN_SPEED_MIN;
+        step = 5;
 
         if(temp > 70 || hum > 40) {
-            fanSpeed += step;
+            fanSpeedPercent += step;
         }
         if(temp > 72 || hum > 50) {
-            fanSpeed += step;
+            fanSpeedPercent += step;
         }
         if(temp > 74 || hum > 60) {
-            fanSpeed += step;
+            fanSpeedPercent += step;
         }
         if(temp > 76 || hum > 70) {
-            fanSpeed += step;
+            fanSpeedPercent += step;
         }
         if(temp > 78 || hum > 80) {
-            fanSpeed += step;
+            fanSpeedPercent += step;
         }
         if(temp > 80 || hum > 90) {
-            fanSpeed += step;
+            fanSpeedPercent += step;
         }
         //for sensor fail
         if(temp > 200 || hum > 200) {
-            fanSpeed = FAN_SPEED_MIN;
+            fanSpeedPercent = FAN_SPEED_MIN+20;
         }
-      
-      analogWrite(FAN_SPEED_PIN,255-fanSpeed, 25000);
+        
+        this->setFanSpeed(fanSpeedPercent);
+        
+        int fanSpeed = map(fanSpeedPercent, 0.0, 100.0, 0.0, 255.0);
+
+        analogWrite(FAN_SPEED_PIN,255-fanSpeed, 25000);
       //analogWrite(FAN_SPEED_PIN,fanSpeed,25000);
         
     }
   
-     fanSpeedPercent = map(fanSpeed,0,255,0,100);
-  
-     if(currentScreen == "homeScreen") {      
-         
-       //write status to screen
-       tft.fillRect(190, 10, 50, 35, ILI9341_BLACK);
-       
-       
-       tft.setCursor(190, 20);
-       tft.setTextSize(2);
-       tft.setTextColor(ILI9341_WHITE); 
-                     
-       tft.print(String::format("%.0f",fanSpeedPercent));
-       tft.print("%");
-     }
-  
-    if(currentScreen == "fanScreen") {
-      
-       tft.fillRect(10, 10, 50, 25, ILI9341_BLACK);
-      
-       tft.setCursor(10,140);
-       tft.print(String(fanSpeedPercent));  
-      
+    if(currentScreen == "homeScreen" || currentScreen == "fanScreen") {
+      this->drawFanSpeed();
     }
- 
       
     }  
 
@@ -211,7 +222,8 @@ void SystemStatus::init() {
   this->status.isDay = true; // true if the light is on
   this->status.minutesInPhotoperiod = 0; //how long has the system been in current photoperiod?  E.g. 31 minutes in NIGHT
   this->status.dayDuration = 18*60; //how long is the light on?  Starts out at 18 hrs (18*60)
-  this->status.fanMode = 50; // -1 for auto, num value 0-100 for percentage
+  this->status.fanAutoMode = 1; // 1 for auto, 0 for manual
+  this->status.fanSpeed = 30; // 0-100 %
   
   this->save();
   

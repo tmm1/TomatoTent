@@ -39,9 +39,10 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       Button fanBtn("fanBtn", 145,10,115,35, "",18,8);
       buttons[3] = fanBtn;
       
-      tft.drawBitmap(145, 4, fan_36, 36, 36, ILI9341_WHITE); 
+      tft.drawBitmap(165, 4, fan_36, 36, 36, ILI9341_WHITE); 
       
       systemStatus.drawTimerStatus();
+      systemStatus.check_fan();
       tent.drawStats();
       
       if(tent.getGrowLightStatus() == "LOW") {
@@ -131,7 +132,7 @@ void Screen::timerScreen(Button *buttons, String &currentScreen) {
   
   tft.setCursor(20,8);
   tft.setTextColor(ILI9341_GREEN);
-  tft.setTextSize(3);
+  tft.setTextSize(2);
   tft.print("Light Timer");
   
   int dayDuration = systemStatus.getDayDuration();
@@ -179,22 +180,29 @@ void Screen::fanScreen(Button *buttons, String &currentScreen) {
   this->clear(buttons);
   currentScreen = "fanScreen";
   
-  tft.setCursor(20,8);
+  tft.drawBitmap(20, 4, fan_36, 36, 36, ILI9341_WHITE); 
+
+  tft.setCursor(60,8);
   tft.setTextColor(ILI9341_GREEN);
-  tft.setTextSize(3);
-  tft.print("Fan Speed");
+  tft.setTextSize(2);
+  tft.print("Speed");
+  
+  Button fanAutoBtn("fanAutoBtn",20,65,150,38,"Automatic",20,11);
+  buttons[0] = fanAutoBtn;
+  
+  Button fanManualBtn("fanManualBtn",20,115,150,38,"Manual",40,11);
+  buttons[1] = fanManualBtn;
   
   Button fanUpBtn("fanUpBtn", 240,50,40,40, "",0,0);
-  buttons[0] = fanUpBtn;
+  buttons[2] = fanUpBtn;
   
-  Button fanDownBtn("fanDownBtn", 240,130,40,40, "",0,0);
-  buttons[1] = fanDownBtn;
+  Button fanDownBtn("fanDownBtn", 240,110,40,40, "",0,0);
+  buttons[3] = fanDownBtn;
   
   Button fanOkBtn("fanOkBtn", 20,180,250,38, "Ok",110,8);
-  buttons[2] = fanOkBtn;
-
-  tft.setCursor(10,120);
-  tft.print(String(map(fanSpeed,0,255,0,100)));
+  buttons[4] = fanOkBtn;
+  
+  systemStatus.drawFanSpeed();
   
 }
 

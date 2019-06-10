@@ -13,7 +13,8 @@ extern Adafruit_ILI9341 tft;
 extern Button button;
 extern SystemStatus systemStatus;
 extern Tent tent;
-
+extern float fanSpeed;
+extern float fanSpeedPercent;
 
 class Screen {
 
