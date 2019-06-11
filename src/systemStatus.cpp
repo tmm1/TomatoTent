@@ -127,7 +127,7 @@ void SystemStatus::drawDayCounter() {
 
 void SystemStatus::drawFanSpeed() {
        //write status to screen
-       tft.fillRect(210, 10, 56, 35, ILI9341_BLACK);
+       tft.fillRect(200, 10, 56, 35, ILI9341_BLACK);
        
        tft.setCursor(210, 10);
        tft.setTextSize(2);
@@ -139,7 +139,7 @@ void SystemStatus::drawFanSpeed() {
        
        tft.setTextSize(1);
        if(this->status.fanAutoMode) {
-         tft.setCursor(195, 30);
+         tft.setCursor(200, 30);
          tft.print("automatic");
        } else {
          tft.setCursor(210, 30);
@@ -171,7 +171,8 @@ void SystemStatus::check_fan() {
         
         int fanSpeed = map(this->status.fanSpeed, 0.0, 100.0, 0.0, 255.0);
         
-        analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
+        analogWrite(FAN_SPEED_PIN,255-fanSpeed, 25000);
+        //analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
 
       } else {
 
