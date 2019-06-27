@@ -10,7 +10,7 @@
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
 #define GROW_LIGHT_ON_OFF_PIN D7
 #define FAN_SPEED_PIN RX
-#define FAN_SPEED_MIN 20    //percent    and will not start below 15
+#define FAN_SPEED_MIN 0    //percent
 #define TFT_BRIGHTNESS_PIN WKP
 #define DIM_PIN DAC
 

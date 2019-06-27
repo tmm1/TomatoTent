@@ -133,7 +133,8 @@ void SystemStatus::drawFanSpeed() {
        tft.setTextSize(2);
        tft.setTextColor(ILI9341_WHITE); 
        
-       tft.print(String(String::format("%.0f",this->status.fanSpeed)));
+       //tft.print(String(String::format("%.0f",this->status.fanSpeed)));
+       tft.print(String(String::format("%.0f",this->status.fanSpeed+5)));
 
        tft.print("%");
        
@@ -178,7 +179,7 @@ void SystemStatus::check_fan() {
 
         float fanSpeedPercent = FAN_SPEED_MIN;
         step = 5;
-
+/*
         if(temp > 70 || hum > 40) {
             fanSpeedPercent += step;
         }
@@ -191,6 +192,7 @@ void SystemStatus::check_fan() {
         if(temp > 76 || hum > 70) {
             fanSpeedPercent += step;
         }
+*/
         if(temp > 78 || hum > 80) {
             fanSpeedPercent += step;
         }
@@ -199,7 +201,7 @@ void SystemStatus::check_fan() {
         }
         //for sensor fail
         if(temp > 200 || hum > 200) {
-            fanSpeedPercent = FAN_SPEED_MIN+20;
+            fanSpeedPercent = FAN_SPEED_MIN+15;
         }
         
         this->setFanSpeed(fanSpeedPercent);

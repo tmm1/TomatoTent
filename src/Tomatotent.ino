@@ -438,7 +438,7 @@ void loop(void) {
              buttons[0].render();
              buttons[1].render();
             
-             if(fanSpeedPercent > 15) {
+             if(fanSpeedPercent > 0) {
             
                 fanSpeedPercent -= 5;
             
