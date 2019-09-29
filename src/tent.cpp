@@ -204,7 +204,7 @@ void Tent::begin() {
     }
 
      void Tent::displayLightLow(void) {
-          
+         
           while(displayBrightness > 30) {
             displayBrightness -= 5;
             analogWrite(TFT_BRIGHTNESS_PIN, displayBrightness);
@@ -215,6 +215,8 @@ void Tent::begin() {
 
         void Tent::displayLightOff(void) {
           analogWrite(TFT_BRIGHTNESS_PIN, 0);
+          RGB.control(true);
+          RGB.brightness(0);
         } 
 
 
@@ -228,7 +230,9 @@ void Tent::begin() {
               displayBrightness += 5;
               analogWrite(TFT_BRIGHTNESS_PIN, displayBrightness);
               delay(5);
-            }            
+            }  
+            RGB.brightness(255);
+            RGB.control(false);
 
             tp->start ();
             tp1->start ();

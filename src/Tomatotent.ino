@@ -10,6 +10,8 @@
 #include "screen.h"
 #include "Adafruit_ILI9341.h"
 
+PRODUCT_ID(10167);
+PRODUCT_VERSION(3);
 
 #define CS_PIN D5
 #define TIRQ_PIN A0
@@ -22,8 +24,6 @@ double waterLevel;
 String currentScreen = "homeScreen";
 unsigned long lastTime2 = 0;
 bool dimmerButtonPressed = false;
-
-
 
 
 /***************************************************
@@ -55,8 +55,7 @@ Timer minuteCounter(60000,&SystemStatus::countMinute, systemStatus);   //once pe
 
 XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
-//SYSTEM_MODE(SEMI_AUTOMATIC);
-
+SYSTEM_MODE(SEMI_AUTOMATIC);
 
 
 struct Page
@@ -132,9 +131,6 @@ void myPage(const char* url, ResponseCallback* cb, void* cbArg, Reader* body, Wr
 // Press SETUP for 3 seconds to make the Photon enter Listening mode
 // Navigate to http://192.168.0.1 to setup Wi-Fi
 
-// Include the rest of your application below,
-// including your setup and loop functions
-
 STARTUP(
   softap_set_application_page_handler(myPage, nullptr);
   pinMode(FAN_SPEED_PIN, OUTPUT);
@@ -148,9 +144,15 @@ void setup() {
         Set through Particle phone app or here in-code
         Needs to be set only once then will remember
     */
-   //WiFi.setCredentials("WiFi-9L3X", "97953215");
-   //WiFi.setCredentials("CIRCUITWEST", "Timelord14");
-    //END SET WIFI
+    if( WiFi.hasCredentials() ) {
+      Particle.connect();
+    } else {
+      WiFi.off();
+      //WiFi.setCredentials("CIRCUITWEST", "Timelord14");
+      //WiFi.setCredentials("WiFi-YY9V", "52367278");
+    }
+  //END SET WIFI
+
     
     Time.zone(+8);
 
@@ -199,7 +201,7 @@ void setup() {
       minuteCounter.start();
        
     } else {
-      systemStatus.init();  
+      systemStatus.init();
     }
   
      
@@ -219,12 +221,7 @@ void loop(void) {
       
       //calibration
       p.x = (p.x)+20;
-      p.y = (p.y)-10;
-      
-      //Serial.println(currentScreen);
-      
-      Serial.println(p.x);
-      Serial.println(p.y);
+      p.y = (p.y)+10;
       
 
       //WAS A BUTTON TOUCHED - And which one?
@@ -242,7 +239,7 @@ void loop(void) {
             
             screen.growStartedScreen(buttons, currentScreen);
             
-            delay(5000);
+            delay(3000);
             
             screen.homeScreen(buttons, currentScreen);
             
@@ -489,7 +486,7 @@ void loop(void) {
   if(tent.getCheckStats()) {
       tent.check_temperature();
       tent.check_humidity();
-      tent.check_waterlevel(); // removed for stand alone controller
+     // tent.check_waterlevel(); // removed for stand alone controller
       systemStatus.check_fan();
       tent.resetCheckStats();
   }  

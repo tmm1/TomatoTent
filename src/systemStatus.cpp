@@ -186,13 +186,13 @@ void SystemStatus::check_fan() {
         if(temp > 72 || hum > 50) {
             fanSpeedPercent += step;
         }
+    */
         if(temp > 74 || hum > 60) {
             fanSpeedPercent += step;
-        }
+        }    
         if(temp > 76 || hum > 70) {
             fanSpeedPercent += step;
         }
-*/
         if(temp > 78 || hum > 80) {
             fanSpeedPercent += step;
         }
