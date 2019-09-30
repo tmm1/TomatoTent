@@ -11,7 +11,7 @@
 #include "Adafruit_ILI9341.h"
 
 PRODUCT_ID(10167);
-PRODUCT_VERSION(3);
+PRODUCT_VERSION(4);
 
 #define CS_PIN D5
 #define TIRQ_PIN A0
@@ -221,7 +221,7 @@ void loop(void) {
       
       //calibration
       p.x = (p.x)+20;
-      p.y = (p.y)+10;
+      p.y = (p.y)+0;
       
 
       //WAS A BUTTON TOUCHED - And which one?
