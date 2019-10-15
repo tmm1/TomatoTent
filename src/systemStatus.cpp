@@ -179,14 +179,15 @@ void SystemStatus::check_fan() {
 
         float fanSpeedPercent = FAN_SPEED_MIN;
         step = 5;
-/*
+
         if(temp > 70 || hum > 40) {
             fanSpeedPercent += step;
         }
+    
         if(temp > 72 || hum > 50) {
             fanSpeedPercent += step;
         }
-    */
+  
         if(temp > 74 || hum > 60) {
             fanSpeedPercent += step;
         }    
