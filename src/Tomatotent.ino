@@ -11,7 +11,7 @@
 #include "Adafruit_ILI9341.h"
 
 PRODUCT_ID(10167);
-PRODUCT_VERSION(5);
+PRODUCT_VERSION(6);
 
 #define CS_PIN D5
 #define TIRQ_PIN A0
