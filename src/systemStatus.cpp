@@ -118,6 +118,9 @@ void SystemStatus::drawTimerStatus() {
 
 
 void SystemStatus::drawDayCounter() {
+  
+      tft.fillRect(130, 180, 80, 25, ILI9341_BLACK);
+  
       tft.setCursor(70,180);
       tft.setTextColor(ILI9341_WHITE);
       tft.setTextSize(3);

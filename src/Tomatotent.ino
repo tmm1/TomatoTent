@@ -11,7 +11,7 @@
 #include "Adafruit_ILI9341.h"
 
 PRODUCT_ID(10167);
-PRODUCT_VERSION(6);
+PRODUCT_VERSION(7);
 
 #define CS_PIN D5
 #define TIRQ_PIN A0
@@ -24,6 +24,7 @@ double waterLevel;
 String currentScreen = "homeScreen";
 unsigned long lastTime2 = 0;
 bool dimmerButtonPressed = false;
+bool dimmerBtnVal;
 
 
 /***************************************************
@@ -48,7 +49,7 @@ Tent tent;
 Screen screen;
 SystemStatus systemStatus;
 
-Timer draw_temp_home(7003,&Tent::doCheckStats,tent);
+Timer draw_temp_home(7013,&Tent::doCheckStats,tent);
 
 //sets the timer for the GrowLight Photoperiod
 Timer minuteCounter(60000,&SystemStatus::countMinute, systemStatus);   //once per minute
@@ -126,8 +127,6 @@ void myPage(const char* url, ResponseCallback* cb, void* cbArg, Reader* body, Wr
     }
 }
 
-//STARTUP();
-
 // Press SETUP for 3 seconds to make the Photon enter Listening mode
 // Navigate to http://192.168.0.1 to setup Wi-Fi
 
@@ -148,8 +147,7 @@ void setup() {
       Particle.connect();
     } else {
       WiFi.off();
-      //WiFi.setCredentials("CIRCUITWEST", "Timelord14");
-      //WiFi.setCredentials("WiFi-YY9V", "52367278");
+      //WiFi.setCredentials("WiFi-YY9V", "");
     }
   //END SET WIFI
 
@@ -467,7 +465,9 @@ void loop(void) {
     }
   
   
-    if(dimmerButtonPressed) {  
+    dimmerBtnVal = digitalRead(DIM_PIN);
+  
+    if(dimmerBtnVal == LOW) {  
 
       unsigned long now = millis();
 
@@ -478,9 +478,8 @@ void loop(void) {
         tent.dimGrowLight();
 
       }
-      dimmerButtonPressed = false;
 
-  }
+    }  
   
   
   if(tent.getCheckStats()) {

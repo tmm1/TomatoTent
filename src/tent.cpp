@@ -12,8 +12,6 @@ void Tent::begin() {
   
   this->displayLightHigh();
   
-  attachInterrupt(DIM_PIN, &Tent::setDimButtonPressed,this,FALLING);
-  
 }
 
   void Tent::check_temperature(){
@@ -160,10 +158,6 @@ void Tent::begin() {
 
     String Tent::getGrowLightStatus() {
       return this->growLightStatus;
-    }
-
-    void Tent::setDimButtonPressed() {
-      dimmerButtonPressed = true;
     }
 
      void Tent::dimGrowLight() {

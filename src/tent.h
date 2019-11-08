@@ -49,7 +49,6 @@ class Tent {
     void drawStats();
     int growLight(String brightness);
     String getGrowLightStatus();
-    void setDimButtonPressed();
     void dimGrowLight();
     void drawDimmedIndicator();
     void displayLightLow(void);
