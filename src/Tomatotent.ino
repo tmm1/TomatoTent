@@ -277,6 +277,12 @@ void loop(void) {
             break;
           }
           
+          if( (buttons[c].getName() == "tempBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             screen.tempUnitScreen(buttons, currentScreen);
+             break;
+          }
+          
           //CANCEL SCREEN
           
           if( (buttons[c].getName() == "cancelScreenOkBtn") && (buttons[c].getStatus() == "none") ) {
@@ -462,6 +468,7 @@ void loop(void) {
              screen.homeScreen(buttons, currentScreen);
              break;
           }
+          
         };  
       }
   

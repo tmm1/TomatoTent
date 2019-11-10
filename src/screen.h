@@ -28,6 +28,7 @@ class Screen {
   void wifiScreen(Button *buttons, String &currentScreen);
   void wifiSetupScreen(Button *buttons, String &currentScreen);
   void fanScreen(Button *buttons, String &currentScreen);
+  void tempUnitScreen(Button *buttons, String &currentScreen);
   void clear(Button *buttons);
 };
 #endif

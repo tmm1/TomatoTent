@@ -163,7 +163,7 @@ void Tent::begin() {
      void Tent::dimGrowLight() {
          
         this->displayLightHigh();
-            
+  
         if(this->growLightStatus == "HIGH") {
           
             this->growLight("LOW");
@@ -217,6 +217,7 @@ void Tent::begin() {
         bool Tent::displayLightHigh()
         {
         	unsigned long now = millis();
+        	
           if ((now - lastTime) >= 15000 || lastTime == 0) {
             lastTime = now;
             

@@ -178,7 +178,47 @@
         tft.setTextSize(3);
         tft.print(buttonText); 
       }
-    
+      
+      if (this->getName() == "tempBtn") {
+        tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
+      }
+      
+      if (this->getName() == "tempFahrenheitBtn") {
+        tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
+
+        if(systemStatus.getTempUnit() == 'F') {
+          tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_OLIVE);
+        } else {
+          tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_BLACK);           
+        }
+        tft.setCursor(x0 + textOffsetLeft,y0 + textOffsetTop);
+        tft.setTextColor(ILI9341_WHITE);
+        tft.setTextSize(2);
+        tft.print(buttonText); 
+      }
+      
+      if (this->getName() == "tempCelsiusBtn") {
+        tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
+
+        if(systemStatus.getTempUnit() == 'C') {
+          tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_OLIVE);
+        } else {
+          tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_BLACK);           
+        }
+        tft.setCursor(x0 + textOffsetLeft,y0 + textOffsetTop);
+        tft.setTextColor(ILI9341_WHITE);
+        tft.setTextSize(2);
+        tft.print(buttonText); 
+      }   
+      
+      if(this->getName() == "tempUnitOkBtn") {
+        tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
+        tft.fillRect(x0+1,y0+1,w-2,h-2,ILI9341_OLIVE);
+        tft.setCursor(x0 + textOffsetLeft,y0 + textOffsetTop);
+        tft.setTextColor(ILI9341_WHITE);
+        tft.setTextSize(3);
+        tft.print(buttonText); 
+      }       
   }
   
   void Button::renderPressed() {

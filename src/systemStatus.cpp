@@ -160,6 +160,15 @@ void SystemStatus::setFanAutoMode(bool fanAutoMode) {
   this->save();
 }
 
+char SystemStatus::getTempUnit() {
+  return this->status.tempUnit;
+}
+
+void SystemStatus::setTempUnit(char tempUnit) {
+  this->status.tempUnit = tempUnit;
+  this->save();
+}
+
 float SystemStatus::getFanSpeed() {
   return this->status.fanSpeed;
 }

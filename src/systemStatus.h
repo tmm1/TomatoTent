@@ -24,6 +24,7 @@ class SystemStatus {
      int dayDuration; //how long is the light on?  Starts out at 18 hrs (18*60)
      bool fanAutoMode; // 1 for auto, 0 for manual
      float fanSpeed; // 0-100%
+     char tempUnit;
   };
   
   Status status;
@@ -35,6 +36,7 @@ class SystemStatus {
   int getMinutesInPhotoperiod(void);
   int getDayDuration(void);
   bool getFanAutoMode(void);
+  char getTempUnit(void);
   float getFanSpeed();
   void check_fan();
   void setDayCount(int);
@@ -43,6 +45,7 @@ class SystemStatus {
   void setDayDuration(int);
   void setFanAutoMode(bool);
   void setFanSpeed(float);
+  void setTempUnit(char);
   void countMinute();
   void drawTimerStatus();
   void drawFanSpeed();

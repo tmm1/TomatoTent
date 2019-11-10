@@ -39,6 +39,9 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       Button fanBtn("fanBtn", 145,10,115,35, "",18,8);
       buttons[3] = fanBtn;
       
+      Button tempBtn("tempBtn", 50,80,115,35, "",18,8);
+      buttons[4] = tempBtn;
+      
       tft.drawBitmap(165, 4, fan_36, 36, 36, ILI9341_WHITE); 
       
       systemStatus.drawTimerStatus();
@@ -241,6 +244,26 @@ void Screen::fanScreen(Button *buttons, String &currentScreen) {
   systemStatus.drawFanSpeed();
   
 }
+
+void Screen::tempUnitScreen(Button *buttons, String &currentScreen) {
+  
+  this->clear(buttons);
+  currentScreen = "tempUnitScreen";
+  
+  tft.drawBitmap(20, 4, thermometer_36, 36, 36, ILI9341_WHITE); 
+  
+  tft.setCursor(60,8);
+  tft.setTextColor(ILI9341_GREEN);
+  tft.setTextSize(2);
+  tft.print("Temp Unit");
+  
+  Button tempFahrenheitBtn("tempFahrenheitBtn",20,65,150,38,"Fahrenheit",20,11);
+  buttons[0] = tempFahrenheitBtn;
+  
+  Button tempCelsiusBtn("tempCelsiusBtn",20,65,150,38,"Celsius",40,11);
+  buttons[1] = tempCelsiusBtn;    
+}
+
 
 void Screen::clear(Button *buttons) {
   
