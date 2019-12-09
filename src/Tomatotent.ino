@@ -190,8 +190,8 @@ void setup() {
     sht20.checkSHT20();
     
     //REMOTE FUNCTIONS
-    //Particle.variable("temperatureC", temp);
-    //Particle.variable("humidity", hum);
+    Particle.variable("temperature", temp);
+    Particle.variable("humidity", hum);
     //Particle.variable("fanSpeed", fanSpeed);
   
     //END REMOTE FUNCTIONS  
