@@ -44,7 +44,7 @@ bool dimmerBtnVal;
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
 DFRobot_SHT20 sht20;
-Button buttons[5];
+Button buttons[6];
 Tent tent;
 Screen screen;
 SystemStatus systemStatus;
@@ -213,6 +213,12 @@ void setup() {
       
       systemStatus.countMinute();  //after restart
       minuteCounter.start();
+      
+      //for updates from earlier version that don't have temp units
+      if(systemStatus.getTempUnit() != 'F' && systemStatus.getTempUnit() != 'C') {
+        systemStatus.setTempUnit('F');  
+      }
+      //
        
     } else {
       systemStatus.init();
@@ -469,6 +475,27 @@ void loop(void) {
              break;
           }
           
+          
+          //temp unit select screen
+          if( (buttons[c].getName() == "tempCelsiusBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             systemStatus.setTempUnit('C');
+             buttons[0].render();
+             buttons[1].render();
+             screen.homeScreen(buttons, currentScreen);
+             tent.check_temperature(systemStatus.getTempUnit());
+             break;
+          }
+          
+          if( (buttons[c].getName() == "tempFahrenheitBtn") && (buttons[c].getStatus() == "none") ) {
+             buttons[c].setStatus("pressed");
+             systemStatus.setTempUnit('F');
+             buttons[0].render();
+             buttons[1].render();
+             screen.homeScreen(buttons, currentScreen);
+             tent.check_temperature(systemStatus.getTempUnit());
+             break;
+          }          
         };  
       }
   
@@ -501,10 +528,10 @@ void loop(void) {
       }
 
     }  
-  
+ 
   
   if(tent.getCheckStats()) {
-      tent.check_temperature();
+      tent.check_temperature(systemStatus.getTempUnit());
       tent.check_humidity();
      // tent.check_waterlevel(); // removed for stand alone controller
       systemStatus.check_fan();

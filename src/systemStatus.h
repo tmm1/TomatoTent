@@ -12,7 +12,6 @@ extern Tent tent;
 extern String currentScreen;
 
 
-
 class SystemStatus {
   
   double step;

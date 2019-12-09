@@ -14,18 +14,20 @@ void Tent::begin() {
   
 }
 
-  void Tent::check_temperature(){
+  void Tent::check_temperature(char tempUnit){
         double currentTemp = sht20.readTemperature();
     
-        currentTemp = (currentTemp * 1.8) + 32;
+        if(tempUnit == 'F') {
+          currentTemp = (currentTemp * 1.8) + 32;
+        }  
 
         if ((temp == 0) || (temp != currentTemp)){
             temp = currentTemp;
-            this->draw_temperature_home();
+            this->draw_temperature_home(tempUnit);
         }
     }
 
-    void Tent::draw_temperature_home() {
+    void Tent::draw_temperature_home(char tempUnit) {
       
         if(currentScreen == "homeScreen") {
 
@@ -39,7 +41,12 @@ void Tent::begin() {
 
           tft.print(String::format("%.1f",temp));
           tft.setTextSize(2);
-          tft.print(" F");
+          
+          if(tempUnit == 'F') {
+            tft.print(" F");
+          } else {
+            tft.print(" C");
+          }
         }
     }
 
@@ -127,8 +134,8 @@ void Tent::begin() {
       this->checkStats = false;
     }
 
-    void Tent::drawStats(){  //only draws stats
-      this->draw_temperature_home();
+    void Tent::drawStats(char tempUnit){  //only draws stats
+      this->draw_temperature_home(tempUnit);
       this->draw_humidity_home();
       this->draw_waterlevel_home();  //remove for stand alone controller
     }  

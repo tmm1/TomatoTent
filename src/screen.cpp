@@ -39,14 +39,14 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
       Button fanBtn("fanBtn", 145,10,115,35, "",18,8);
       buttons[3] = fanBtn;
       
-      Button tempBtn("tempBtn", 50,80,115,35, "",18,8);
+      Button tempBtn("tempBtn", 50,55,115,35, "",18,8);
       buttons[4] = tempBtn;
       
       tft.drawBitmap(165, 4, fan_36, 36, 36, ILI9341_WHITE); 
       
       systemStatus.drawTimerStatus();
       systemStatus.check_fan();
-      tent.drawStats();
+      tent.drawStats(systemStatus.getTempUnit());
       
       if(tent.getGrowLightStatus() == "LOW") {
         tent.drawDimmedIndicator();  
@@ -54,7 +54,7 @@ void Screen::homeScreen(Button *buttons, String &currentScreen) {
          
   }
       Button wifiBtn("wifiBtn", 260,0,60,30, "",18,8);
-      buttons[4] = wifiBtn;
+      buttons[5] = wifiBtn;
 }
 
 void Screen::growStartedScreen(Button *buttons, String &currentScreen) {
@@ -255,12 +255,12 @@ void Screen::tempUnitScreen(Button *buttons, String &currentScreen) {
   tft.setCursor(60,8);
   tft.setTextColor(ILI9341_GREEN);
   tft.setTextSize(2);
-  tft.print("Temp Unit");
+  tft.print("Temperature Unit");
   
-  Button tempFahrenheitBtn("tempFahrenheitBtn",20,65,150,38,"Fahrenheit",20,11);
+  Button tempFahrenheitBtn("tempFahrenheitBtn",80,70,150,38,"Fahrenheit",20,11);
   buttons[0] = tempFahrenheitBtn;
   
-  Button tempCelsiusBtn("tempCelsiusBtn",20,65,150,38,"Celsius",40,11);
+  Button tempCelsiusBtn("tempCelsiusBtn",80,140,150,38,"Celsius",40,11);
   buttons[1] = tempCelsiusBtn;    
 }
 
@@ -276,5 +276,6 @@ void Screen::clear(Button *buttons) {
   buttons[2] = blankBtn;
   buttons[3] = blankBtn;
   buttons[4] = blankBtn;
+  buttons[5] = blankBtn;
 
 }

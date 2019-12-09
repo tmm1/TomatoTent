@@ -240,6 +240,7 @@ void SystemStatus::init() {
   this->status.dayDuration = 18*60; //how long is the light on?  Starts out at 18 hrs (18*60)
   this->status.fanAutoMode = 1; // 1 for auto, 0 for manual
   this->status.fanSpeed = 30; // 0-100 %
+  this->status.tempUnit = 'F'; // C or F. Single characters use single quotes.
   
   this->save();
   

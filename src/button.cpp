@@ -179,9 +179,7 @@
         tft.print(buttonText); 
       }
       
-      if (this->getName() == "tempBtn") {
-        tft.drawRect(x0,y0,w,h,ILI9341_WHITE);
-      }
+      if (this->getName() == "tempBtn") {}
       
       if (this->getName() == "tempFahrenheitBtn") {
         tft.drawRect(x0,y0,w,h,ILI9341_WHITE);

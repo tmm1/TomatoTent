@@ -10,7 +10,7 @@
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
 #define GROW_LIGHT_ON_OFF_PIN D7
 #define FAN_SPEED_PIN RX
-#define FAN_SPEED_MIN 15    //percent
+#define FAN_SPEED_MIN 10    //percent
 #define TFT_BRIGHTNESS_PIN WKP
 #define DIM_PIN DAC
 
@@ -36,8 +36,8 @@ class Tent {
     bool checkStats;
   
     void begin();
-    void check_temperature();
-    void draw_temperature_home();
+    void check_temperature(char tempUnit);
+    void draw_temperature_home(char tempUnit);
     void check_humidity();
     void draw_humidity_home();
     void check_waterlevel();
@@ -46,7 +46,7 @@ class Tent {
     void doCheckStats();
     bool getCheckStats();
     void resetCheckStats();
-    void drawStats();
+    void drawStats(char tempUnit);
     int growLight(String brightness);
     String getGrowLightStatus();
     void dimGrowLight();
