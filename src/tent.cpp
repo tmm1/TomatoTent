@@ -177,16 +177,12 @@ void Tent::begin() {
           
             this->drawDimmedIndicator();
           
-         } else {
-          
-            if(this->growLightStatus == "LOW") {
+         } else if(this->growLightStatus == "LOW") {
               
-              this->growLight("HIGH");
+            this->growLight("HIGH");
           
-              tft.fillRoundRect(0, 220, 320, 25, 5,ILI9341_BLACK);
+            tft.fillRoundRect(0, 220, 320, 25, 5,ILI9341_BLACK);
               
-            }
-
         }
        
      }
