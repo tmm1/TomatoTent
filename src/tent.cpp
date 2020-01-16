@@ -153,6 +153,7 @@ void Tent::begin() {
           analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 20, 25000);
           digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
           this->growLightStatus = "LOW";
+          this->dimTimeout = 15;
         }
         //SWITCH OFF
         if(brightness == "OFF") {
@@ -165,6 +166,17 @@ void Tent::begin() {
 
     String Tent::getGrowLightStatus() {
       return this->growLightStatus;
+    }
+
+    void Tent::minutelyTick() {
+        if (this->growLightStatus == "LOW") {
+          this->dimTimeout -= 1;
+          if (this->dimTimeout == 0) {
+            this->growLight("HIGH");
+            tft.fillRoundRect(0, 220, 320, 25, 5,ILI9341_BLACK);
+          }
+          this->drawDimmedIndicator();
+        }
     }
 
      void Tent::dimGrowLight() {
@@ -191,12 +203,12 @@ void Tent::begin() {
       
             tft.fillRoundRect(0, 220, 320, 25, 5,ILI9341_RED);
           
-            tft.setCursor(135, 222);
+            tft.setCursor(120, 222);
             tft.setTextColor(ILI9341_WHITE);
             tft.setTextSize(2);
-            tft.print("Dimmed");
+            tft.print("Dimmed ("+String(dimTimeout)+"m)");
 
-            tft.drawBitmap(112, 222, iconBulb_16x16, 16, 16, ILI9341_WHITE); 
+            tft.drawBitmap(97, 222, iconBulb_16x16, 16, 16, ILI9341_WHITE);
       
     }
 

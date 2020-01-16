@@ -25,6 +25,7 @@ extern bool dimmerButtonPressed;
 class Tent {
   
   int displayBrightness = 0;
+  int dimTimeout = 0;
   String growLightStatus;
   
   
@@ -46,6 +47,7 @@ class Tent {
     void doCheckStats();
     bool getCheckStats();
     void resetCheckStats();
+    void minutelyTick();
     void drawStats(char tempUnit);
     int growLight(String brightness);
     String getGrowLightStatus();
