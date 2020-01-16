@@ -190,29 +190,33 @@ void SystemStatus::check_fan() {
 
         float fanSpeedPercent = FAN_SPEED_MIN;
         step = 5;
+        float tempFahrenheit = temp;
+        if (this->status.tempUnit == 'C') {
+            tempFahrenheit = (temp * 1.8) + 32;
+        }
 
-        if(temp > 70 || hum > 40) {
+        if(tempFahrenheit > 70 || hum > 40) {
             fanSpeedPercent += step;
         }
     
-        if(temp > 72 || hum > 50) {
+        if(tempFahrenheit > 72 || hum > 50) {
             fanSpeedPercent += step;
         }
   
-        if(temp > 74 || hum > 60) {
+        if(tempFahrenheit > 74 || hum > 60) {
             fanSpeedPercent += step;
         }    
-        if(temp > 76 || hum > 70) {
+        if(tempFahrenheit > 76 || hum > 70) {
             fanSpeedPercent += step;
         }
-        if(temp > 78 || hum > 80) {
+        if(tempFahrenheit > 78 || hum > 80) {
             fanSpeedPercent += step;
         }
-        if(temp > 80 || hum > 90) {
+        if(tempFahrenheit > 80 || hum > 90) {
             fanSpeedPercent += step;
         }
         //for sensor fail
-        if(temp > 200 || hum > 200) {
+        if(tempFahrenheit > 200 || hum > 200) {
             fanSpeedPercent = FAN_SPEED_MIN+15;
         }
         
