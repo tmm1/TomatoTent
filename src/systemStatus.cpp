@@ -184,8 +184,7 @@ void SystemStatus::check_fan() {
         
         int fanSpeed = map(this->status.fanSpeed, 0.0, 100.0, 0.0, 255.0);
         
-        analogWrite(FAN_SPEED_PIN,255-fanSpeed, 25000);
-        //analogWrite(FAN_SPEED_PIN,fanSpeed, 25000);
+        analogWrite(FAN_SPEED_PIN, 255-fanSpeed, 25000);
 
       } else {
 
@@ -221,8 +220,7 @@ void SystemStatus::check_fan() {
         
         int fanSpeed = map(fanSpeedPercent, 0.0, 100.0, 0.0, 255.0);
 
-        analogWrite(FAN_SPEED_PIN,255-fanSpeed, 25000);
-      //analogWrite(FAN_SPEED_PIN,fanSpeed,25000);
+        analogWrite(FAN_SPEED_PIN, 255-fanSpeed, 25000);
         
     }
   
@@ -230,7 +228,7 @@ void SystemStatus::check_fan() {
       this->drawFanSpeed();
     }
       
-    }  
+}
 
 void SystemStatus::init() {
     
