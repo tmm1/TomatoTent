@@ -115,7 +115,6 @@ void Tent::fan(String fanStatus)
 {
     if (fanStatus == "OFF") {
         analogWrite(FAN_SPEED_PIN, 255, 25000);
-        //analogWrite(FAN_SPEED_PIN,0, 25000);
     }
 }
 
