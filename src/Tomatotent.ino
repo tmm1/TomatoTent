@@ -54,6 +54,8 @@ Timer draw_temp_home(7013,&Tent::doCheckStats,tent);
 //sets the timer for the GrowLight Photoperiod
 Timer minuteCounter(60000,&SystemStatus::countMinute, systemStatus);   //once per minute
 
+Timer minuteCounterTent(60000, &Tent::minutelyTick, tent);
+
 XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 
 SYSTEM_MODE(SEMI_AUTOMATIC);
@@ -213,6 +215,7 @@ void setup() {
       
       systemStatus.countMinute();  //after restart
       minuteCounter.start();
+      minuteCounterTent.start();
       
       //for updates from earlier version that don't have temp units
       if(systemStatus.getTempUnit() != 'F' && systemStatus.getTempUnit() != 'C') {
@@ -247,11 +250,10 @@ void loop(void) {
 
       for(c = 0; c < (sizeof(buttons) / sizeof(buttons[0])); ++c) {
         
-        if(buttons[c].isPressed(p.x,p.y)) {
+        if(buttons[c].isPressed(p.x, p.y) && buttons[c].getStatus() == "none") {
+          buttons[c].setStatus("pressed");
                     
-          if( (buttons[c].getName() == "startGrowBtn") && (buttons[c].getStatus() == "none") ) {
-            buttons[c].setStatus("pressed");
-            
+          if(buttons[c].getName() == "startGrowBtn") {
             tent.growLight("HIGH");
             systemStatus.setDayCount(1);
             
@@ -266,66 +268,59 @@ void loop(void) {
             
             systemStatus.countMinute(); // First time on new grow
             minuteCounter.start();
+            minuteCounterTent.start();
             
             break;
-            
           }
           
-          if( (buttons[c].getName() == "timerBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "timerBtn") {
              screen.timerScreen(buttons, currentScreen);
              break;
           } 
           
-          if( (buttons[c].getName() == "dayCounterBtn") && (buttons[c].getStatus() == "none") ) {
-            buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "dayCounterBtn") {
             screen.cancelScreen(buttons, currentScreen);
             break;
           }
           
-          if( (buttons[c].getName() == "tempBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "tempBtn") {
              screen.tempUnitScreen(buttons, currentScreen);
              break;
           }
           
           //CANCEL SCREEN
           
-          if( (buttons[c].getName() == "cancelScreenOkBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "cancelScreenOkBtn") {
              screen.homeScreen(buttons, currentScreen);
              break;
           }
           
-          if( (buttons[c].getName() == "terminateBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "terminateBtn") {
              screen.cancelConfirmationScreen(buttons, currentScreen);
              break;
           }
           
-          if( (buttons[c].getName() == "terminateYesBtn") && (buttons[c].getStatus() == "none") ) {
-            buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "terminateYesBtn") {
             
             tent.growLight("OFF");
             draw_temp_home.stop();
             tent.fan("OFF");
             minuteCounter.stop();
+            minuteCounterTent.stop();
             
             systemStatus.init();            
             screen.homeScreen(buttons, currentScreen);
             break;
           }  
           
-          if( (buttons[c].getName() == "terminateNoBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "terminateNoBtn") {
              screen.homeScreen(buttons, currentScreen);
              break;
           }
        
           
           //TIMER SCREEN
-          if( (buttons[c].getName() == "timerUpBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "timerUpBtn") {
             
             int dayDuration = systemStatus.getDayDuration() + 60;
             
@@ -348,9 +343,7 @@ void loop(void) {
                         
             break;
           } 
-          if( (buttons[c].getName() == "timerDownBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
-            
+          if(buttons[c].getName() == "timerDownBtn") {
             int dayDuration = systemStatus.getDayDuration() - 60;
             
             if(dayDuration <= 0) {
@@ -372,47 +365,40 @@ void loop(void) {
             break;
           }
           
-          if( (buttons[c].getName() == "timerOkBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "timerOkBtn") {
              screen.homeScreen(buttons, currentScreen);
              break;
           } 
           
-          if( (buttons[c].getName() == "wifiBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "wifiBtn") {
              screen.wifiScreen(buttons, currentScreen);
              break;
           } 
           
-          if( (buttons[c].getName() == "wifiOnBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "wifiOnBtn") {
              Particle.connect();
              screen.homeScreen(buttons, currentScreen);
              break;
           }
           
-          if( (buttons[c].getName() == "wifiOffBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "wifiOffBtn") {
              Particle.disconnect();
              WiFi.off();
              screen.homeScreen(buttons, currentScreen);
              break;
           }
           
-          if( (buttons[c].getName() == "wifiOkBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "wifiOkBtn") {
              screen.homeScreen(buttons, currentScreen);
              break;
           }
           
-          if( (buttons[c].getName() == "fanBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "fanBtn") {
              screen.fanScreen(buttons, currentScreen);
              break;
           } 
           
-          if( (buttons[c].getName() == "fanAutoBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "fanAutoBtn") {
              systemStatus.setFanAutoMode(1);
              buttons[0].render();
              buttons[1].render();
@@ -420,8 +406,7 @@ void loop(void) {
              break;
           }
           
-          if( (buttons[c].getName() == "fanManualBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "fanManualBtn") {
              systemStatus.setFanAutoMode(0);
              buttons[0].render();
              buttons[1].render();
@@ -429,8 +414,7 @@ void loop(void) {
              break;
           }         
           
-          if( (buttons[c].getName() == "fanUpBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "fanUpBtn") {
              float fanSpeedPercent = systemStatus.getFanSpeed();
             
              //set to manual
@@ -449,8 +433,7 @@ void loop(void) {
              break;
           } 
           
-          if( (buttons[c].getName() == "fanDownBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "fanDownBtn") {
              float fanSpeedPercent = systemStatus.getFanSpeed();
             
              //set to manual
@@ -469,16 +452,14 @@ void loop(void) {
              break;
           } 
           
-          if( (buttons[c].getName() == "fanOkBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "fanOkBtn") {
              screen.homeScreen(buttons, currentScreen);
              break;
           }
           
           
           //temp unit select screen
-          if( (buttons[c].getName() == "tempCelsiusBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "tempCelsiusBtn") {
              systemStatus.setTempUnit('C');
              buttons[0].render();
              buttons[1].render();
@@ -487,8 +468,7 @@ void loop(void) {
              break;
           }
           
-          if( (buttons[c].getName() == "tempFahrenheitBtn") && (buttons[c].getStatus() == "none") ) {
-             buttons[c].setStatus("pressed");
+          if(buttons[c].getName() == "tempFahrenheitBtn") {
              systemStatus.setTempUnit('F');
              buttons[0].render();
              buttons[1].render();
@@ -496,7 +476,7 @@ void loop(void) {
              tent.check_temperature(systemStatus.getTempUnit());
              break;
           }          
-        };  
+        }
       }
   
       delay(10); 
