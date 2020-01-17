@@ -24,20 +24,16 @@ double hum;
 double waterLevel;
 unsigned long dimmerBtnTime = 0;
 
-Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
+Adafruit_ILI9341 tft(TFT_CS, TFT_DC, D6);
+XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 DFRobot_SHT20 sht20;
+
 Tent tent;
 ScreenManager screenManager;
 SystemStatus systemStatus;
 
 Timer draw_temp_home(7013, &Tent::doCheckStats, tent);
-
-//sets the timer for the GrowLight Photoperiod
-Timer minuteCounter(60000, &SystemStatus::countMinute, systemStatus); //once per minute
-
-Timer minuteCounterTent(60000, &Tent::minutelyTick, tent);
-
-XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
+Timer minutelyTicker(60000, &minutelyTick);
 
 SYSTEM_MODE(SEMI_AUTOMATIC);
 
@@ -173,8 +169,7 @@ void setup()
         draw_temp_home.start();
 
         systemStatus.countMinute(); //after restart
-        minuteCounter.start();
-        minuteCounterTent.start();
+        minutelyTicker.start();
 
         //for updates from earlier version that don't have temp units
         if (systemStatus.getTempUnit() != 'F' && systemStatus.getTempUnit() != 'C') {
@@ -185,6 +180,12 @@ void setup()
     } else {
         systemStatus.init();
     }
+}
+
+void minutelyTick()
+{
+    tent.minutelyTick();
+    systemStatus.countMinute();
 }
 
 void touchHandler(void)
@@ -222,8 +223,7 @@ void touchHandler(void)
             draw_temp_home.start();
 
             systemStatus.countMinute(); // First time on new grow
-            minuteCounter.start();
-            minuteCounterTent.start();
+            minutelyTicker.start();
 
             break;
         }
@@ -259,8 +259,7 @@ void touchHandler(void)
             tent.growLight("OFF");
             draw_temp_home.stop();
             tent.fan("OFF");
-            minuteCounter.stop();
-            minuteCounterTent.stop();
+            minutelyTicker.stop();
 
             systemStatus.init();
             screenManager.homeScreen();
