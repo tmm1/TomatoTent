@@ -247,49 +247,9 @@ void Button::renderPressed()
     }
 }
 
-String Button::getName()
-{
-    return this->name;
-}
-
-uint16_t Button::getx0()
-{
-    return this->x0;
-}
-
-uint16_t Button::gety0()
-{
-    return this->y0;
-}
-
-uint16_t Button::getW()
-{
-    return this->w;
-}
-
-uint16_t Button::getH()
-{
-    return this->h;
-}
-
-String Button::getButtonText()
-{
-    return this->buttonText;
-}
-
-uint16_t Button::getTextOffsetLeft()
-{
-    return this->textOffsetLeft;
-}
-
-uint16_t Button::getTextOffsetTop()
-{
-    return this->textOffsetTop;
-}
-
 bool Button::isPressed(int x, int y)
 {
-    if ((x > this->getx0() && x < (this->getx0() + this->getW())) && (y > this->gety0() && (y < (this->gety0() + this->getH())))) {
+    if ((x > this->x0 && x < (this->x0 + this->w)) && (y > this->y0 && (y < (this->y0 + this->h)))) {
         this->renderPressed();
         return true;
     }
@@ -299,14 +259,4 @@ bool Button::isPressed(int x, int y)
     }
 
     return false;
-}
-
-void Button::setStatus(String status)
-{
-    this->currentStatus = status;
-}
-
-String Button::getStatus()
-{
-    return this->currentStatus;
 }
