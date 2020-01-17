@@ -292,13 +292,13 @@ bool Button::isPressed(int x, int y)
     if ((x > this->getx0() && x < (this->getx0() + this->getW())) && (y > this->gety0() && (y < (this->gety0() + this->getH())))) {
         this->renderPressed();
         return true;
-
-    } else {
-        if (this->pressed) {
-            this->setStatus("none");
-        }
-        return false;
     }
+
+    if (this->pressed) {
+        this->setStatus("none");
+    }
+
+    return false;
 }
 
 void Button::setStatus(String status)

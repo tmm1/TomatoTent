@@ -143,21 +143,18 @@ void Tent::drawStats(char tempUnit)
 
 int Tent::growLight(String brightness)
 {
-    //SET TO HIGH BRIGHTNESS
     if (brightness == "HIGH") {
         analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 255, 25000);
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
         this->growLightStatus = "HIGH";
-    }
-    //SET to low Brightness
-    if (brightness == "LOW") {
+
+    } else if (brightness == "LOW") {
         analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 20, 25000);
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
         this->growLightStatus = "LOW";
         this->dimTimeout = 15;
-    }
-    //SWITCH OFF
-    if (brightness == "OFF") {
+
+    } else if (brightness == "OFF") {
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, LOW);
         this->growLightStatus = "OFF";
     }
