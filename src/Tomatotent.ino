@@ -12,7 +12,7 @@
 #include "assets.h"
 
 PRODUCT_ID(10167);
-PRODUCT_VERSION(7);
+PRODUCT_VERSION(9);
 
 #define CS_PIN D5
 #define TIRQ_PIN A0
