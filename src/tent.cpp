@@ -174,8 +174,9 @@ void Tent::begin() {
           if (this->dimTimeout == 0) {
             this->growLight("HIGH");
             tft.fillRoundRect(0, 220, 320, 25, 5,ILI9341_BLACK);
+          } else {
+            this->drawDimmedIndicator();
           }
-          this->drawDimmedIndicator();
         }
     }
 
