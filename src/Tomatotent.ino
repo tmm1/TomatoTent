@@ -24,7 +24,6 @@ double hum;
 double waterLevel;
 String currentScreen = "homeScreen";
 unsigned long lastTime2 = 0;
-bool dimmerButtonPressed = false;
 bool dimmerBtnVal;
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);

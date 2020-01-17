@@ -20,7 +20,6 @@ extern double temp;
 extern double hum;
 extern double waterLevel;
 extern String currentScreen;
-extern bool dimmerButtonPressed;
 
 class Tent {
 
