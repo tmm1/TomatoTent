@@ -14,7 +14,7 @@ Button::Button(String name, uint16_t x0, uint16_t y0, uint16_t w, uint16_t h, St
     this->pressed = false;
     this->currentStatus = "none";
     this->render();
-};
+}
 
 void Button::render()
 {
@@ -95,7 +95,6 @@ void Button::render()
     }
 
     if (this->getName() == "timerOkBtn") {
-
         tft.drawRect(x0, y0, w, h, ILI9341_WHITE);
         tft.fillRect(x0 + 1, y0 + 1, w - 2, h - 2, ILI9341_OLIVE);
         tft.setCursor(x0 + textOffsetLeft, y0 + textOffsetTop);
@@ -105,7 +104,6 @@ void Button::render()
     }
 
     if (this->getName() == "wifiBtn") {
-
         tft.drawBitmap(289, 5, iconWifi_24x24, 24, 24, ILI9341_DARKGREY);
     }
 
@@ -140,7 +138,6 @@ void Button::render()
     }
 
     if (this->getName() == "fanAutoBtn") {
-
         tft.drawRect(x0, y0, w, h, ILI9341_WHITE);
 
         if (systemStatus.getFanAutoMode()) {
@@ -155,7 +152,6 @@ void Button::render()
     }
 
     if (this->getName() == "fanManualBtn") {
-
         tft.drawRect(x0, y0, w, h, ILI9341_WHITE);
 
         if (!systemStatus.getFanAutoMode()) {
@@ -231,7 +227,6 @@ void Button::render()
 
 void Button::renderPressed()
 {
-
     if (this->getName() == "startGrowBtn") {
         tft.drawRect(x0, y0, w, h, ILI9341_RED);
     }
@@ -251,53 +246,59 @@ void Button::renderPressed()
         tft.fillTriangle(240, 110, 260, 150, 280, 110, ILI9341_WHITE);
     }
 }
+
 String Button::getName()
 {
     return this->name;
-};
+}
+
 uint16_t Button::getx0()
 {
     return this->x0;
-};
+}
+
 uint16_t Button::gety0()
 {
     return this->y0;
-};
+}
+
 uint16_t Button::getW()
 {
     return this->w;
-};
+}
+
 uint16_t Button::getH()
 {
     return this->h;
-};
+}
+
 String Button::getButtonText()
 {
     return this->buttonText;
-};
+}
+
 uint16_t Button::getTextOffsetLeft()
 {
     return this->textOffsetLeft;
-};
+}
+
 uint16_t Button::getTextOffsetTop()
 {
     return this->textOffsetTop;
-};
+}
 
 bool Button::isPressed(int x, int y)
 {
-
     if ((x > this->getx0() && x < (this->getx0() + this->getW())) && (y > this->gety0() && (y < (this->gety0() + this->getH())))) {
-
         this->renderPressed();
         return true;
-
-    } else {
-        if (this->pressed) {
-            this->setStatus("none");
-        }
-        return false;
     }
+
+    if (this->pressed) {
+        this->setStatus("none");
+    }
+
+    return false;
 }
 
 void Button::setStatus(String status)

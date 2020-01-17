@@ -2,7 +2,6 @@
 
 Tent::Tent()
 {
-
     this->growLightStatus = "OFF";
 }
 
@@ -30,7 +29,6 @@ void Tent::check_temperature(char tempUnit)
 
 void Tent::draw_temperature_home(char tempUnit)
 {
-
     if (currentScreen == "homeScreen") {
 
         //reset screen
@@ -54,7 +52,6 @@ void Tent::draw_temperature_home(char tempUnit)
 
 void Tent::check_humidity()
 {
-
     double currentHumidity = sht20.readHumidity();
 
     if ((hum == 0) || (hum != currentHumidity)) {
@@ -65,9 +62,7 @@ void Tent::check_humidity()
 
 void Tent::draw_humidity_home()
 {
-
     if (currentScreen == "homeScreen") {
-
         /////// Humidity
         tft.fillRect(50, 110, 141, 25, ILI9341_BLACK);
 
@@ -84,7 +79,6 @@ void Tent::draw_humidity_home()
 
 void Tent::check_waterlevel()
 {
-
     double currentWaterLevel = sht20.readHumidity();
 
     if ((waterLevel == 0) || (waterLevel != currentWaterLevel)) {
@@ -95,9 +89,7 @@ void Tent::check_waterlevel()
 
 void Tent::draw_waterlevel_home()
 {
-
     if (currentScreen == "homeScreen") {
-
         const float waterLevelBoxHeight = 150;
         const int waterLevelBoxTop = 60;
 
@@ -123,7 +115,6 @@ void Tent::fan(String fanStatus)
 {
     if (fanStatus == "OFF") {
         analogWrite(FAN_SPEED_PIN, 255, 25000);
-        //analogWrite(FAN_SPEED_PIN,0, 25000);
     }
 }
 
@@ -151,22 +142,18 @@ void Tent::drawStats(char tempUnit)
 
 int Tent::growLight(String brightness)
 {
-
-    //SET TO HIGH BRIGHTNESS
     if (brightness == "HIGH") {
         analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 255, 25000);
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
         this->growLightStatus = "HIGH";
-    }
-    //SET to low Brightness
-    if (brightness == "LOW") {
+
+    } else if (brightness == "LOW") {
         analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 20, 25000);
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
         this->growLightStatus = "LOW";
         this->dimTimeout = 15;
-    }
-    //SWITCH OFF
-    if (brightness == "OFF") {
+
+    } else if (brightness == "OFF") {
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, LOW);
         this->growLightStatus = "OFF";
     }
@@ -194,26 +181,22 @@ void Tent::minutelyTick()
 
 void Tent::dimGrowLight()
 {
-
     this->displayLightHigh();
 
     if (this->growLightStatus == "HIGH") {
 
         this->growLight("LOW");
-
         this->drawDimmedIndicator();
 
     } else if (this->growLightStatus == "LOW") {
 
         this->growLight("HIGH");
-
         tft.fillRoundRect(0, 220, 320, 25, 5, ILI9341_BLACK);
     }
 }
 
 void Tent::drawDimmedIndicator()
 {
-
     tft.fillRoundRect(0, 220, 320, 25, 5, ILI9341_RED);
 
     tft.setCursor(120, 222);
@@ -226,7 +209,6 @@ void Tent::drawDimmedIndicator()
 
 void Tent::displayLightLow(void)
 {
-
     while (displayBrightness > 30) {
         displayBrightness -= 5;
         analogWrite(TFT_BRIGHTNESS_PIN, displayBrightness);
@@ -266,16 +248,15 @@ bool Tent::displayLightHigh()
 }
 
 /* 
-        void Tent::drawTime() {
-    
-            String currentTime = Time.format(Time.now(), "%l:%M %P %S");
+void Tent::drawTime() {
+    String currentTime = Time.format(Time.now(), "%l:%M %P %S");
 
-            tft.fillRect(190,7,140,18,ILI9341_BLACK);
+    tft.fillRect(190,7,140,18,ILI9341_BLACK);
 
-            tft.setCursor(190, 7);
-            tft.setTextColor(ILI9341_WHITE);
-            tft.setTextSize(2);
+    tft.setCursor(190, 7);
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(2);
 
-            tft.print(currentTime);
-
-        } */
+    tft.print(currentTime);
+}
+*/

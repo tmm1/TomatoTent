@@ -4,7 +4,6 @@ Screen::Screen() {}
 
 void Screen::homeScreen(Button* buttons, String& currentScreen)
 {
-
     this->clear(buttons);
     currentScreen = "homeScreen";
 
@@ -58,7 +57,6 @@ void Screen::homeScreen(Button* buttons, String& currentScreen)
 
 void Screen::growStartedScreen(Button* buttons, String& currentScreen)
 {
-
     this->clear(buttons);
     currentScreen = "growStartedScreen";
 
@@ -77,7 +75,6 @@ void Screen::growStartedScreen(Button* buttons, String& currentScreen)
 
 void Screen::cancelScreen(Button* buttons, String& currentScreen)
 {
-
     this->clear(buttons);
     currentScreen = "cancelScreen";
 
@@ -111,7 +108,6 @@ void Screen::cancelScreen(Button* buttons, String& currentScreen)
 
 void Screen::cancelConfirmationScreen(Button* buttons, String& currentScreen)
 {
-
     this->clear(buttons);
     currentScreen = "cancelConfirmationScreen";
 
@@ -129,7 +125,6 @@ void Screen::cancelConfirmationScreen(Button* buttons, String& currentScreen)
 
 void Screen::timerScreen(Button* buttons, String& currentScreen)
 {
-
     this->clear(buttons);
     currentScreen = "timerScreen";
 
@@ -164,7 +159,6 @@ void Screen::timerScreen(Button* buttons, String& currentScreen)
 
 void Screen::wifiScreen(Button* buttons, String& currentScreen)
 {
-
     this->clear(buttons);
     currentScreen = "wifiScreen";
 
@@ -180,7 +174,6 @@ void Screen::wifiScreen(Button* buttons, String& currentScreen)
 
 void Screen::wifiSetupScreen(Button* buttons, String& currentScreen)
 {
-
     this->clear(buttons);
     currentScreen = "wifiScreen";
 
@@ -211,9 +204,9 @@ void Screen::wifiSetupScreen(Button* buttons, String& currentScreen)
     tft.setTextColor(ILI9341_GREEN);
     tft.print("community.tomatotent.de");
 }
+
 void Screen::fanScreen(Button* buttons, String& currentScreen)
 {
-
     this->clear(buttons);
     currentScreen = "fanScreen";
 
@@ -244,7 +237,6 @@ void Screen::fanScreen(Button* buttons, String& currentScreen)
 
 void Screen::tempUnitScreen(Button* buttons, String& currentScreen)
 {
-
     this->clear(buttons);
     currentScreen = "tempUnitScreen";
 
@@ -264,7 +256,6 @@ void Screen::tempUnitScreen(Button* buttons, String& currentScreen)
 
 void Screen::clear(Button* buttons)
 {
-
     Button blankBtn("blankBtn", -1, -1, -1, -1, "", -1, -1);
 
     tft.fillScreen(ILI9341_BLACK);

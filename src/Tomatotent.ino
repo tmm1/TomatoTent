@@ -23,9 +23,7 @@ double temp;
 double hum;
 double waterLevel;
 String currentScreen = "homeScreen";
-unsigned long lastTime2 = 0;
-bool dimmerButtonPressed = false;
-bool dimmerBtnVal;
+unsigned long dimmerBtnTime = 0;
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
 DFRobot_SHT20 sht20;
@@ -117,7 +115,6 @@ STARTUP(
 
 void setup()
 {
-
     System.set(SYSTEM_CONFIG_SOFTAP_PREFIX, "TomatoTent");
 
     System.on(setup_begin, setup_handler);
@@ -192,251 +189,256 @@ void setup()
     }
 }
 
-void loop(void)
+void touchHandler(void)
 {
+    tent.displayLightHigh(); // Switch on Displaylight on touch
 
-    if (ts.touched()) {
+    TS_Point p = ts.getPosition();
 
-        tent.displayLightHigh(); // Switch on Displaylight on touch
+    //calibration
+    p.x = (p.x) + 20;
+    p.y = (p.y) + 0;
 
-        TS_Point p = ts.getPosition();
+    //WAS A BUTTON TOUCHED - And which one?
+    uint8_t c { 0 };
 
-        //calibration
-        p.x = (p.x) + 20;
-        p.y = (p.y) + 0;
-
-        //WAS A BUTTON TOUCHED - And which one?
-        uint8_t c { 0 };
-
-        for (c = 0; c < (sizeof(buttons) / sizeof(buttons[0])); ++c) {
-
-            if (buttons[c].isPressed(p.x, p.y) && buttons[c].getStatus() == "none") {
-                buttons[c].setStatus("pressed");
-
-                if (buttons[c].getName() == "startGrowBtn") {
-                    tent.growLight("HIGH");
-                    systemStatus.setDayCount(1);
-
-                    screen.growStartedScreen(buttons, currentScreen);
-
-                    delay(3000);
-
-                    screen.homeScreen(buttons, currentScreen);
-
-                    tent.doCheckStats(); //First time right away
-                    draw_temp_home.start();
-
-                    systemStatus.countMinute(); // First time on new grow
-                    minuteCounter.start();
-                    minuteCounterTent.start();
-
-                    break;
-                }
-
-                if (buttons[c].getName() == "timerBtn") {
-                    screen.timerScreen(buttons, currentScreen);
-                    break;
-                }
-
-                if (buttons[c].getName() == "dayCounterBtn") {
-                    screen.cancelScreen(buttons, currentScreen);
-                    break;
-                }
-
-                if (buttons[c].getName() == "tempBtn") {
-                    screen.tempUnitScreen(buttons, currentScreen);
-                    break;
-                }
-
-                //CANCEL SCREEN
-
-                if (buttons[c].getName() == "cancelScreenOkBtn") {
-                    screen.homeScreen(buttons, currentScreen);
-                    break;
-                }
-
-                if (buttons[c].getName() == "terminateBtn") {
-                    screen.cancelConfirmationScreen(buttons, currentScreen);
-                    break;
-                }
-
-                if (buttons[c].getName() == "terminateYesBtn") {
-
-                    tent.growLight("OFF");
-                    draw_temp_home.stop();
-                    tent.fan("OFF");
-                    minuteCounter.stop();
-                    minuteCounterTent.stop();
-
-                    systemStatus.init();
-                    screen.homeScreen(buttons, currentScreen);
-                    break;
-                }
-
-                if (buttons[c].getName() == "terminateNoBtn") {
-                    screen.homeScreen(buttons, currentScreen);
-                    break;
-                }
-
-                //TIMER SCREEN
-                if (buttons[c].getName() == "timerUpBtn") {
-
-                    int dayDuration = systemStatus.getDayDuration() + 60;
-
-                    if (dayDuration > 1440) {
-                        dayDuration = 60;
-                    }
-
-                    systemStatus.setDayDuration(dayDuration);
-
-                    tft.fillRect(10, 70, 200, 22, ILI9341_BLACK);
-                    tft.setTextColor(ILI9341_WHITE);
-                    tft.setTextSize(2);
-                    tft.setCursor(10, 70);
-                    tft.print(String(dayDuration / 60) + " Hours ON");
-
-                    tft.setCursor(10, 140);
-                    tft.fillRect(10, 140, 215, 22, ILI9341_BLACK);
-                    int nightDuration = (24 * 60) - dayDuration;
-                    tft.print(String(nightDuration / 60) + " Hours OFF");
-
-                    break;
-                }
-                if (buttons[c].getName() == "timerDownBtn") {
-                    int dayDuration = systemStatus.getDayDuration() - 60;
-
-                    if (dayDuration <= 0) {
-                        dayDuration = 1440;
-                    }
-
-                    systemStatus.setDayDuration(dayDuration);
-
-                    tft.fillRect(10, 70, 200, 22, ILI9341_BLACK);
-                    tft.setTextColor(ILI9341_WHITE);
-                    tft.setTextSize(2);
-                    tft.setCursor(10, 70);
-                    tft.print(String(dayDuration / 60) + " Hours ON");
-
-                    tft.setCursor(10, 140);
-                    tft.fillRect(10, 140, 215, 22, ILI9341_BLACK);
-                    int nightDuration = (24 * 60) - dayDuration;
-                    tft.print(String(nightDuration / 60) + " Hours OFF");
-                    break;
-                }
-
-                if (buttons[c].getName() == "timerOkBtn") {
-                    screen.homeScreen(buttons, currentScreen);
-                    break;
-                }
-
-                if (buttons[c].getName() == "wifiBtn") {
-                    screen.wifiScreen(buttons, currentScreen);
-                    break;
-                }
-
-                if (buttons[c].getName() == "wifiOnBtn") {
-                    Particle.connect();
-                    screen.homeScreen(buttons, currentScreen);
-                    break;
-                }
-
-                if (buttons[c].getName() == "wifiOffBtn") {
-                    Particle.disconnect();
-                    WiFi.off();
-                    screen.homeScreen(buttons, currentScreen);
-                    break;
-                }
-
-                if (buttons[c].getName() == "wifiOkBtn") {
-                    screen.homeScreen(buttons, currentScreen);
-                    break;
-                }
-
-                if (buttons[c].getName() == "fanBtn") {
-                    screen.fanScreen(buttons, currentScreen);
-                    break;
-                }
-
-                if (buttons[c].getName() == "fanAutoBtn") {
-                    systemStatus.setFanAutoMode(1);
-                    buttons[0].render();
-                    buttons[1].render();
-                    systemStatus.check_fan();
-                    break;
-                }
-
-                if (buttons[c].getName() == "fanManualBtn") {
-                    systemStatus.setFanAutoMode(0);
-                    buttons[0].render();
-                    buttons[1].render();
-                    systemStatus.check_fan();
-                    break;
-                }
-
-                if (buttons[c].getName() == "fanUpBtn") {
-                    float fanSpeedPercent = systemStatus.getFanSpeed();
-
-                    //set to manual
-                    systemStatus.setFanAutoMode(0);
-
-                    buttons[0].render();
-                    buttons[1].render();
-
-                    if (fanSpeedPercent < 100) {
-
-                        fanSpeedPercent += 5;
-
-                        systemStatus.setFanSpeed(fanSpeedPercent);
-                        systemStatus.check_fan();
-                    }
-                    break;
-                }
-
-                if (buttons[c].getName() == "fanDownBtn") {
-                    float fanSpeedPercent = systemStatus.getFanSpeed();
-
-                    //set to manual
-                    systemStatus.setFanAutoMode(0);
-
-                    buttons[0].render();
-                    buttons[1].render();
-
-                    if (fanSpeedPercent > 0) {
-
-                        fanSpeedPercent -= 5;
-
-                        systemStatus.setFanSpeed(fanSpeedPercent);
-                        systemStatus.check_fan();
-                    }
-                    break;
-                }
-
-                if (buttons[c].getName() == "fanOkBtn") {
-                    screen.homeScreen(buttons, currentScreen);
-                    break;
-                }
-
-                //temp unit select screen
-                if (buttons[c].getName() == "tempCelsiusBtn") {
-                    systemStatus.setTempUnit('C');
-                    buttons[0].render();
-                    buttons[1].render();
-                    screen.homeScreen(buttons, currentScreen);
-                    tent.check_temperature(systemStatus.getTempUnit());
-                    break;
-                }
-
-                if (buttons[c].getName() == "tempFahrenheitBtn") {
-                    systemStatus.setTempUnit('F');
-                    buttons[0].render();
-                    buttons[1].render();
-                    screen.homeScreen(buttons, currentScreen);
-                    tent.check_temperature(systemStatus.getTempUnit());
-                    break;
-                }
-            }
+    for (c = 0; c < (sizeof(buttons) / sizeof(buttons[0])); ++c) {
+        Button& btn = buttons[c];
+        if (!btn.isPressed(p.x, p.y)) {
+            continue;
+        }
+        if (btn.getStatus() != "none") {
+            continue;
         }
 
+        btn.setStatus("pressed");
+
+        if (btn.getName() == "startGrowBtn") {
+            tent.growLight("HIGH");
+            systemStatus.setDayCount(1);
+
+            screen.growStartedScreen(buttons, currentScreen);
+
+            delay(3000);
+
+            screen.homeScreen(buttons, currentScreen);
+
+            tent.doCheckStats(); //First time right away
+            draw_temp_home.start();
+
+            systemStatus.countMinute(); // First time on new grow
+            minuteCounter.start();
+            minuteCounterTent.start();
+
+            break;
+        }
+
+        if (btn.getName() == "timerBtn") {
+            screen.timerScreen(buttons, currentScreen);
+            break;
+        }
+
+        if (btn.getName() == "dayCounterBtn") {
+            screen.cancelScreen(buttons, currentScreen);
+            break;
+        }
+
+        if (btn.getName() == "tempBtn") {
+            screen.tempUnitScreen(buttons, currentScreen);
+            break;
+        }
+
+        //CANCEL SCREEN
+
+        if (btn.getName() == "cancelScreenOkBtn") {
+            screen.homeScreen(buttons, currentScreen);
+            break;
+        }
+
+        if (btn.getName() == "terminateBtn") {
+            screen.cancelConfirmationScreen(buttons, currentScreen);
+            break;
+        }
+
+        if (btn.getName() == "terminateYesBtn") {
+            tent.growLight("OFF");
+            draw_temp_home.stop();
+            tent.fan("OFF");
+            minuteCounter.stop();
+            minuteCounterTent.stop();
+
+            systemStatus.init();
+            screen.homeScreen(buttons, currentScreen);
+            break;
+        }
+
+        if (btn.getName() == "terminateNoBtn") {
+            screen.homeScreen(buttons, currentScreen);
+            break;
+        }
+
+        //TIMER SCREEN
+        if (btn.getName() == "timerUpBtn") {
+            int dayDuration = systemStatus.getDayDuration() + 60;
+
+            if (dayDuration > 1440) {
+                dayDuration = 60;
+            }
+
+            systemStatus.setDayDuration(dayDuration);
+
+            tft.fillRect(10, 70, 200, 22, ILI9341_BLACK);
+            tft.setTextColor(ILI9341_WHITE);
+            tft.setTextSize(2);
+            tft.setCursor(10, 70);
+            tft.print(String(dayDuration / 60) + " Hours ON");
+
+            tft.setCursor(10, 140);
+            tft.fillRect(10, 140, 215, 22, ILI9341_BLACK);
+            int nightDuration = (24 * 60) - dayDuration;
+            tft.print(String(nightDuration / 60) + " Hours OFF");
+
+            break;
+        }
+        if (btn.getName() == "timerDownBtn") {
+            int dayDuration = systemStatus.getDayDuration() - 60;
+
+            if (dayDuration <= 0) {
+                dayDuration = 1440;
+            }
+
+            systemStatus.setDayDuration(dayDuration);
+
+            tft.fillRect(10, 70, 200, 22, ILI9341_BLACK);
+            tft.setTextColor(ILI9341_WHITE);
+            tft.setTextSize(2);
+            tft.setCursor(10, 70);
+            tft.print(String(dayDuration / 60) + " Hours ON");
+
+            tft.setCursor(10, 140);
+            tft.fillRect(10, 140, 215, 22, ILI9341_BLACK);
+            int nightDuration = (24 * 60) - dayDuration;
+            tft.print(String(nightDuration / 60) + " Hours OFF");
+            break;
+        }
+
+        if (btn.getName() == "timerOkBtn") {
+            screen.homeScreen(buttons, currentScreen);
+            break;
+        }
+
+        if (btn.getName() == "wifiBtn") {
+            screen.wifiScreen(buttons, currentScreen);
+            break;
+        }
+
+        if (btn.getName() == "wifiOnBtn") {
+            Particle.connect();
+            screen.homeScreen(buttons, currentScreen);
+            break;
+        }
+
+        if (btn.getName() == "wifiOffBtn") {
+            Particle.disconnect();
+            WiFi.off();
+            screen.homeScreen(buttons, currentScreen);
+            break;
+        }
+
+        if (btn.getName() == "wifiOkBtn") {
+            screen.homeScreen(buttons, currentScreen);
+            break;
+        }
+
+        if (btn.getName() == "fanBtn") {
+            screen.fanScreen(buttons, currentScreen);
+            break;
+        }
+
+        if (btn.getName() == "fanAutoBtn") {
+            systemStatus.setFanAutoMode(1);
+            buttons[0].render();
+            buttons[1].render();
+            systemStatus.check_fan();
+            break;
+        }
+
+        if (btn.getName() == "fanManualBtn") {
+            systemStatus.setFanAutoMode(0);
+            buttons[0].render();
+            buttons[1].render();
+            systemStatus.check_fan();
+            break;
+        }
+
+        if (btn.getName() == "fanUpBtn") {
+            float fanSpeedPercent = systemStatus.getFanSpeed();
+
+            //set to manual
+            systemStatus.setFanAutoMode(0);
+
+            buttons[0].render();
+            buttons[1].render();
+
+            if (fanSpeedPercent < 100) {
+
+                fanSpeedPercent += 5;
+
+                systemStatus.setFanSpeed(fanSpeedPercent);
+                systemStatus.check_fan();
+            }
+            break;
+        }
+
+        if (btn.getName() == "fanDownBtn") {
+            float fanSpeedPercent = systemStatus.getFanSpeed();
+
+            //set to manual
+            systemStatus.setFanAutoMode(0);
+
+            buttons[0].render();
+            buttons[1].render();
+
+            if (fanSpeedPercent > 0) {
+
+                fanSpeedPercent -= 5;
+
+                systemStatus.setFanSpeed(fanSpeedPercent);
+                systemStatus.check_fan();
+            }
+            break;
+        }
+
+        if (btn.getName() == "fanOkBtn") {
+            screen.homeScreen(buttons, currentScreen);
+            break;
+        }
+
+        //temp unit select screen
+        if (btn.getName() == "tempCelsiusBtn") {
+            systemStatus.setTempUnit('C');
+            buttons[0].render();
+            buttons[1].render();
+            screen.homeScreen(buttons, currentScreen);
+            tent.check_temperature(systemStatus.getTempUnit());
+            break;
+        }
+
+        if (btn.getName() == "tempFahrenheitBtn") {
+            systemStatus.setTempUnit('F');
+            buttons[0].render();
+            buttons[1].render();
+            screen.homeScreen(buttons, currentScreen);
+            tent.check_temperature(systemStatus.getTempUnit());
+            break;
+        }
+    }
+}
+
+void loop(void)
+{
+    if (ts.touched()) {
+        touchHandler();
         delay(10);
 
     } else {
@@ -449,16 +451,11 @@ void loop(void)
         }
     }
 
-    dimmerBtnVal = digitalRead(DIM_PIN);
-
+    bool dimmerBtnVal = digitalRead(DIM_PIN);
     if (dimmerBtnVal == LOW) {
-
         unsigned long now = millis();
-
-        if ((now - lastTime2) >= 1000 || lastTime2 == 0) {
-
-            lastTime2 = now;
-
+        if ((now - dimmerBtnTime) >= 1000 || dimmerBtnTime == 0) {
+            dimmerBtnTime = now;
             tent.dimGrowLight();
         }
     }

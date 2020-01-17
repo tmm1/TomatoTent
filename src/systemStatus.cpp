@@ -10,14 +10,17 @@ int SystemStatus::getDayCount()
 {
     return this->status.dayCounter;
 }
+
 bool SystemStatus::isDay()
 {
     return this->status.isDay;
 }
+
 int SystemStatus::getMinutesInPhotoperiod()
 {
     return this->status.minutesInPhotoperiod;
 }
+
 int SystemStatus::getDayDuration()
 {
     return this->status.dayDuration;
@@ -34,19 +37,21 @@ void SystemStatus::setDayCount(int dayCount)
     this->status.dayCounter = dayCount;
     this->save();
 }
+
 void SystemStatus::setIsDay(bool isDay)
 {
     this->status.isDay = isDay;
     this->save();
 }
+
 void SystemStatus::setMinutesInPhotoperiod(int minutesInPhotoperiod)
 {
     this->status.minutesInPhotoperiod = minutesInPhotoperiod;
     this->save();
 }
+
 void SystemStatus::countMinute()
 {
-
     this->setMinutesInPhotoperiod(this->getMinutesInPhotoperiod() + 1);
 
     if (this->isDay()) {
@@ -57,13 +62,9 @@ void SystemStatus::countMinute()
         }
 
     } else {
-
         if (this->getMinutesInPhotoperiod() > ((24 * 60) - this->getDayDuration())) { //night is over
-
             this->setDayCount(this->getDayCount() + 1);
-
             this->drawDayCounter();
-
             tent.growLight("HIGH");
             this->setIsDay(true);
             this->setMinutesInPhotoperiod(0);
@@ -77,7 +78,6 @@ void SystemStatus::countMinute()
 
 void SystemStatus::drawTimerStatus()
 {
-
     int hoursLeft;
     int minutesLeft;
 
@@ -124,7 +124,6 @@ void SystemStatus::drawTimerStatus()
 
 void SystemStatus::drawDayCounter()
 {
-
     tft.fillRect(130, 180, 80, 25, ILI9341_BLACK);
 
     tft.setCursor(70, 180);
@@ -193,11 +192,9 @@ void SystemStatus::setFanSpeed(float fanSpeed)
 
 void SystemStatus::check_fan()
 {
-
     if (this->status.fanAutoMode == 0) { //manual
 
         int fanSpeed = map(this->status.fanSpeed, 0.0, 100.0, 0.0, 255.0);
-
         analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
 
     } else {
@@ -235,9 +232,7 @@ void SystemStatus::check_fan()
         }
 
         this->setFanSpeed(fanSpeedPercent);
-
         int fanSpeed = map(fanSpeedPercent, 0.0, 100.0, 0.0, 255.0);
-
         analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
     }
 
@@ -248,7 +243,6 @@ void SystemStatus::check_fan()
 
 void SystemStatus::init()
 {
-
     this->status.dayCounter = -1; //counting days the grow was active. Starting from 1
     this->status.isDay = true; // true if the light is on
     this->status.minutesInPhotoperiod = 0; //how long has the system been in current photoperiod?  E.g. 31 minutes in NIGHT
