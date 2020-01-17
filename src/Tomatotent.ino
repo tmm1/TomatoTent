@@ -23,8 +23,7 @@ double temp;
 double hum;
 double waterLevel;
 String currentScreen = "homeScreen";
-unsigned long lastTime2 = 0;
-bool dimmerBtnVal;
+unsigned long dimmerBtnTime = 0;
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
 DFRobot_SHT20 sht20;
@@ -452,16 +451,11 @@ void loop(void)
         }
     }
 
-    dimmerBtnVal = digitalRead(DIM_PIN);
-
+    bool dimmerBtnVal = digitalRead(DIM_PIN);
     if (dimmerBtnVal == LOW) {
-
         unsigned long now = millis();
-
-        if ((now - lastTime2) >= 1000 || lastTime2 == 0) {
-
-            lastTime2 = now;
-
+        if ((now - dimmerBtnTime) >= 1000 || dimmerBtnTime == 0) {
+            dimmerBtnTime = now;
             tent.dimGrowLight();
         }
     }
