@@ -10,7 +10,7 @@
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
 #define GROW_LIGHT_ON_OFF_PIN D7
 #define FAN_SPEED_PIN RX
-#define FAN_SPEED_MIN 10    //percent
+#define FAN_SPEED_MIN 10 //percent
 #define TFT_BRIGHTNESS_PIN WKP
 #define DIM_PIN DAC
 
@@ -23,19 +23,18 @@ extern String currentScreen;
 extern bool dimmerButtonPressed;
 
 class Tent {
-  
-  int displayBrightness = 0;
-  int dimTimeout = 0;
-  String growLightStatus;
-  
-  
-  public:
+
+    int displayBrightness = 0;
+    int dimTimeout = 0;
+    String growLightStatus;
+
+public:
     Tent();
     unsigned long lastTime = 0;
-    Timer *tp;
-    Timer *tp1;
+    Timer* tp;
+    Timer* tp1;
     bool checkStats;
-  
+
     void begin();
     void check_temperature(char tempUnit);
     void draw_temperature_home(char tempUnit);
@@ -56,8 +55,7 @@ class Tent {
     void displayLightLow(void);
     void displayLightOff(void);
     bool displayLightHigh(void);
-  
-   // void drawTime();
-   
+
+    // void drawTime();
 };
 #endif
