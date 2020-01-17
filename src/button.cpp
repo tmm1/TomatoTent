@@ -1,4 +1,11 @@
 #include "button.h"
+#include <Arduino.h>
+#include <Adafruit_ILI9341.h>
+#include "icons.h"
+#include "systemStatus.h"
+
+extern Adafruit_ILI9341 tft;
+extern SystemStatus systemStatus;
 
 Button::Button() {}
 Button::Button(String name, uint16_t x0, uint16_t y0, uint16_t w, uint16_t h, String buttonText, uint16_t textOffsetLeft, uint16_t textOffsetTop)

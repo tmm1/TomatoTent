@@ -7,7 +7,7 @@
 #include "systemStatus.h"
 #include "button.h"
 #include "tent.h"
-#include "screen.h"
+#include "screen_manager.h"
 #include "Adafruit_ILI9341.h"
 #include "assets.h"
 
@@ -22,14 +22,12 @@ PRODUCT_VERSION(9);
 double temp;
 double hum;
 double waterLevel;
-String currentScreen = "homeScreen";
 unsigned long dimmerBtnTime = 0;
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
 DFRobot_SHT20 sht20;
-Button buttons[6];
 Tent tent;
-Screen screen;
+ScreenManager screenManager;
 SystemStatus systemStatus;
 
 Timer draw_temp_home(7013, &Tent::doCheckStats, tent);
@@ -96,7 +94,7 @@ void myPage(const char* url, ResponseCallback* cb, void* cbArg, Reader* body, Wr
 
 void setup_handler()
 {
-    screen.wifiSetupScreen(buttons, currentScreen);
+    screenManager.wifiSetupScreen();
     tent.tp->stop();
     tent.tp1->stop();
 }
@@ -105,7 +103,7 @@ void setup_finished_handler()
 {
     tent.tp->start();
     tent.tp1->start();
-    screen.homeScreen(buttons, currentScreen);
+    screenManager.homeScreen();
 }
 
 STARTUP(
@@ -160,7 +158,7 @@ void setup()
 
     //END REMOTE FUNCTIONS
 
-    screen.homeScreen(buttons, currentScreen);
+    screenManager.homeScreen();
 
     tent.begin();
 
@@ -194,16 +192,13 @@ void touchHandler(void)
     tent.displayLightHigh(); // Switch on Displaylight on touch
 
     TS_Point p = ts.getPosition();
-
-    //calibration
-    p.x = (p.x) + 20;
-    p.y = (p.y) + 0;
+    p.x += 20; // calibration
 
     //WAS A BUTTON TOUCHED - And which one?
     uint8_t c { 0 };
 
-    for (c = 0; c < (sizeof(buttons) / sizeof(buttons[0])); ++c) {
-        Button& btn = buttons[c];
+    for (c = 0; c < (sizeof(screenManager.buttons) / sizeof(screenManager.buttons[0])); ++c) {
+        Button& btn = screenManager.buttons[c];
         if (!btn.isPressed(p.x, p.y)) {
             continue;
         }
@@ -217,11 +212,11 @@ void touchHandler(void)
             tent.growLight("HIGH");
             systemStatus.setDayCount(1);
 
-            screen.growStartedScreen(buttons, currentScreen);
+            screenManager.growStartedScreen();
 
             delay(3000);
 
-            screen.homeScreen(buttons, currentScreen);
+            screenManager.homeScreen();
 
             tent.doCheckStats(); //First time right away
             draw_temp_home.start();
@@ -234,29 +229,29 @@ void touchHandler(void)
         }
 
         if (btn.getName() == "timerBtn") {
-            screen.timerScreen(buttons, currentScreen);
+            screenManager.timerScreen();
             break;
         }
 
         if (btn.getName() == "dayCounterBtn") {
-            screen.cancelScreen(buttons, currentScreen);
+            screenManager.cancelScreen();
             break;
         }
 
         if (btn.getName() == "tempBtn") {
-            screen.tempUnitScreen(buttons, currentScreen);
+            screenManager.tempUnitScreen();
             break;
         }
 
         //CANCEL SCREEN
 
         if (btn.getName() == "cancelScreenOkBtn") {
-            screen.homeScreen(buttons, currentScreen);
+            screenManager.homeScreen();
             break;
         }
 
         if (btn.getName() == "terminateBtn") {
-            screen.cancelConfirmationScreen(buttons, currentScreen);
+            screenManager.cancelConfirmationScreen();
             break;
         }
 
@@ -268,12 +263,12 @@ void touchHandler(void)
             minuteCounterTent.stop();
 
             systemStatus.init();
-            screen.homeScreen(buttons, currentScreen);
+            screenManager.homeScreen();
             break;
         }
 
         if (btn.getName() == "terminateNoBtn") {
-            screen.homeScreen(buttons, currentScreen);
+            screenManager.homeScreen();
             break;
         }
 
@@ -323,50 +318,48 @@ void touchHandler(void)
         }
 
         if (btn.getName() == "timerOkBtn") {
-            screen.homeScreen(buttons, currentScreen);
+            screenManager.homeScreen();
             break;
         }
 
         if (btn.getName() == "wifiBtn") {
-            screen.wifiScreen(buttons, currentScreen);
+            screenManager.wifiScreen();
             break;
         }
 
         if (btn.getName() == "wifiOnBtn") {
             Particle.connect();
-            screen.homeScreen(buttons, currentScreen);
+            screenManager.homeScreen();
             break;
         }
 
         if (btn.getName() == "wifiOffBtn") {
             Particle.disconnect();
             WiFi.off();
-            screen.homeScreen(buttons, currentScreen);
+            screenManager.homeScreen();
             break;
         }
 
         if (btn.getName() == "wifiOkBtn") {
-            screen.homeScreen(buttons, currentScreen);
+            screenManager.homeScreen();
             break;
         }
 
         if (btn.getName() == "fanBtn") {
-            screen.fanScreen(buttons, currentScreen);
+            screenManager.fanScreen();
             break;
         }
 
         if (btn.getName() == "fanAutoBtn") {
             systemStatus.setFanAutoMode(1);
-            buttons[0].render();
-            buttons[1].render();
+            screenManager.renderButtons(true);
             systemStatus.check_fan();
             break;
         }
 
         if (btn.getName() == "fanManualBtn") {
             systemStatus.setFanAutoMode(0);
-            buttons[0].render();
-            buttons[1].render();
+            screenManager.renderButtons(true);
             systemStatus.check_fan();
             break;
         }
@@ -377,8 +370,7 @@ void touchHandler(void)
             //set to manual
             systemStatus.setFanAutoMode(0);
 
-            buttons[0].render();
-            buttons[1].render();
+            screenManager.renderButtons(true);
 
             if (fanSpeedPercent < 100) {
 
@@ -396,8 +388,7 @@ void touchHandler(void)
             //set to manual
             systemStatus.setFanAutoMode(0);
 
-            buttons[0].render();
-            buttons[1].render();
+            screenManager.renderButtons(true);
 
             if (fanSpeedPercent > 0) {
 
@@ -410,25 +401,23 @@ void touchHandler(void)
         }
 
         if (btn.getName() == "fanOkBtn") {
-            screen.homeScreen(buttons, currentScreen);
+            screenManager.homeScreen();
             break;
         }
 
         //temp unit select screen
         if (btn.getName() == "tempCelsiusBtn") {
             systemStatus.setTempUnit('C');
-            buttons[0].render();
-            buttons[1].render();
-            screen.homeScreen(buttons, currentScreen);
+            screenManager.renderButtons(true);
+            screenManager.homeScreen();
             tent.check_temperature(systemStatus.getTempUnit());
             break;
         }
 
         if (btn.getName() == "tempFahrenheitBtn") {
             systemStatus.setTempUnit('F');
-            buttons[0].render();
-            buttons[1].render();
-            screen.homeScreen(buttons, currentScreen);
+            screenManager.renderButtons(true);
+            screenManager.homeScreen();
             tent.check_temperature(systemStatus.getTempUnit());
             break;
         }
@@ -442,13 +431,7 @@ void loop(void)
         delay(10);
 
     } else {
-        uint8_t d { 0 };
-        for (d = 0; d < (sizeof(buttons) / sizeof(buttons[0])); ++d) {
-            if (buttons[d].getStatus() == "pressed") {
-                buttons[d].render();
-                buttons[d].setStatus("none");
-            }
-        }
+        screenManager.renderButtons();
     }
 
     bool dimmerBtnVal = digitalRead(DIM_PIN);

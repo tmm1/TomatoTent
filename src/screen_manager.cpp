@@ -1,10 +1,16 @@
-#include "screen.h"
+#include "screen_manager.h"
+#include "systemStatus.h"
+#include "tent.h"
 
-Screen::Screen() {}
+extern Adafruit_ILI9341 tft;
+extern SystemStatus systemStatus;
+extern Tent tent;
+extern float fanSpeed;
+extern float fanSpeedPercent;
 
-void Screen::homeScreen(Button* buttons, String& currentScreen)
+void ScreenManager::homeScreen()
 {
-    this->clear(buttons);
+    this->clearButtons();
     currentScreen = "homeScreen";
 
     if (systemStatus.getDayCount() == -1) {
@@ -55,9 +61,9 @@ void Screen::homeScreen(Button* buttons, String& currentScreen)
     buttons[5] = wifiBtn;
 }
 
-void Screen::growStartedScreen(Button* buttons, String& currentScreen)
+void ScreenManager::growStartedScreen()
 {
-    this->clear(buttons);
+    this->clearButtons();
     currentScreen = "growStartedScreen";
 
     tft.fillScreen(ILI9341_OLIVE);
@@ -73,9 +79,9 @@ void Screen::growStartedScreen(Button* buttons, String& currentScreen)
     tft.drawBitmap(124, 160, plant_filled_72x72, 72, 72, ILI9341_WHITE);
 }
 
-void Screen::cancelScreen(Button* buttons, String& currentScreen)
+void ScreenManager::cancelScreen()
 {
-    this->clear(buttons);
+    this->clearButtons();
     currentScreen = "cancelScreen";
 
     tft.setCursor(20, 70);
@@ -106,9 +112,9 @@ void Screen::cancelScreen(Button* buttons, String& currentScreen)
     }
 }
 
-void Screen::cancelConfirmationScreen(Button* buttons, String& currentScreen)
+void ScreenManager::cancelConfirmationScreen()
 {
-    this->clear(buttons);
+    this->clearButtons();
     currentScreen = "cancelConfirmationScreen";
 
     tft.setCursor(10, 50);
@@ -123,9 +129,9 @@ void Screen::cancelConfirmationScreen(Button* buttons, String& currentScreen)
     buttons[1] = terminateNoBtn;
 }
 
-void Screen::timerScreen(Button* buttons, String& currentScreen)
+void ScreenManager::timerScreen()
 {
-    this->clear(buttons);
+    this->clearButtons();
     currentScreen = "timerScreen";
 
     tft.setCursor(20, 8);
@@ -157,9 +163,9 @@ void Screen::timerScreen(Button* buttons, String& currentScreen)
     }
 }
 
-void Screen::wifiScreen(Button* buttons, String& currentScreen)
+void ScreenManager::wifiScreen()
 {
-    this->clear(buttons);
+    this->clearButtons();
     currentScreen = "wifiScreen";
 
     Button wifiOnBtn("wifiOnBtn", 20, 40, 250, 38, "On", 110, 8);
@@ -172,9 +178,9 @@ void Screen::wifiScreen(Button* buttons, String& currentScreen)
     buttons[2] = wifiOkBtn;
 }
 
-void Screen::wifiSetupScreen(Button* buttons, String& currentScreen)
+void ScreenManager::wifiSetupScreen()
 {
-    this->clear(buttons);
+    this->clearButtons();
     currentScreen = "wifiScreen";
 
     tft.drawBitmap(18, 5, iconWifi_24x24, 24, 24, ILI9341_WHITE);
@@ -205,9 +211,9 @@ void Screen::wifiSetupScreen(Button* buttons, String& currentScreen)
     tft.print("community.tomatotent.de");
 }
 
-void Screen::fanScreen(Button* buttons, String& currentScreen)
+void ScreenManager::fanScreen()
 {
-    this->clear(buttons);
+    this->clearButtons();
     currentScreen = "fanScreen";
 
     tft.drawBitmap(20, 4, fan_36, 36, 36, ILI9341_WHITE);
@@ -235,9 +241,9 @@ void Screen::fanScreen(Button* buttons, String& currentScreen)
     systemStatus.drawFanSpeed();
 }
 
-void Screen::tempUnitScreen(Button* buttons, String& currentScreen)
+void ScreenManager::tempUnitScreen()
 {
-    this->clear(buttons);
+    this->clearButtons();
     currentScreen = "tempUnitScreen";
 
     tft.drawBitmap(20, 4, thermometer_36, 36, 36, ILI9341_WHITE);
@@ -254,7 +260,20 @@ void Screen::tempUnitScreen(Button* buttons, String& currentScreen)
     buttons[1] = tempCelsiusBtn;
 }
 
-void Screen::clear(Button* buttons)
+void ScreenManager::renderButtons(bool forced)
+{
+    uint8_t d { 0 };
+    for (d = 0; d < (sizeof(buttons) / sizeof(buttons[0])); ++d) {
+        if (buttons[d].getStatus() == "pressed") {
+            buttons[d].render();
+            buttons[d].setStatus("none");
+        } else if (forced) {
+            buttons[d].render();
+        }
+    }
+}
+
+void ScreenManager::clearButtons()
 {
     Button blankBtn("blankBtn", -1, -1, -1, -1, "", -1, -1);
 

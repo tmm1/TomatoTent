@@ -6,6 +6,7 @@
 #include "DFRobot_SHT20.h"
 #include "Adafruit_ILI9341.h"
 #include "icons.h"
+#include "screen_manager.h"
 
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
 #define GROW_LIGHT_ON_OFF_PIN D7
@@ -19,7 +20,7 @@ extern Adafruit_ILI9341 tft;
 extern double temp;
 extern double hum;
 extern double waterLevel;
-extern String currentScreen;
+extern ScreenManager screenManager;
 
 class Tent {
 

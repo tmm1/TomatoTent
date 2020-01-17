@@ -2,13 +2,6 @@
 #define BUTTON_H
 
 #include <Particle.h>
-#include <Arduino.h>
-#include <Adafruit_ILI9341.h>
-#include "icons.h"
-#include "systemStatus.h"
-
-extern Adafruit_ILI9341 tft;
-extern SystemStatus systemStatus;
 
 class Button {
 

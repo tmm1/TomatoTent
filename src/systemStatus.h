@@ -6,10 +6,11 @@
 #include "math.h"
 #include "Adafruit_ILI9341.h"
 #include "tent.h"
+#include "screen_manager.h"
 
 extern Adafruit_ILI9341 tft;
 extern Tent tent;
-extern String currentScreen;
+extern ScreenManager screenManager;
 
 class SystemStatus {
 
