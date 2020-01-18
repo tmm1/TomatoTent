@@ -18,63 +18,63 @@ extern float fanSpeedPercent;
 
 void ScreenManager::homeScreen()
 {
-    current = new HomeScreen();
+    current = std::make_unique<HomeScreen>();
     currentScreen = current->getName();
     current->render();
 }
 
 void ScreenManager::growStartedScreen()
 {
-    current = new GrowStartedScreen();
+    current = std::make_unique<GrowStartedScreen>();
     currentScreen = current->getName();
     current->render();
 }
 
 void ScreenManager::cancelScreen()
 {
-    current = new CancelScreen();
+    current = std::make_unique<CancelScreen>();
     currentScreen = current->getName();
     current->render();
 }
 
 void ScreenManager::cancelConfirmationScreen()
 {
-    current = new CancelConfirmScreen();
+    current = std::make_unique<CancelConfirmScreen>();
     currentScreen = current->getName();
     current->render();
 }
 
 void ScreenManager::timerScreen()
 {
-    current = new TimerScreen();
+    current = std::make_unique<TimerScreen>();
     currentScreen = current->getName();
     current->render();
 }
 
 void ScreenManager::wifiScreen()
 {
-    current = new WifiScreen();
+    current = std::make_unique<WifiScreen>();
     currentScreen = current->getName();
     current->render();
 }
 
 void ScreenManager::wifiSplashScreen()
 {
-    current = new WifiSplashScreen();
+    current = std::make_unique<WifiSplashScreen>();
     currentScreen = current->getName();
     current->render();
 }
 
 void ScreenManager::fanScreen()
 {
-    current = new FanScreen();
+    current = std::make_unique<FanScreen>();
     currentScreen = current->getName();
     current->render();
 }
 
 void ScreenManager::tempUnitScreen()
 {
-    current = new TempUnitScreen();
+    current = std::make_unique<TempUnitScreen>();
     currentScreen = current->getName();
     current->render();
 }

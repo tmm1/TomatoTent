@@ -10,11 +10,12 @@ protected:
     void drawButton(Button& btn, int color, int textSize);
 
 public:
-    virtual String getName();
-    virtual void render();
-    virtual void renderButton(Button& btn);
-    virtual void renderButtonPressed(Button& btn);
-    virtual void handleButton(Button& btn);
+    virtual ~Screen();
+    virtual String getName() = 0;
+    virtual void render() = 0;
+    virtual void renderButton(Button& btn) = 0;
+    virtual void renderButtonPressed(Button& btn) = 0;
+    virtual void handleButton(Button& btn) = 0;
 
     void renderButtons(bool forced = false);
     void processTouch(int x, int y);
