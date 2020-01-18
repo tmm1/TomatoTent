@@ -7,6 +7,7 @@
 #include "screens/fan.h"
 #include "screens/temp_unit.h"
 #include "screens/grow_started.h"
+#include "screens/wifi_splash.h"
 
 extern Adafruit_ILI9341 tft;
 extern SystemStatus systemStatus;
@@ -64,37 +65,11 @@ void ScreenManager::wifiScreen()
     buttons[2] = wifiOkBtn;
 }
 
-void ScreenManager::wifiSetupScreen()
+void ScreenManager::wifiSplashScreen()
 {
-    this->clearButtons();
-    currentScreen = "wifiScreen";
-
-    tft.drawBitmap(18, 5, iconWifi_24x24, 24, 24, ILI9341_WHITE);
-
-    tft.setCursor(50, 10);
-    tft.setTextColor(ILI9341_GREEN);
-    tft.setTextSize(3);
-    tft.print("WiFi Setup");
-
-    tft.setTextColor(ILI9341_WHITE);
-    tft.setTextSize(1);
-    tft.setCursor(20, 50);
-    tft.print("Use a SmartPhone, Tablet or Computer");
-    tft.setCursor(20, 70);
-    tft.print("Go to WiFi settings, scan for Networks.");
-    tft.setCursor(20, 90);
-    tft.print("Connect to the Network called TomatoTent-xxxx.");
-    tft.setCursor(20, 110);
-    tft.print("Open a Web Browser (Safari, Chrome, IE).");
-    tft.setCursor(20, 130);
-    tft.print("Navigate to http://192.168.0.1");
-    tft.setCursor(20, 150);
-    tft.print("Follow the instructions there.");
-
-    tft.setCursor(20, 200);
-    tft.setTextSize(2);
-    tft.setTextColor(ILI9341_GREEN);
-    tft.print("community.tomatotent.de");
+    current = new WifiSplashScreen();
+    currentScreen = current->getName();
+    current->render();
 }
 
 void ScreenManager::fanScreen()

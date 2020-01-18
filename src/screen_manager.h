@@ -27,7 +27,7 @@ public:
     void cancelConfirmationScreen();
     void timerScreen();
     void wifiScreen();
-    void wifiSetupScreen();
+    void wifiSplashScreen();
     void fanScreen();
     void tempUnitScreen();
 };

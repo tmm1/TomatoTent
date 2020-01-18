@@ -90,7 +90,7 @@ void myPage(const char* url, ResponseCallback* cb, void* cbArg, Reader* body, Wr
 
 void setup_handler()
 {
-    screenManager.wifiSetupScreen();
+    screenManager.wifiSplashScreen();
     tent.tp->stop();
     tent.tp1->stop();
 }
