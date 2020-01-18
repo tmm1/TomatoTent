@@ -137,6 +137,9 @@ void setup()
     pinMode(GROW_LIGHT_ON_OFF_PIN, OUTPUT);
     pinMode(DIM_PIN, INPUT_PULLUP);
 
+    tft.fillScreen(ILI9341_BLACK);
+    analogWrite(TFT_BRIGHTNESS_PIN, 255);
+
     //TOUCH
     ts.begin();
     ts.setRotation(3); // 1 for 2.4 screen, 3 for 2.8
