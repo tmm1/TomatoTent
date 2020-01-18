@@ -237,16 +237,6 @@ void touchHandler(void)
 
         //CANCEL SCREEN
 
-        if (btn.getName() == "cancelScreenOkBtn") {
-            screenManager.homeScreen();
-            break;
-        }
-
-        if (btn.getName() == "terminateBtn") {
-            screenManager.cancelConfirmationScreen();
-            break;
-        }
-
         if (btn.getName() == "terminateYesBtn") {
             tent.growLight("OFF");
             draw_temp_home.stop();
