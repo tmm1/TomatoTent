@@ -235,56 +235,6 @@ void touchHandler(void)
             break;
         }
 
-        //TIMER SCREEN
-        if (btn.getName() == "timerUpBtn") {
-            int dayDuration = systemStatus.getDayDuration() + 60;
-
-            if (dayDuration > 1440) {
-                dayDuration = 60;
-            }
-
-            systemStatus.setDayDuration(dayDuration);
-
-            tft.fillRect(10, 70, 200, 22, ILI9341_BLACK);
-            tft.setTextColor(ILI9341_WHITE);
-            tft.setTextSize(2);
-            tft.setCursor(10, 70);
-            tft.print(String(dayDuration / 60) + " Hours ON");
-
-            tft.setCursor(10, 140);
-            tft.fillRect(10, 140, 215, 22, ILI9341_BLACK);
-            int nightDuration = (24 * 60) - dayDuration;
-            tft.print(String(nightDuration / 60) + " Hours OFF");
-
-            break;
-        }
-        if (btn.getName() == "timerDownBtn") {
-            int dayDuration = systemStatus.getDayDuration() - 60;
-
-            if (dayDuration <= 0) {
-                dayDuration = 1440;
-            }
-
-            systemStatus.setDayDuration(dayDuration);
-
-            tft.fillRect(10, 70, 200, 22, ILI9341_BLACK);
-            tft.setTextColor(ILI9341_WHITE);
-            tft.setTextSize(2);
-            tft.setCursor(10, 70);
-            tft.print(String(dayDuration / 60) + " Hours ON");
-
-            tft.setCursor(10, 140);
-            tft.fillRect(10, 140, 215, 22, ILI9341_BLACK);
-            int nightDuration = (24 * 60) - dayDuration;
-            tft.print(String(nightDuration / 60) + " Hours OFF");
-            break;
-        }
-
-        if (btn.getName() == "timerOkBtn") {
-            screenManager.homeScreen();
-            break;
-        }
-
         if (btn.getName() == "wifiBtn") {
             screenManager.wifiScreen();
             break;

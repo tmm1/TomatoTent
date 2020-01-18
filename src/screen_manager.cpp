@@ -3,6 +3,7 @@
 #include "tent.h"
 #include "screens/cancel.h"
 #include "screens/cancel_confirm.h"
+#include "screens/timer.h"
 
 extern Adafruit_ILI9341 tft;
 extern SystemStatus systemStatus;
@@ -51,36 +52,9 @@ void ScreenManager::cancelConfirmationScreen()
 
 void ScreenManager::timerScreen()
 {
-    this->clearButtons();
-    currentScreen = "timerScreen";
-
-    tft.setCursor(20, 8);
-    tft.setTextColor(ILI9341_GREEN);
-    tft.setTextSize(2);
-    tft.print("Light Timer");
-
-    int dayDuration = systemStatus.getDayDuration();
-
-    tft.setTextColor(ILI9341_WHITE);
-    tft.setCursor(10, 70);
-    tft.print(String(dayDuration / 60) + " Hours ON");
-
-    int nightDuration = (24 * 60) - dayDuration;
-    tft.setCursor(10, 140);
-    tft.print(String(nightDuration / 60) + " Hours OFF");
-
-    Button timerUpBtn("timerUpBtn", 240, 50, 40, 40, "", 0, 0);
-    buttons[0] = timerUpBtn;
-
-    Button timerDownBtn("timerDownBtn", 240, 130, 40, 40, "", 0, 0);
-    buttons[1] = timerDownBtn;
-
-    Button timerOkBtn("timerOkBtn", 20, 180, 250, 38, "Ok", 110, 8);
-    buttons[2] = timerOkBtn;
-
-    if (tent.getGrowLightStatus() == "LOW") {
-        tent.drawDimmedIndicator();
-    }
+    current = new TimerScreen();
+    currentScreen = current->getName();
+    current->render();
 }
 
 void ScreenManager::wifiScreen()
