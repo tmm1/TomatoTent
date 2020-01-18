@@ -27,34 +27,11 @@ void TempUnitScreen::render()
 
 void TempUnitScreen::renderButton(Button& btn)
 {
-    uint16_t x0 = btn.x0, y0 = btn.y0, w = btn.w, h = btn.h, textOffsetLeft = btn.textOffsetLeft, textOffsetTop = btn.textOffsetTop;
-    String buttonText = btn.buttonText;
-
     if (btn.getName() == "tempFahrenheitBtn") {
-        tft.drawRect(x0, y0, w, h, ILI9341_WHITE);
-
-        if (systemStatus.getTempUnit() == 'F') {
-            tft.fillRect(x0 + 1, y0 + 1, w - 2, h - 2, ILI9341_OLIVE);
-        } else {
-            tft.fillRect(x0 + 1, y0 + 1, w - 2, h - 2, ILI9341_BLACK);
-        }
-        tft.setCursor(x0 + textOffsetLeft, y0 + textOffsetTop);
-        tft.setTextColor(ILI9341_WHITE);
-        tft.setTextSize(2);
-        tft.print(buttonText);
+        drawButton(btn, systemStatus.getTempUnit() == 'F' ? ILI9341_OLIVE : ILI9341_BLACK, 2);
 
     } else if (btn.getName() == "tempCelsiusBtn") {
-        tft.drawRect(x0, y0, w, h, ILI9341_WHITE);
-
-        if (systemStatus.getTempUnit() == 'C') {
-            tft.fillRect(x0 + 1, y0 + 1, w - 2, h - 2, ILI9341_OLIVE);
-        } else {
-            tft.fillRect(x0 + 1, y0 + 1, w - 2, h - 2, ILI9341_BLACK);
-        }
-        tft.setCursor(x0 + textOffsetLeft, y0 + textOffsetTop);
-        tft.setTextColor(ILI9341_WHITE);
-        tft.setTextSize(2);
-        tft.print(buttonText);
+        drawButton(btn, systemStatus.getTempUnit() == 'C' ? ILI9341_OLIVE : ILI9341_BLACK, 2);
     }
 }
 
