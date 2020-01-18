@@ -21,9 +21,6 @@ public:
     Button();
     Button(String name, uint16_t x0, uint16_t y0, uint16_t w, uint16_t h, String buttonText, uint16_t textOffsetLeft, uint16_t textOffsetTop);
 
-    void render();
-    void renderPressed();
-
     String getName() { return this->name; }
 
     bool isPressed(int x, int y);
