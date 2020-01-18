@@ -4,9 +4,9 @@
 #include "Particle.h"
 #include <Arduino.h>
 #include "DFRobot_SHT20.h"
+#include "screen_manager.h"
 #include "Adafruit_ILI9341.h"
 #include "icons.h"
-#include "screen_manager.h"
 
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
 #define GROW_LIGHT_ON_OFF_PIN D7

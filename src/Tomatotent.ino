@@ -90,7 +90,7 @@ void myPage(const char* url, ResponseCallback* cb, void* cbArg, Reader* body, Wr
 
 void setup_handler()
 {
-    screenManager.wifiSetupScreen();
+    screenManager.wifiSplashScreen();
     tent.tp->stop();
     tent.tp1->stop();
 }
@@ -136,6 +136,9 @@ void setup()
     pinMode(GROW_LIGHT_BRIGHTNESS_PIN, OUTPUT);
     pinMode(GROW_LIGHT_ON_OFF_PIN, OUTPUT);
     pinMode(DIM_PIN, INPUT_PULLUP);
+
+    tft.fillScreen(ILI9341_BLACK);
+    analogWrite(TFT_BRIGHTNESS_PIN, 255);
 
     //TOUCH
     ts.begin();
@@ -195,231 +198,8 @@ void touchHandler(void)
     TS_Point p = ts.getPosition();
     p.x += 20; // calibration
 
-    //WAS A BUTTON TOUCHED - And which one?
-    uint8_t c { 0 };
-
-    for (c = 0; c < (sizeof(screenManager.buttons) / sizeof(screenManager.buttons[0])); ++c) {
-        Button& btn = screenManager.buttons[c];
-        if (!btn.isPressed(p.x, p.y)) {
-            continue;
-        }
-        if (btn.getStatus() != "none") {
-            continue;
-        }
-
-        btn.setStatus("pressed");
-
-        if (btn.getName() == "startGrowBtn") {
-            tent.growLight("HIGH");
-            systemStatus.setDayCount(1);
-
-            screenManager.growStartedScreen();
-
-            delay(3000);
-
-            screenManager.homeScreen();
-
-            tent.doCheckStats(); //First time right away
-            draw_temp_home.start();
-
-            systemStatus.countMinute(); // First time on new grow
-            minutelyTicker.start();
-
-            break;
-        }
-
-        if (btn.getName() == "timerBtn") {
-            screenManager.timerScreen();
-            break;
-        }
-
-        if (btn.getName() == "dayCounterBtn") {
-            screenManager.cancelScreen();
-            break;
-        }
-
-        if (btn.getName() == "tempBtn") {
-            screenManager.tempUnitScreen();
-            break;
-        }
-
-        //CANCEL SCREEN
-
-        if (btn.getName() == "cancelScreenOkBtn") {
-            screenManager.homeScreen();
-            break;
-        }
-
-        if (btn.getName() == "terminateBtn") {
-            screenManager.cancelConfirmationScreen();
-            break;
-        }
-
-        if (btn.getName() == "terminateYesBtn") {
-            tent.growLight("OFF");
-            draw_temp_home.stop();
-            tent.fan("OFF");
-            minutelyTicker.stop();
-
-            systemStatus.init();
-            screenManager.homeScreen();
-            break;
-        }
-
-        if (btn.getName() == "terminateNoBtn") {
-            screenManager.homeScreen();
-            break;
-        }
-
-        //TIMER SCREEN
-        if (btn.getName() == "timerUpBtn") {
-            int dayDuration = systemStatus.getDayDuration() + 60;
-
-            if (dayDuration > 1440) {
-                dayDuration = 60;
-            }
-
-            systemStatus.setDayDuration(dayDuration);
-
-            tft.fillRect(10, 70, 200, 22, ILI9341_BLACK);
-            tft.setTextColor(ILI9341_WHITE);
-            tft.setTextSize(2);
-            tft.setCursor(10, 70);
-            tft.print(String(dayDuration / 60) + " Hours ON");
-
-            tft.setCursor(10, 140);
-            tft.fillRect(10, 140, 215, 22, ILI9341_BLACK);
-            int nightDuration = (24 * 60) - dayDuration;
-            tft.print(String(nightDuration / 60) + " Hours OFF");
-
-            break;
-        }
-        if (btn.getName() == "timerDownBtn") {
-            int dayDuration = systemStatus.getDayDuration() - 60;
-
-            if (dayDuration <= 0) {
-                dayDuration = 1440;
-            }
-
-            systemStatus.setDayDuration(dayDuration);
-
-            tft.fillRect(10, 70, 200, 22, ILI9341_BLACK);
-            tft.setTextColor(ILI9341_WHITE);
-            tft.setTextSize(2);
-            tft.setCursor(10, 70);
-            tft.print(String(dayDuration / 60) + " Hours ON");
-
-            tft.setCursor(10, 140);
-            tft.fillRect(10, 140, 215, 22, ILI9341_BLACK);
-            int nightDuration = (24 * 60) - dayDuration;
-            tft.print(String(nightDuration / 60) + " Hours OFF");
-            break;
-        }
-
-        if (btn.getName() == "timerOkBtn") {
-            screenManager.homeScreen();
-            break;
-        }
-
-        if (btn.getName() == "wifiBtn") {
-            screenManager.wifiScreen();
-            break;
-        }
-
-        if (btn.getName() == "wifiOnBtn") {
-            Particle.connect();
-            screenManager.homeScreen();
-            break;
-        }
-
-        if (btn.getName() == "wifiOffBtn") {
-            Particle.disconnect();
-            WiFi.off();
-            screenManager.homeScreen();
-            break;
-        }
-
-        if (btn.getName() == "wifiOkBtn") {
-            screenManager.homeScreen();
-            break;
-        }
-
-        if (btn.getName() == "fanBtn") {
-            screenManager.fanScreen();
-            break;
-        }
-
-        if (btn.getName() == "fanAutoBtn") {
-            systemStatus.setFanAutoMode(1);
-            screenManager.renderButtons(true);
-            systemStatus.check_fan();
-            break;
-        }
-
-        if (btn.getName() == "fanManualBtn") {
-            systemStatus.setFanAutoMode(0);
-            screenManager.renderButtons(true);
-            systemStatus.check_fan();
-            break;
-        }
-
-        if (btn.getName() == "fanUpBtn") {
-            float fanSpeedPercent = systemStatus.getFanSpeed();
-
-            //set to manual
-            systemStatus.setFanAutoMode(0);
-
-            screenManager.renderButtons(true);
-
-            if (fanSpeedPercent < 100) {
-
-                fanSpeedPercent += 5;
-
-                systemStatus.setFanSpeed(fanSpeedPercent);
-                systemStatus.check_fan();
-            }
-            break;
-        }
-
-        if (btn.getName() == "fanDownBtn") {
-            float fanSpeedPercent = systemStatus.getFanSpeed();
-
-            //set to manual
-            systemStatus.setFanAutoMode(0);
-
-            screenManager.renderButtons(true);
-
-            if (fanSpeedPercent > 0) {
-
-                fanSpeedPercent -= 5;
-
-                systemStatus.setFanSpeed(fanSpeedPercent);
-                systemStatus.check_fan();
-            }
-            break;
-        }
-
-        if (btn.getName() == "fanOkBtn") {
-            screenManager.homeScreen();
-            break;
-        }
-
-        //temp unit select screen
-        if (btn.getName() == "tempCelsiusBtn") {
-            systemStatus.setTempUnit('C');
-            screenManager.renderButtons(true);
-            screenManager.homeScreen();
-            tent.check_temperature(systemStatus.getTempUnit());
-            break;
-        }
-
-        if (btn.getName() == "tempFahrenheitBtn") {
-            systemStatus.setTempUnit('F');
-            screenManager.renderButtons(true);
-            screenManager.homeScreen();
-            tent.check_temperature(systemStatus.getTempUnit());
-            break;
-        }
+    if (screenManager.current) {
+        screenManager.current->processTouch(p.x, p.y);
     }
 }
 

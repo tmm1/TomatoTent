@@ -4,14 +4,13 @@
 #include <Particle.h>
 #include <Arduino.h>
 
-#include <button.h>
+#include "button.h"
+#include "screen.h"
+#include "screens/home.h"
 
 class ScreenManager {
-
-    void clearButtons();
-
 public:
-    Button buttons[6];
+    Screen* current = new HomeScreen();
     String currentScreen = "homeScreen";
 
     ScreenManager() {};
@@ -24,7 +23,7 @@ public:
     void cancelConfirmationScreen();
     void timerScreen();
     void wifiScreen();
-    void wifiSetupScreen();
+    void wifiSplashScreen();
     void fanScreen();
     void tempUnitScreen();
 };
