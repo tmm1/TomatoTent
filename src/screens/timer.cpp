@@ -18,14 +18,7 @@ void TimerScreen::render()
     tft.print("Light Timer");
 
     int dayDuration = systemStatus.getDayDuration();
-
-    tft.setTextColor(ILI9341_WHITE);
-    tft.setCursor(10, 70);
-    tft.print(String(dayDuration / 60) + " Hours ON");
-
-    int nightDuration = (24 * 60) - dayDuration;
-    tft.setCursor(10, 140);
-    tft.print(String(nightDuration / 60) + " Hours OFF");
+    renderDayDuration(dayDuration);
 
     buttons.push_back(Button("timerUpBtn", 240, 50, 40, 40, "", 0, 0));
     buttons.push_back(Button("timerDownBtn", 240, 130, 40, 40, "", 0, 0));
@@ -67,49 +60,35 @@ void TimerScreen::renderButtonPressed(Button& btn)
 
 void TimerScreen::renderDayDuration(int dayDuration)
 {
+    tft.fillRect(10, 70, 200, 22, ILI9341_BLACK);
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(2);
+    tft.setCursor(10, 70);
+    tft.print(String(dayDuration / 60) + " Hours ON");
+
+    tft.setCursor(10, 140);
+    tft.fillRect(10, 140, 215, 22, ILI9341_BLACK);
+    int nightDuration = (24 * 60) - dayDuration;
+    tft.print(String(nightDuration / 60) + " Hours OFF");
 }
 
 void TimerScreen::handleButton(Button& btn)
 {
     if (btn.getName() == "timerUpBtn") {
         int dayDuration = systemStatus.getDayDuration() + 60;
-
         if (dayDuration > 1440) {
             dayDuration = 60;
         }
-
         systemStatus.setDayDuration(dayDuration);
-
-        tft.fillRect(10, 70, 200, 22, ILI9341_BLACK);
-        tft.setTextColor(ILI9341_WHITE);
-        tft.setTextSize(2);
-        tft.setCursor(10, 70);
-        tft.print(String(dayDuration / 60) + " Hours ON");
-
-        tft.setCursor(10, 140);
-        tft.fillRect(10, 140, 215, 22, ILI9341_BLACK);
-        int nightDuration = (24 * 60) - dayDuration;
-        tft.print(String(nightDuration / 60) + " Hours OFF");
+        renderDayDuration(dayDuration);
 
     } else if (btn.getName() == "timerDownBtn") {
         int dayDuration = systemStatus.getDayDuration() - 60;
-
         if (dayDuration <= 0) {
             dayDuration = 1440;
         }
-
         systemStatus.setDayDuration(dayDuration);
-
-        tft.fillRect(10, 70, 200, 22, ILI9341_BLACK);
-        tft.setTextColor(ILI9341_WHITE);
-        tft.setTextSize(2);
-        tft.setCursor(10, 70);
-        tft.print(String(dayDuration / 60) + " Hours ON");
-
-        tft.setCursor(10, 140);
-        tft.fillRect(10, 140, 215, 22, ILI9341_BLACK);
-        int nightDuration = (24 * 60) - dayDuration;
-        tft.print(String(nightDuration / 60) + " Hours OFF");
+        renderDayDuration(dayDuration);
 
     } else if (btn.getName() == "timerOkBtn") {
         screenManager.homeScreen();
