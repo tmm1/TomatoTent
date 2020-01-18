@@ -199,47 +199,6 @@ void touchHandler(void)
     p.x += 20; // calibration
 
     screenManager.current->processTouch(p.x, p.y);
-
-    return;
-
-    //WAS A BUTTON TOUCHED - And which one?
-    uint8_t c { 0 };
-
-    for (c = 0; c < (sizeof(screenManager.buttons) / sizeof(screenManager.buttons[0])); ++c) {
-        Button& btn = screenManager.buttons[c];
-        if (!btn.isPressed(p.x, p.y)) {
-            continue;
-        }
-        if (btn.getStatus() != "none") {
-            continue;
-        }
-
-        btn.setStatus("pressed");
-
-        if (btn.getName() == "startGrowBtn") {
-            tent.growLight("HIGH");
-            systemStatus.setDayCount(1);
-
-            screenManager.growStartedScreen();
-
-            delay(3000);
-
-            screenManager.homeScreen();
-
-            tent.doCheckStats(); //First time right away
-            draw_temp_home.start();
-
-            systemStatus.countMinute(); // First time on new grow
-            minutelyTicker.start();
-
-            break;
-        }
-
-        if (btn.getName() == "wifiBtn") {
-            screenManager.wifiScreen();
-            break;
-        }
-    }
 }
 
 void loop(void)
