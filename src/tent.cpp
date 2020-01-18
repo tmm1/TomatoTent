@@ -29,7 +29,7 @@ void Tent::check_temperature(char tempUnit)
 
 void Tent::draw_temperature_home(char tempUnit)
 {
-    if (currentScreen == "homeScreen") {
+    if (screenManager.currentScreen == "homeScreen") {
 
         //reset screen
         tft.fillRect(50, 60, 141, 25, ILI9341_BLACK);
@@ -62,7 +62,7 @@ void Tent::check_humidity()
 
 void Tent::draw_humidity_home()
 {
-    if (currentScreen == "homeScreen") {
+    if (screenManager.currentScreen == "homeScreen") {
         /////// Humidity
         tft.fillRect(50, 110, 141, 25, ILI9341_BLACK);
 
@@ -89,7 +89,7 @@ void Tent::check_waterlevel()
 
 void Tent::draw_waterlevel_home()
 {
-    if (currentScreen == "homeScreen") {
+    if (screenManager.currentScreen == "homeScreen") {
         const float waterLevelBoxHeight = 150;
         const int waterLevelBoxTop = 60;
 

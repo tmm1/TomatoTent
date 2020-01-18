@@ -71,7 +71,7 @@ void SystemStatus::countMinute()
         }
     }
 
-    if (currentScreen == "homeScreen") {
+    if (screenManager.currentScreen == "homeScreen") {
         this->drawTimerStatus();
     }
 }
@@ -236,7 +236,7 @@ void SystemStatus::check_fan()
         analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
     }
 
-    if (currentScreen == "homeScreen" || currentScreen == "fanScreen") {
+    if (screenManager.currentScreen == "homeScreen" || screenManager.currentScreen == "fanScreen") {
         this->drawFanSpeed();
     }
 }
