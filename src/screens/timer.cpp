@@ -56,6 +56,11 @@ void TimerScreen::renderButton(Button& btn)
 
 void TimerScreen::renderButtonPressed(Button& btn)
 {
+    if (btn.getName() == "timerUpBtn") {
+        tft.fillTriangle(240, 95, 260, 55, 280, 95, ILI9341_WHITE);
+    } else if (btn.getName() == "timerDownBtn") {
+        tft.fillTriangle(240, 170, 260, 130, 280, 170, ILI9341_WHITE);
+    }
 }
 
 void TimerScreen::renderDayDuration(int dayDuration)
