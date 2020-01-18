@@ -10,7 +10,7 @@
 
 class ScreenManager {
 public:
-    Screen* current = new HomeScreen();
+    std::unique_ptr<Screen> current = std::make_unique<HomeScreen>();
     String currentScreen = "homeScreen";
 
     ScreenManager() {};

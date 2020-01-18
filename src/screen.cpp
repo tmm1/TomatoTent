@@ -48,3 +48,5 @@ void Screen::drawButton(Button& btn, int color, int textSize)
     tft.setTextSize(textSize);
     tft.print(buttonText);
 }
+
+Screen::~Screen() {}
