@@ -10,55 +10,8 @@ extern float fanSpeedPercent;
 
 void ScreenManager::homeScreen()
 {
-    this->clearButtons();
-    currentScreen = "homeScreen";
-
-    if (systemStatus.getDayCount() == -1) {
-
-        tft.setTextColor(ILI9341_LIGHTGREY);
-        tft.setTextSize(2);
-
-        tft.setCursor(126, 15);
-        tft.print("Hi,");
-
-        tft.setCursor(75, 40);
-        tft.print("I'm Tomatotent.");
-
-        tft.drawBitmap(110, 65, tomato_filled_100, 100, 100, ILI9341_RED);
-
-        Button startGrowBtn("startGrowBtn", 35, 180, 250, 38, "Start a Grow", 18, 8);
-        buttons[0] = startGrowBtn;
-
-    } else { // a grow is in progress
-
-        tft.drawRect(20, 180, 250, 38, ILI9341_BLACK);
-
-        systemStatus.drawDayCounter();
-
-        Button dayCounterBtn("dayCounterBtn", 20, 180, 250, 38, "", 18, 8);
-        buttons[1] = dayCounterBtn;
-
-        Button timerBtn("timerBtn", 10, 10, 115, 25, "", 18, 8);
-        buttons[2] = timerBtn;
-
-        Button fanBtn("fanBtn", 145, 10, 115, 35, "", 18, 8);
-        buttons[3] = fanBtn;
-
-        Button tempBtn("tempBtn", 50, 55, 115, 35, "", 18, 8);
-        buttons[4] = tempBtn;
-
-        tft.drawBitmap(165, 4, fan_36, 36, 36, ILI9341_WHITE);
-
-        systemStatus.drawTimerStatus();
-        systemStatus.check_fan();
-        tent.drawStats(systemStatus.getTempUnit());
-
-        if (tent.getGrowLightStatus() == "LOW") {
-            tent.drawDimmedIndicator();
-        }
-    }
-    Button wifiBtn("wifiBtn", 260, 0, 60, 30, "", 18, 8);
-    buttons[5] = wifiBtn;
+    current = new HomeScreen();
+    current->render();
 }
 
 void ScreenManager::growStartedScreen()

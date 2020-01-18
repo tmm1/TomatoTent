@@ -154,8 +154,7 @@ void setup()
 
     //END REMOTE FUNCTIONS
 
-    //screenManager.homeScreen();
-    screenManager.current->render();
+    screenManager.homeScreen();
 
     tent.begin();
 
@@ -230,21 +229,6 @@ void touchHandler(void)
             systemStatus.countMinute(); // First time on new grow
             minutelyTicker.start();
 
-            break;
-        }
-
-        if (btn.getName() == "timerBtn") {
-            screenManager.timerScreen();
-            break;
-        }
-
-        if (btn.getName() == "dayCounterBtn") {
-            screenManager.cancelScreen();
-            break;
-        }
-
-        if (btn.getName() == "tempBtn") {
-            screenManager.tempUnitScreen();
             break;
         }
 
@@ -346,11 +330,6 @@ void touchHandler(void)
 
         if (btn.getName() == "wifiOkBtn") {
             screenManager.homeScreen();
-            break;
-        }
-
-        if (btn.getName() == "fanBtn") {
-            screenManager.fanScreen();
             break;
         }
 

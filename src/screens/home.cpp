@@ -57,23 +57,32 @@ void HomeScreen::render()
 
 void HomeScreen::renderButton(Button& btn)
 {
+    uint16_t x0 = btn.x0, y0 = btn.y0, w = btn.w, h = btn.h, textOffsetLeft = btn.textOffsetLeft, textOffsetTop = btn.textOffsetTop;
+    String buttonText = btn.buttonText;
+
     if (btn.getName() == "startGrowBtn") {
-        tft.drawRect(btn.x0, btn.y0, btn.w, btn.h, ILI9341_WHITE);
+        tft.drawRect(x0, y0, w, h, ILI9341_WHITE);
 
-        tft.fillRect(btn.x0 + 1, btn.y0 + 1, btn.w - 2, btn.h - 2, ILI9341_OLIVE);
+        tft.fillRect(x0 + 1, y0 + 1, w - 2, h - 2, ILI9341_OLIVE);
 
-        tft.setCursor(btn.x0 + btn.textOffsetLeft, btn.y0 + btn.textOffsetTop);
+        tft.setCursor(x0 + textOffsetLeft, y0 + textOffsetTop);
         tft.setTextColor(ILI9341_WHITE);
         tft.setTextSize(3);
 
-        tft.print(btn.buttonText);
+        tft.print(buttonText);
+
+    } else if (btn.getName() == "wifiBtn") {
+        tft.drawBitmap(289, 5, iconWifi_24x24, 24, 24, ILI9341_DARKGREY);
     }
 }
 
 void HomeScreen::renderButtonPressed(Button& btn)
 {
+    uint16_t x0 = btn.x0, y0 = btn.y0, w = btn.w, h = btn.h, textOffsetLeft = btn.textOffsetLeft, textOffsetTop = btn.textOffsetTop;
+    String buttonText = btn.buttonText;
+
     if (btn.getName() == "startGrowBtn") {
-        tft.drawRect(btn.x0, btn.y0, btn.w, btn.h, ILI9341_RED);
+        tft.drawRect(x0, y0, w, h, ILI9341_RED);
     }
 }
 
@@ -94,5 +103,20 @@ void HomeScreen::handleButton(Button& btn)
 
         systemStatus.countMinute(); // First time on new grow
         minutelyTicker.start();
+
+    } else if (btn.getName() == "wifiBtn") {
+        screenManager.wifiScreen();
+
+    } else if (btn.getName() == "dayCounterBtn") {
+        screenManager.cancelScreen();
+
+    } else if (btn.getName() == "timerBtn") {
+        screenManager.timerScreen();
+
+    } else if (btn.getName() == "fanBtn") {
+        screenManager.fanScreen();
+
+    } else if (btn.getName() == "tempBtn") {
+        screenManager.tempUnitScreen();
     }
 }

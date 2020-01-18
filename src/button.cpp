@@ -25,20 +25,6 @@ Button::Button(String name, uint16_t x0, uint16_t y0, uint16_t w, uint16_t h, St
 
 void Button::render()
 {
-    if (this->getName() == "startGrowBtn") {
-        tft.drawRect(x0, y0, w, h, ILI9341_WHITE);
-
-        tft.fillRect(x0 + 1, y0 + 1, w - 2, h - 2, ILI9341_OLIVE);
-
-        tft.setCursor(x0 + textOffsetLeft, y0 + textOffsetTop);
-        tft.setTextColor(ILI9341_WHITE);
-        tft.setTextSize(3);
-
-        tft.print(buttonText);
-    }
-
-    if (this->getName() == "dayCounterBtn") {
-    }
 
     if (this->getName() == "cancelScreenOkBtn") {
         tft.drawRect(x0, y0, w, h, ILI9341_WHITE);
@@ -88,9 +74,6 @@ void Button::render()
         tft.print(buttonText);
     }
 
-    if (this->getName() == "timerBtn") {
-    }
-
     if (this->getName() == "timerUpBtn") {
         tft.fillTriangle(240, 95, 260, 55, 280, 95, ILI9341_RED);
         tft.drawTriangle(240, 95, 260, 55, 280, 95, ILI9341_LIGHTGREY);
@@ -108,10 +91,6 @@ void Button::render()
         tft.setTextColor(ILI9341_WHITE);
         tft.setTextSize(3);
         tft.print(buttonText);
-    }
-
-    if (this->getName() == "wifiBtn") {
-        tft.drawBitmap(289, 5, iconWifi_24x24, 24, 24, ILI9341_DARKGREY);
     }
 
     if (this->getName() == "wifiOnBtn") {
@@ -139,9 +118,6 @@ void Button::render()
         tft.setTextColor(ILI9341_WHITE);
         tft.setTextSize(3);
         tft.print(buttonText);
-    }
-
-    if (this->getName() == "fanBtn") {
     }
 
     if (this->getName() == "fanAutoBtn") {
@@ -191,9 +167,6 @@ void Button::render()
         tft.print(buttonText);
     }
 
-    if (this->getName() == "tempBtn") {
-    }
-
     if (this->getName() == "tempFahrenheitBtn") {
         tft.drawRect(x0, y0, w, h, ILI9341_WHITE);
 
@@ -234,9 +207,6 @@ void Button::render()
 
 void Button::renderPressed()
 {
-    if (this->getName() == "startGrowBtn") {
-        tft.drawRect(x0, y0, w, h, ILI9341_RED);
-    }
 
     if (this->getName() == "timerUpBtn") {
         tft.fillTriangle(240, 95, 260, 55, 280, 95, ILI9341_WHITE);
