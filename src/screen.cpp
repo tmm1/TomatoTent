@@ -6,10 +6,10 @@ void Screen::renderButtons(bool forced)
 {
     for (auto it = buttons.begin(); it != buttons.end(); ++it) {
         Button& btn = *it;
-        if (btn.getStatus() == "pressed") {
-            this->renderButtonPressed(btn);
+        if (forced) {
+            this->renderButton(btn);
+        } else if (btn.getStatus() == "pressed") {
             btn.setStatus("none");
-        } else if (forced) {
             this->renderButton(btn);
         }
     }
@@ -27,7 +27,7 @@ void Screen::processTouch(int x, int y)
         }
 
         btn.setStatus("pressed");
+        this->renderButtonPressed(btn);
         this->handleButton(btn);
-        this->renderButtons();
     }
 }
