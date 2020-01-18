@@ -9,12 +9,8 @@
 #include "screens/home.h"
 
 class ScreenManager {
-
-    void clearButtons();
-
 public:
     Screen* current = new HomeScreen();
-    Button buttons[6];
     String currentScreen = "homeScreen";
 
     ScreenManager() {};

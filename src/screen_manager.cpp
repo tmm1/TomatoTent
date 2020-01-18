@@ -85,17 +85,3 @@ void ScreenManager::renderButtons(bool forced)
         current->renderButtons(forced);
     }
 }
-
-void ScreenManager::clearButtons()
-{
-    Button blankBtn("blankBtn", -1, -1, -1, -1, "", -1, -1);
-
-    tft.fillScreen(ILI9341_BLACK);
-
-    buttons[0] = blankBtn;
-    buttons[1] = blankBtn;
-    buttons[2] = blankBtn;
-    buttons[3] = blankBtn;
-    buttons[4] = blankBtn;
-    buttons[5] = blankBtn;
-}

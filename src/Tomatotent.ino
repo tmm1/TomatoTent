@@ -198,7 +198,9 @@ void touchHandler(void)
     TS_Point p = ts.getPosition();
     p.x += 20; // calibration
 
-    screenManager.current->processTouch(p.x, p.y);
+    if (screenManager.current) {
+        screenManager.current->processTouch(p.x, p.y);
+    }
 }
 
 void loop(void)
