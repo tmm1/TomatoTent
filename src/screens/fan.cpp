@@ -83,6 +83,7 @@ void FanScreen::renderButtonPressed(Button& btn)
 {
     if (btn.getName() == "fanUpBtn") {
         tft.fillTriangle(240, 95, 260, 55, 280, 95, ILI9341_WHITE);
+
     } else if (btn.getName() == "fanDownBtn") {
         tft.fillTriangle(240, 110, 260, 150, 280, 110, ILI9341_WHITE);
     }
@@ -91,18 +92,18 @@ void FanScreen::renderButtonPressed(Button& btn)
 void FanScreen::handleButton(Button& btn)
 {
     if (btn.getName() == "fanAutoBtn") {
-        systemStatus.setFanAutoMode(1);
-        screenManager.renderButtons(true);
+        systemStatus.setFanAutoMode(true);
+        renderButtons(true);
         systemStatus.check_fan();
 
     } else if (btn.getName() == "fanManualBtn") {
-        systemStatus.setFanAutoMode(0);
-        screenManager.renderButtons(true);
+        systemStatus.setFanAutoMode(false);
+        renderButtons(true);
         systemStatus.check_fan();
 
     } else if (btn.getName() == "fanUpBtn") {
         float fanSpeedPercent = systemStatus.getFanSpeed();
-        systemStatus.setFanAutoMode(0);
+        systemStatus.setFanAutoMode(false);
         renderButtons(true);
 
         if (fanSpeedPercent < 100) {
@@ -113,7 +114,7 @@ void FanScreen::handleButton(Button& btn)
 
     } else if (btn.getName() == "fanDownBtn") {
         float fanSpeedPercent = systemStatus.getFanSpeed();
-        systemStatus.setFanAutoMode(0);
+        systemStatus.setFanAutoMode(false);
         renderButtons(true);
 
         if (fanSpeedPercent > 0) {
