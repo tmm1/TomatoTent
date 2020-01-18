@@ -7,6 +7,7 @@
 class Screen {
 protected:
     std::vector<Button> buttons;
+    void drawButton(Button& btn, int color, int textSize);
 
 public:
     virtual String getName();

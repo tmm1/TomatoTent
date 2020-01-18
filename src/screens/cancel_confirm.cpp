@@ -26,30 +26,11 @@ void CancelConfirmScreen::render()
 
 void CancelConfirmScreen::renderButton(Button& btn)
 {
-    uint16_t x0 = btn.x0, y0 = btn.y0, w = btn.w, h = btn.h, textOffsetLeft = btn.textOffsetLeft, textOffsetTop = btn.textOffsetTop;
-    String buttonText = btn.buttonText;
-
     if (btn.getName() == "terminateYesBtn") {
-        tft.drawRect(x0, y0, w, h, ILI9341_WHITE);
-
-        tft.fillRect(x0 + 1, y0 + 1, w - 2, h - 2, ILI9341_RED);
-
-        tft.setCursor(x0 + textOffsetLeft, y0 + textOffsetTop);
-        tft.setTextColor(ILI9341_WHITE);
-        tft.setTextSize(2);
-
-        tft.print(buttonText);
+        drawButton(btn, ILI9341_RED, 2);
 
     } else if (btn.getName() == "terminateNoBtn") {
-        tft.drawRect(x0, y0, w, h, ILI9341_WHITE);
-
-        tft.fillRect(x0 + 1, y0 + 1, w - 2, h - 2, ILI9341_OLIVE);
-
-        tft.setCursor(x0 + textOffsetLeft, y0 + textOffsetTop);
-        tft.setTextColor(ILI9341_WHITE);
-        tft.setTextSize(3);
-
-        tft.print(buttonText);
+        drawButton(btn, ILI9341_OLIVE, 3);
     }
 }
 
