@@ -5,6 +5,7 @@
 #include "screens/cancel_confirm.h"
 #include "screens/timer.h"
 #include "screens/fan.h"
+#include "screens/temp_unit.h"
 
 extern Adafruit_ILI9341 tft;
 extern SystemStatus systemStatus;
@@ -115,28 +116,16 @@ void ScreenManager::fanScreen()
 
 void ScreenManager::tempUnitScreen()
 {
-    this->clearButtons();
-    currentScreen = "tempUnitScreen";
-
-    tft.drawBitmap(20, 4, thermometer_36, 36, 36, ILI9341_WHITE);
-
-    tft.setCursor(60, 8);
-    tft.setTextColor(ILI9341_GREEN);
-    tft.setTextSize(2);
-    tft.print("Temperature Unit");
-
-    Button tempFahrenheitBtn("tempFahrenheitBtn", 80, 70, 150, 38, "Fahrenheit", 20, 11);
-    buttons[0] = tempFahrenheitBtn;
-
-    Button tempCelsiusBtn("tempCelsiusBtn", 80, 140, 150, 38, "Celsius", 40, 11);
-    buttons[1] = tempCelsiusBtn;
+    current = new TempUnitScreen();
+    currentScreen = current->getName();
+    current->render();
 }
 
 void ScreenManager::renderButtons(bool forced)
 {
-    if (!current)
-        return;
-    current->renderButtons(forced);
+    if (current) {
+        current->renderButtons(forced);
+    }
 }
 
 void ScreenManager::clearButtons()

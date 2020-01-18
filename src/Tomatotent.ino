@@ -257,23 +257,6 @@ void touchHandler(void)
             screenManager.homeScreen();
             break;
         }
-
-        //temp unit select screen
-        if (btn.getName() == "tempCelsiusBtn") {
-            systemStatus.setTempUnit('C');
-            screenManager.renderButtons(true);
-            screenManager.homeScreen();
-            tent.check_temperature(systemStatus.getTempUnit());
-            break;
-        }
-
-        if (btn.getName() == "tempFahrenheitBtn") {
-            systemStatus.setTempUnit('F');
-            screenManager.renderButtons(true);
-            screenManager.homeScreen();
-            tent.check_temperature(systemStatus.getTempUnit());
-            break;
-        }
     }
 }
 
