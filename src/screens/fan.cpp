@@ -32,9 +32,6 @@ void FanScreen::render()
 
 void FanScreen::renderButton(Button& btn)
 {
-    uint16_t x0 = btn.x0, y0 = btn.y0, w = btn.w, h = btn.h, textOffsetLeft = btn.textOffsetLeft, textOffsetTop = btn.textOffsetTop;
-    String buttonText = btn.buttonText;
-
     if (btn.getName() == "fanAutoBtn") {
         drawButton(btn, systemStatus.getFanAutoMode() ? ILI9341_OLIVE : ILI9341_BLACK, 2);
 
