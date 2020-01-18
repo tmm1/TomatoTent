@@ -258,61 +258,6 @@ void touchHandler(void)
             break;
         }
 
-        if (btn.getName() == "fanAutoBtn") {
-            systemStatus.setFanAutoMode(1);
-            screenManager.renderButtons(true);
-            systemStatus.check_fan();
-            break;
-        }
-
-        if (btn.getName() == "fanManualBtn") {
-            systemStatus.setFanAutoMode(0);
-            screenManager.renderButtons(true);
-            systemStatus.check_fan();
-            break;
-        }
-
-        if (btn.getName() == "fanUpBtn") {
-            float fanSpeedPercent = systemStatus.getFanSpeed();
-
-            //set to manual
-            systemStatus.setFanAutoMode(0);
-
-            screenManager.renderButtons(true);
-
-            if (fanSpeedPercent < 100) {
-
-                fanSpeedPercent += 5;
-
-                systemStatus.setFanSpeed(fanSpeedPercent);
-                systemStatus.check_fan();
-            }
-            break;
-        }
-
-        if (btn.getName() == "fanDownBtn") {
-            float fanSpeedPercent = systemStatus.getFanSpeed();
-
-            //set to manual
-            systemStatus.setFanAutoMode(0);
-
-            screenManager.renderButtons(true);
-
-            if (fanSpeedPercent > 0) {
-
-                fanSpeedPercent -= 5;
-
-                systemStatus.setFanSpeed(fanSpeedPercent);
-                systemStatus.check_fan();
-            }
-            break;
-        }
-
-        if (btn.getName() == "fanOkBtn") {
-            screenManager.homeScreen();
-            break;
-        }
-
         //temp unit select screen
         if (btn.getName() == "tempCelsiusBtn") {
             systemStatus.setTempUnit('C');

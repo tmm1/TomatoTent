@@ -4,6 +4,7 @@
 #include "screens/cancel.h"
 #include "screens/cancel_confirm.h"
 #include "screens/timer.h"
+#include "screens/fan.h"
 
 extern Adafruit_ILI9341 tft;
 extern SystemStatus systemStatus;
@@ -107,32 +108,9 @@ void ScreenManager::wifiSetupScreen()
 
 void ScreenManager::fanScreen()
 {
-    this->clearButtons();
-    currentScreen = "fanScreen";
-
-    tft.drawBitmap(20, 4, fan_36, 36, 36, ILI9341_WHITE);
-
-    tft.setCursor(60, 8);
-    tft.setTextColor(ILI9341_GREEN);
-    tft.setTextSize(2);
-    tft.print("Speed");
-
-    Button fanAutoBtn("fanAutoBtn", 20, 65, 150, 38, "Automatic", 20, 11);
-    buttons[0] = fanAutoBtn;
-
-    Button fanManualBtn("fanManualBtn", 20, 115, 150, 38, "Manual", 40, 11);
-    buttons[1] = fanManualBtn;
-
-    Button fanUpBtn("fanUpBtn", 240, 50, 40, 40, "", 0, 0);
-    buttons[2] = fanUpBtn;
-
-    Button fanDownBtn("fanDownBtn", 240, 110, 40, 40, "", 0, 0);
-    buttons[3] = fanDownBtn;
-
-    Button fanOkBtn("fanOkBtn", 20, 180, 250, 38, "Ok", 110, 8);
-    buttons[4] = fanOkBtn;
-
-    systemStatus.drawFanSpeed();
+    current = new FanScreen();
+    currentScreen = current->getName();
+    current->render();
 }
 
 void ScreenManager::tempUnitScreen()
