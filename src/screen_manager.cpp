@@ -8,6 +8,7 @@
 #include "screens/temp_unit.h"
 #include "screens/grow_started.h"
 #include "screens/wifi_splash.h"
+#include "screens/wifi.h"
 
 extern Adafruit_ILI9341 tft;
 extern SystemStatus systemStatus;
@@ -52,17 +53,9 @@ void ScreenManager::timerScreen()
 
 void ScreenManager::wifiScreen()
 {
-    this->clearButtons();
-    currentScreen = "wifiScreen";
-
-    Button wifiOnBtn("wifiOnBtn", 20, 40, 250, 38, "On", 110, 8);
-    buttons[0] = wifiOnBtn;
-
-    Button wifiOffBtn("wifiOffBtn", 20, 100, 250, 38, "Off", 110, 8);
-    buttons[1] = wifiOffBtn;
-
-    Button wifiOkBtn("wifiOkBtn", 20, 180, 250, 38, "Ok", 110, 8);
-    buttons[2] = wifiOkBtn;
+    current = new WifiScreen();
+    currentScreen = current->getName();
+    current->render();
 }
 
 void ScreenManager::wifiSplashScreen()

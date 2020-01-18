@@ -239,24 +239,6 @@ void touchHandler(void)
             screenManager.wifiScreen();
             break;
         }
-
-        if (btn.getName() == "wifiOnBtn") {
-            Particle.connect();
-            screenManager.homeScreen();
-            break;
-        }
-
-        if (btn.getName() == "wifiOffBtn") {
-            Particle.disconnect();
-            WiFi.off();
-            screenManager.homeScreen();
-            break;
-        }
-
-        if (btn.getName() == "wifiOkBtn") {
-            screenManager.homeScreen();
-            break;
-        }
     }
 }
 
