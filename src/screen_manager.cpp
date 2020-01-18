@@ -262,15 +262,9 @@ void ScreenManager::tempUnitScreen()
 
 void ScreenManager::renderButtons(bool forced)
 {
-    uint8_t d { 0 };
-    for (d = 0; d < (sizeof(buttons) / sizeof(buttons[0])); ++d) {
-        if (buttons[d].getStatus() == "pressed") {
-            buttons[d].render();
-            buttons[d].setStatus("none");
-        } else if (forced) {
-            buttons[d].render();
-        }
-    }
+    if (!current)
+        return;
+    current->renderButtons(forced);
 }
 
 void ScreenManager::clearButtons()

@@ -154,7 +154,8 @@ void setup()
 
     //END REMOTE FUNCTIONS
 
-    screenManager.homeScreen();
+    //screenManager.homeScreen();
+    screenManager.current->render();
 
     tent.begin();
 
@@ -194,6 +195,10 @@ void touchHandler(void)
 
     TS_Point p = ts.getPosition();
     p.x += 20; // calibration
+
+    screenManager.current->processTouch(p.x, p.y);
+
+    return;
 
     //WAS A BUTTON TOUCHED - And which one?
     uint8_t c { 0 };

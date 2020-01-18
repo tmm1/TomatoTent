@@ -6,6 +6,9 @@
 class Button {
 
     String name;
+    String currentStatus;
+
+public:
     uint16_t x0;
     uint16_t y0;
     uint16_t w;
@@ -13,9 +16,7 @@ class Button {
     String buttonText;
     uint16_t textOffsetLeft;
     uint16_t textOffsetTop;
-    String currentStatus;
 
-public:
     bool pressed;
     Button();
     Button(String name, uint16_t x0, uint16_t y0, uint16_t w, uint16_t h, String buttonText, uint16_t textOffsetLeft, uint16_t textOffsetTop);

@@ -1,4 +1,11 @@
-#include <systemStatus.h>
+#include "systemStatus.h"
+#include "tent.h"
+#include "screen_manager.h"
+#include <Adafruit_ILI9341.h>
+
+extern Adafruit_ILI9341 tft;
+extern Tent tent;
+extern ScreenManager screenManager;
 
 SystemStatus::SystemStatus()
 {
