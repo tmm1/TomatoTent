@@ -2,6 +2,7 @@
 #include "systemStatus.h"
 #include "tent.h"
 #include "screens/cancel.h"
+#include "screens/cancel_confirm.h"
 
 extern Adafruit_ILI9341 tft;
 extern SystemStatus systemStatus;
@@ -43,19 +44,9 @@ void ScreenManager::cancelScreen()
 
 void ScreenManager::cancelConfirmationScreen()
 {
-    this->clearButtons();
-    currentScreen = "cancelConfirmationScreen";
-
-    tft.setCursor(10, 50);
-    tft.setTextColor(ILI9341_RED);
-    tft.setTextSize(3);
-    tft.print("Really Terminate?");
-
-    Button terminateYesBtn("terminateYesBtn", 70, 120, 180, 28, "Yes", 78, 7);
-    buttons[0] = terminateYesBtn;
-
-    Button terminateNoBtn("terminateNoBtn", 70, 180, 180, 38, "No", 75, 8);
-    buttons[1] = terminateNoBtn;
+    current = new CancelConfirmScreen();
+    currentScreen = current->getName();
+    current->render();
 }
 
 void ScreenManager::timerScreen()

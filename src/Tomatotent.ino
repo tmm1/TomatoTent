@@ -235,24 +235,6 @@ void touchHandler(void)
             break;
         }
 
-        //CANCEL SCREEN
-
-        if (btn.getName() == "terminateYesBtn") {
-            tent.growLight("OFF");
-            draw_temp_home.stop();
-            tent.fan("OFF");
-            minutelyTicker.stop();
-
-            systemStatus.init();
-            screenManager.homeScreen();
-            break;
-        }
-
-        if (btn.getName() == "terminateNoBtn") {
-            screenManager.homeScreen();
-            break;
-        }
-
         //TIMER SCREEN
         if (btn.getName() == "timerUpBtn") {
             int dayDuration = systemStatus.getDayDuration() + 60;
