@@ -12,6 +12,7 @@ extern float fanSpeedPercent;
 void ScreenManager::homeScreen()
 {
     current = new HomeScreen();
+    currentScreen = current->getName();
     current->render();
 }
 
@@ -36,6 +37,7 @@ void ScreenManager::growStartedScreen()
 void ScreenManager::cancelScreen()
 {
     current = new CancelScreen();
+    currentScreen = current->getName();
     current->render();
 }
 
