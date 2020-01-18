@@ -93,18 +93,21 @@ void FanScreen::handleButton(Button& btn)
 {
     if (btn.getName() == "fanAutoBtn") {
         systemStatus.setFanAutoMode(true);
-        renderButtons(true);
+        renderButton(buttons[0]);
+        renderButton(buttons[1]);
         systemStatus.check_fan();
 
     } else if (btn.getName() == "fanManualBtn") {
         systemStatus.setFanAutoMode(false);
-        renderButtons(true);
+        renderButton(buttons[0]);
+        renderButton(buttons[1]);
         systemStatus.check_fan();
 
     } else if (btn.getName() == "fanUpBtn") {
         float fanSpeedPercent = systemStatus.getFanSpeed();
         systemStatus.setFanAutoMode(false);
-        renderButtons(true);
+        renderButton(buttons[0]);
+        renderButton(buttons[1]);
 
         if (fanSpeedPercent < 100) {
             fanSpeedPercent += 5;
@@ -115,7 +118,8 @@ void FanScreen::handleButton(Button& btn)
     } else if (btn.getName() == "fanDownBtn") {
         float fanSpeedPercent = systemStatus.getFanSpeed();
         systemStatus.setFanAutoMode(false);
-        renderButtons(true);
+        renderButton(buttons[0]);
+        renderButton(buttons[1]);
 
         if (fanSpeedPercent > 0) {
             fanSpeedPercent -= 5;
