@@ -32,6 +32,7 @@ void Screen::processTouch(int x, int y)
         btn.setStatus("pressed");
         this->renderButtonPressed(btn);
         this->handleButton(btn);
+        break;
     }
 }
 
