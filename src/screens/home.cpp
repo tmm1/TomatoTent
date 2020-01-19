@@ -67,8 +67,7 @@ void HomeScreen::renderButton(Button& btn)
 
 void HomeScreen::renderButtonPressed(Button& btn)
 {
-    uint16_t x0 = btn.x0, y0 = btn.y0, w = btn.w, h = btn.h, textOffsetLeft = btn.textOffsetLeft, textOffsetTop = btn.textOffsetTop;
-    String buttonText = btn.buttonText;
+    uint16_t x0 = btn.x0, y0 = btn.y0, w = btn.w, h = btn.h;
 
     if (btn.getName() == "startGrowBtn") {
         tft.drawRect(x0, y0, w, h, ILI9341_RED);

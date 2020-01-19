@@ -32,6 +32,7 @@ void Screen::processTouch(int x, int y)
         btn.setStatus("pressed");
         this->renderButtonPressed(btn);
         this->handleButton(btn);
+        break;
     }
 }
 
@@ -48,5 +49,3 @@ void Screen::drawButton(Button& btn, int color, int textSize)
     tft.setTextSize(textSize);
     tft.print(buttonText);
 }
-
-Screen::~Screen() {}
