@@ -26,8 +26,15 @@ void FanScreen::render()
     buttons.push_back(Button("fanOkBtn", 20, 180, 250, 38, "Ok", 110, 8));
 
     renderButtons(true);
+    drawFanStatus();
+}
 
-    systemStatus.drawFanSpeed();
+void FanScreen::update()
+{
+    if (screenManager.wasNeedsRedraw(FAN))
+        drawFanStatus();
+
+    Screen::update();
 }
 
 void FanScreen::renderButton(Button& btn)

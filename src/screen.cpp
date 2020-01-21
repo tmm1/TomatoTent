@@ -1,9 +1,14 @@
 #include <Particle.h>
 #include <Arduino.h>
 #include "screen.h"
+#include "icons.h"
 #include <Adafruit_ILI9341.h>
+#include "systemStatus.h"
+#include "tent.h"
 
 extern Adafruit_ILI9341 tft;
+extern SystemStatus systemStatus;
+extern Tent tent;
 
 void Screen::renderButtons(bool forced)
 {
@@ -48,4 +53,55 @@ void Screen::drawButton(Button& btn, int color, int textSize)
     tft.setTextColor(ILI9341_WHITE);
     tft.setTextSize(textSize);
     tft.print(buttonText);
+}
+
+void Screen::drawFanStatus()
+{
+    //write status to screen
+    tft.fillRect(200, 10, 56, 35, ILI9341_BLACK);
+
+    tft.setCursor(210, 10);
+    tft.setTextSize(2);
+    tft.setTextColor(ILI9341_WHITE);
+
+    tft.print(String(String::format("%.0f", systemStatus.getFanSpeed() + 5)));
+
+    tft.print("%");
+
+    tft.setTextSize(1);
+    if (systemStatus.getFanAutoMode()) {
+        tft.setCursor(200, 30);
+        tft.print("automatic");
+    } else {
+        tft.setCursor(210, 30);
+        tft.print("manual");
+    }
+}
+
+void Screen::update()
+{
+    if (screenManager.wasNeedsRedraw(DIMMED)) {
+        if (tent.getGrowLightStatus() == "LOW") {
+            drawDimmedIndicator();
+        } else {
+            hideDimmedIndicator();
+        }
+    }
+}
+
+void Screen::drawDimmedIndicator()
+{
+    tft.fillRoundRect(0, 220, 320, 25, 5, ILI9341_RED);
+
+    tft.setCursor(120, 222);
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(2);
+    tft.print("Dimmed (" + String(tent.dimTimeout) + "m)");
+
+    tft.drawBitmap(97, 222, iconBulb_16x16, 16, 16, ILI9341_WHITE);
+}
+
+void Screen::hideDimmedIndicator()
+{
+    tft.fillRoundRect(0, 220, 320, 25, 5, ILI9341_BLACK);
 }

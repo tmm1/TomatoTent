@@ -16,67 +16,66 @@ extern Tent tent;
 extern float fanSpeed;
 extern float fanSpeedPercent;
 
+void ScreenManager::render()
+{
+    if (current) {
+        markNeedsRedraw(DIMMED);
+        current->render();
+    }
+}
+
 void ScreenManager::homeScreen()
 {
-    current = std::make_unique<HomeScreen>();
-    currentScreen = current->getName();
-    current->render();
+    current.reset(new HomeScreen());
+    render();
 }
 
 void ScreenManager::growStartedScreen()
 {
-    current = std::make_unique<GrowStartedScreen>();
-    currentScreen = current->getName();
-    current->render();
+    current.reset(new GrowStartedScreen());
+    render();
 }
 
 void ScreenManager::cancelScreen()
 {
-    current = std::make_unique<CancelScreen>();
-    currentScreen = current->getName();
-    current->render();
+    current.reset(new CancelScreen());
+    render();
 }
 
 void ScreenManager::cancelConfirmationScreen()
 {
-    current = std::make_unique<CancelConfirmScreen>();
-    currentScreen = current->getName();
-    current->render();
+    current.reset(new CancelConfirmScreen());
+    render();
 }
 
 void ScreenManager::timerScreen()
 {
-    current = std::make_unique<TimerScreen>();
-    currentScreen = current->getName();
-    current->render();
+    current.reset(new TimerScreen());
+    render();
 }
 
 void ScreenManager::wifiScreen()
 {
-    current = std::make_unique<WifiScreen>();
-    currentScreen = current->getName();
-    current->render();
+    current.reset(new WifiScreen());
+    render();
 }
 
 void ScreenManager::wifiSplashScreen()
 {
-    current = std::make_unique<WifiSplashScreen>();
-    currentScreen = current->getName();
-    current->render();
+    current.reset(new WifiSplashScreen());
+    render();
 }
 
 void ScreenManager::fanScreen()
 {
-    current = std::make_unique<FanScreen>();
-    currentScreen = current->getName();
-    current->render();
+    current.reset(new FanScreen());
+    render();
 }
 
 void ScreenManager::tempUnitScreen()
 {
-    current = std::make_unique<TempUnitScreen>();
-    currentScreen = current->getName();
-    current->render();
+    current.reset(new TempUnitScreen());
+    render();
 }
 
 void ScreenManager::renderButtons(bool forced)
@@ -84,4 +83,16 @@ void ScreenManager::renderButtons(bool forced)
     if (current) {
         current->renderButtons(forced);
     }
+}
+
+void ScreenManager::markNeedsRedraw(redrawMarker m)
+{
+    redrawMarkers |= (int)m;
+}
+
+bool ScreenManager::wasNeedsRedraw(redrawMarker m)
+{
+    bool ret = redrawMarkers & m;
+    redrawMarkers &= ~m;
+    return ret;
 }

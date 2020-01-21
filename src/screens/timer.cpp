@@ -25,10 +25,6 @@ void TimerScreen::render()
     buttons.push_back(Button("timerOkBtn", 20, 180, 250, 38, "Ok", 110, 8));
 
     renderButtons(true);
-
-    if (tent.getGrowLightStatus() == "LOW") {
-        tent.drawDimmedIndicator();
-    }
 }
 
 void TimerScreen::renderButton(Button& btn)
