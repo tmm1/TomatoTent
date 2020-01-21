@@ -1,9 +1,9 @@
 #include "cancel_confirm.h"
-#include "systemStatus.h"
 #include "icons.h"
 #include "tent.h"
+#include "screen_manager.h"
 
-extern SystemStatus systemStatus;
+extern ScreenManager screenManager;
 extern Tent tent;
 extern Timer minutelyTicker, draw_temp_home;
 
@@ -44,7 +44,7 @@ void CancelConfirmScreen::handleButton(Button& btn)
         tent.fan("OFF");
         minutelyTicker.stop();
 
-        systemStatus.init();
+        tent.state.init();
         screenManager.homeScreen();
 
     } else if (btn.getName() == "terminateNoBtn") {

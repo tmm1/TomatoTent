@@ -2,8 +2,6 @@
 #include <Arduino.h>
 #include "softap_http.h"
 #include "DFRobot_SHT20.h"
-#include "systemStatus.h"
-#include "button.h"
 #include "tent.h"
 #include "screen_manager.h"
 #include "assets.h"
@@ -20,7 +18,6 @@ DFRobot_SHT20 sht20;
 
 Tent tent;
 ScreenManager screenManager;
-SystemStatus systemStatus;
 
 Timer draw_temp_home(7013, &Tent::doCheckStats, tent);
 Timer minutelyTicker(60000, &minutelyTick);
@@ -144,33 +141,31 @@ void setup()
     tent.begin();
 
     //was there a grow in process before (re)booting?
-    if (systemStatus.getDayCount() > -1) {
+    if (tent.state.getDayCount() > -1) {
 
-        if (systemStatus.isDay()) { //was the light on when we restarted?
+        if (tent.state.isDay()) { //was the light on when we restarted?
             tent.growLight("HIGH");
         }
 
         tent.doCheckStats(); //First time right away
         draw_temp_home.start();
 
-        systemStatus.countMinute(); //after restart
+        tent.countMinute(); //after restart
         minutelyTicker.start();
 
         //for updates from earlier version that don't have temp units
-        if (systemStatus.getTempUnit() != 'F' && systemStatus.getTempUnit() != 'C') {
-            systemStatus.setTempUnit('F');
+        if (tent.state.getTempUnit() != 'F' && tent.state.getTempUnit() != 'C') {
+            tent.state.setTempUnit('F');
         }
-        //
 
     } else {
-        systemStatus.init();
+        tent.state.init();
     }
 }
 
 void minutelyTick()
 {
     tent.minutelyTick();
-    systemStatus.countMinute();
 }
 
 void loop(void)
@@ -187,10 +182,10 @@ void loop(void)
     }
 
     if (tent.getCheckStats()) {
-        tent.check_temperature(systemStatus.getTempUnit());
+        tent.check_temperature();
         tent.check_humidity();
         // tent.check_waterlevel(); // removed for stand alone controller
-        systemStatus.check_fan();
+        tent.adjustFan();
         tent.resetCheckStats();
     }
 

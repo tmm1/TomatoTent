@@ -1,9 +1,9 @@
 #include "wifi.h"
-#include "systemStatus.h"
 #include "icons.h"
 #include "tent.h"
+#include "screen_manager.h"
 
-extern SystemStatus systemStatus;
+extern ScreenManager screenManager;
 extern Tent tent;
 
 void WifiScreen::render()

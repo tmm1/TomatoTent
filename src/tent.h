@@ -4,8 +4,7 @@
 #include "Particle.h"
 #include <Arduino.h>
 #include "DFRobot_SHT20.h"
-#include "screen_manager.h"
-#include "icons.h"
+#include "tent_state.h"
 
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
 #define GROW_LIGHT_ON_OFF_PIN D7
@@ -18,15 +17,15 @@ extern DFRobot_SHT20 sht20;
 extern double temp;
 extern double hum;
 extern double waterLevel;
-extern ScreenManager screenManager;
 
 class Tent {
-
+private:
     int displayBrightness = 0;
     String growLightStatus;
 
 public:
     Tent();
+    TentState state;
     unsigned long lastTime = 0;
     int dimTimeout = 0;
     Timer* tp;
@@ -34,7 +33,9 @@ public:
     bool checkStats;
 
     void begin();
-    void check_temperature(char tempUnit);
+    void adjustFan();
+    void countMinute();
+    void check_temperature();
     void check_humidity();
     void check_waterlevel();
     void fan(String fanStatus);

@@ -2,12 +2,10 @@
 #include <Arduino.h>
 #include "screen.h"
 #include "icons.h"
-#include "systemStatus.h"
 #include "tent.h"
 #include "screen_manager.h"
 
 extern ScreenManager screenManager;
-extern SystemStatus systemStatus;
 extern Tent tent;
 
 Screen::Screen()
@@ -69,12 +67,12 @@ void Screen::drawFanStatus()
     tft.setTextSize(2);
     tft.setTextColor(ILI9341_WHITE);
 
-    tft.print(String(String::format("%.0f", systemStatus.getFanSpeed() + 5)));
+    tft.print(String(String::format("%.0f", tent.state.getFanSpeed() + 5)));
 
     tft.print("%");
 
     tft.setTextSize(1);
-    if (systemStatus.getFanAutoMode()) {
+    if (tent.state.getFanAutoMode()) {
         tft.setCursor(200, 30);
         tft.print("automatic");
     } else {

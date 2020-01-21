@@ -1,9 +1,9 @@
 #include "home.h"
-#include "systemStatus.h"
 #include "icons.h"
 #include "tent.h"
+#include "screen_manager.h"
 
-extern SystemStatus systemStatus;
+extern ScreenManager screenManager;
 extern Tent tent;
 extern Timer minutelyTicker, draw_temp_home;
 
@@ -13,7 +13,7 @@ void HomeScreen::render()
     buttons.clear();
     buttons.push_back(Button("wifiBtn", 260, 0, 60, 30, "", 18, 8));
 
-    if (systemStatus.getDayCount() == -1) {
+    if (tent.state.getDayCount() == -1) {
 
         tft.setTextColor(ILI9341_LIGHTGREY);
         tft.setTextSize(2);
@@ -69,7 +69,7 @@ void HomeScreen::update()
 
 void HomeScreen::drawTemperature()
 {
-    char tempUnit = systemStatus.getTempUnit();
+    char tempUnit = tent.state.getTempUnit();
 
     tft.fillRect(50, 60, 141, 25, ILI9341_BLACK);
     tft.setCursor(50, 60);
@@ -126,19 +126,19 @@ void HomeScreen::drawTimerStatus()
     int hoursLeft;
     int minutesLeft;
 
-    if (systemStatus.isDay()) {
+    if (tent.state.isDay()) {
         tft.setTextColor(ILI9341_YELLOW);
-        hoursLeft = floor((systemStatus.getDayDuration() - systemStatus.getMinutesInPhotoperiod()) / 60);
-        minutesLeft = (systemStatus.getDayDuration() - systemStatus.getMinutesInPhotoperiod()) % 60;
+        hoursLeft = floor((tent.state.getDayDuration() - tent.state.getMinutesInPhotoperiod()) / 60);
+        minutesLeft = (tent.state.getDayDuration() - tent.state.getMinutesInPhotoperiod()) % 60;
     } else {
         tft.setTextColor(ILI9341_BLUE);
-        hoursLeft = floor((((24 * 60) - systemStatus.getDayDuration()) - systemStatus.getMinutesInPhotoperiod()) / 60);
-        minutesLeft = (((24 * 60) - systemStatus.getDayDuration()) - systemStatus.getMinutesInPhotoperiod()) % 60;
+        hoursLeft = floor((((24 * 60) - tent.state.getDayDuration()) - tent.state.getMinutesInPhotoperiod()) / 60);
+        minutesLeft = (((24 * 60) - tent.state.getDayDuration()) - tent.state.getMinutesInPhotoperiod()) % 60;
     }
 
     if (hoursLeft < 0 || minutesLeft < 0) {
 
-        systemStatus.countMinute();
+        tent.countMinute();
 
     } else {
 
@@ -157,7 +157,7 @@ void HomeScreen::drawTimerStatus()
 
         tft.setCursor(53, 31);
         tft.setTextSize(1);
-        if (systemStatus.isDay()) {
+        if (tent.state.isDay()) {
             tft.drawBitmap(7, 5, sun_36, 36, 36, ILI9341_YELLOW);
             tft.print("until sunset");
         } else {
@@ -175,7 +175,7 @@ void HomeScreen::drawDayCounter()
     tft.setTextColor(ILI9341_WHITE);
     tft.setTextSize(3);
 
-    tft.print("Day " + String(systemStatus.getDayCount()));
+    tft.print("Day " + String(tent.state.getDayCount()));
 }
 
 void HomeScreen::drawClock()
@@ -214,7 +214,7 @@ void HomeScreen::handleButton(Button& btn)
 {
     if (btn.getName() == "startGrowBtn") {
         tent.growLight("HIGH");
-        systemStatus.setDayCount(1);
+        tent.state.setDayCount(1);
 
         screenManager.growStartedScreen();
 
@@ -225,7 +225,7 @@ void HomeScreen::handleButton(Button& btn)
         tent.doCheckStats(); //First time right away
         draw_temp_home.start();
 
-        systemStatus.countMinute(); // First time on new grow
+        tent.countMinute(); // First time on new grow
         minutelyTicker.start();
 
     } else if (btn.getName() == "wifiBtn") {
