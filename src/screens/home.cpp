@@ -53,17 +53,17 @@ void HomeScreen::render()
 
 void HomeScreen::update()
 {
-    if (screenManager.wasDirty(TIMER))
+    if (screenManager.wasNeedsRedraw(TIMER))
         drawTimerStatus();
-    if (screenManager.wasDirty(TEMPERATURE))
+    if (screenManager.wasNeedsRedraw(TEMPERATURE))
         drawTemperature();
-    if (screenManager.wasDirty(HUMIDITY))
+    if (screenManager.wasNeedsRedraw(HUMIDITY))
         drawHumidity();
-    if (screenManager.wasDirty(WATER_LEVEL))
+    if (screenManager.wasNeedsRedraw(WATER_LEVEL))
         drawWaterLevel();
-    if (screenManager.wasDirty(FAN))
+    if (screenManager.wasNeedsRedraw(FAN))
         drawFanStatus();
-    if (screenManager.wasDirty(DAY))
+    if (screenManager.wasNeedsRedraw(DAY))
         drawDayCounter();
 
     Screen::update();

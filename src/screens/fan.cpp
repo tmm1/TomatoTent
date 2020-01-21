@@ -31,7 +31,7 @@ void FanScreen::render()
 
 void FanScreen::update()
 {
-    if (screenManager.wasDirty(FAN))
+    if (screenManager.wasNeedsRedraw(FAN))
         drawFanStatus();
 
     Screen::update();

@@ -80,7 +80,7 @@ void Screen::drawFanStatus()
 
 void Screen::update()
 {
-    if (screenManager.wasDirty(DIMMED)) {
+    if (screenManager.wasNeedsRedraw(DIMMED)) {
         if (tent.getGrowLightStatus() == "LOW") {
             drawDimmedIndicator();
         } else {

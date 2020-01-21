@@ -71,14 +71,14 @@ void SystemStatus::countMinute()
     } else {
         if (this->getMinutesInPhotoperiod() > ((24 * 60) - this->getDayDuration())) { //night is over
             this->setDayCount(this->getDayCount() + 1);
-            screenManager.markDirty(DAY);
+            screenManager.markNeedsRedraw(DAY);
             tent.growLight("HIGH");
             this->setIsDay(true);
             this->setMinutesInPhotoperiod(0);
         }
     }
 
-    screenManager.markDirty(TIMER);
+    screenManager.markNeedsRedraw(TIMER);
 }
 
 bool SystemStatus::getFanAutoMode()
@@ -160,7 +160,7 @@ void SystemStatus::check_fan()
         analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
     }
 
-    screenManager.markDirty(FAN);
+    screenManager.markNeedsRedraw(FAN);
 }
 
 void SystemStatus::init()

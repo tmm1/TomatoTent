@@ -23,7 +23,7 @@ void Tent::check_temperature(char tempUnit)
 
     if ((temp == 0) || (temp != currentTemp)) {
         temp = currentTemp;
-        screenManager.markDirty(TEMPERATURE);
+        screenManager.markNeedsRedraw(TEMPERATURE);
     }
 }
 
@@ -33,7 +33,7 @@ void Tent::check_humidity()
 
     if ((hum == 0) || (hum != currentHumidity)) {
         hum = currentHumidity;
-        screenManager.markDirty(HUMIDITY);
+        screenManager.markNeedsRedraw(HUMIDITY);
     }
 }
 
@@ -43,7 +43,7 @@ void Tent::check_waterlevel()
 
     if ((waterLevel == 0) || (waterLevel != currentWaterLevel)) {
         waterLevel = currentWaterLevel;
-        screenManager.markDirty(WATER_LEVEL);
+        screenManager.markNeedsRedraw(WATER_LEVEL);
     }
 }
 
@@ -102,7 +102,7 @@ void Tent::minutelyTick()
         if (this->dimTimeout == 0) {
             this->growLight("HIGH");
         }
-        screenManager.markDirty(DIMMED);
+        screenManager.markNeedsRedraw(DIMMED);
     }
 }
 
@@ -116,7 +116,7 @@ void Tent::dimGrowLight()
         this->growLight("HIGH");
     }
 
-    screenManager.markDirty(DIMMED);
+    screenManager.markNeedsRedraw(DIMMED);
 }
 
 void Tent::displayLightLow(void)

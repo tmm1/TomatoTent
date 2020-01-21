@@ -8,7 +8,7 @@
 #include "screen.h"
 #include "screens/home.h"
 
-enum dirtyMarker {
+enum redrawMarker {
     TEMPERATURE = 1,
     HUMIDITY = 2,
     WATER_LEVEL = 4,
@@ -20,7 +20,7 @@ enum dirtyMarker {
 
 class ScreenManager {
 private:
-    int dirtyMarkers;
+    int redrawMarkers;
 
     void render();
 
@@ -30,8 +30,8 @@ public:
     ScreenManager() {};
 
     void renderButtons(bool forced = false);
-    void markDirty(dirtyMarker m);
-    bool wasDirty(dirtyMarker m);
+    void markNeedsRedraw(redrawMarker m);
+    bool wasNeedsRedraw(redrawMarker m);
 
     void homeScreen();
     void growStartedScreen();

@@ -19,7 +19,7 @@ extern float fanSpeedPercent;
 void ScreenManager::render()
 {
     if (current) {
-        markDirty(DIMMED);
+        markNeedsRedraw(DIMMED);
         current->render();
     }
 }
@@ -85,14 +85,14 @@ void ScreenManager::renderButtons(bool forced)
     }
 }
 
-void ScreenManager::markDirty(dirtyMarker m)
+void ScreenManager::markNeedsRedraw(redrawMarker m)
 {
-    dirtyMarkers |= (int)m;
+    redrawMarkers |= (int)m;
 }
 
-bool ScreenManager::wasDirty(dirtyMarker m)
+bool ScreenManager::wasNeedsRedraw(redrawMarker m)
 {
-    bool ret = dirtyMarkers & m;
-    dirtyMarkers &= ~m;
+    bool ret = redrawMarkers & m;
+    redrawMarkers &= ~m;
     return ret;
 }
