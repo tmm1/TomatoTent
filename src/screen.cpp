@@ -10,7 +10,8 @@ extern ScreenManager screenManager;
 extern SystemStatus systemStatus;
 extern Tent tent;
 
-Screen::Screen(): tft { screenManager.tft }
+Screen::Screen()
+    : tft { screenManager.tft }
 {
 }
 
