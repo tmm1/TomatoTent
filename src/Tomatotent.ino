@@ -1,31 +1,21 @@
 #include "Particle.h"
 #include <Arduino.h>
 #include "softap_http.h"
-#include "XPT2046_Touch.h"
-#include "Adafruit_mfGFX.h"
 #include "DFRobot_SHT20.h"
 #include "systemStatus.h"
 #include "button.h"
 #include "tent.h"
 #include "screen_manager.h"
-#include "Adafruit_ILI9341.h"
 #include "assets.h"
 
 PRODUCT_ID(10167);
 PRODUCT_VERSION(9);
-
-#define CS_PIN D5
-#define TIRQ_PIN A0
-#define TFT_DC A1
-#define TFT_CS A2
 
 double temp;
 double hum;
 double waterLevel;
 unsigned long dimmerBtnTime = 0;
 
-Adafruit_ILI9341 tft(TFT_CS, TFT_DC, D6);
-XPT2046_Touchscreen ts(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
 DFRobot_SHT20 sht20;
 
 Tent tent;
@@ -129,21 +119,14 @@ void setup()
 
     // Time.zone(+8);
 
-    tft.begin();
-    tft.setRotation(1);
+    screenManager.setup();
+
     //DISPLAY BRIGHNESS
     pinMode(TFT_BRIGHTNESS_PIN, OUTPUT);
     pinMode(GROW_LIGHT_BRIGHTNESS_PIN, OUTPUT);
     pinMode(GROW_LIGHT_ON_OFF_PIN, OUTPUT);
     pinMode(DIM_PIN, INPUT_PULLUP);
-
-    tft.fillScreen(ILI9341_BLACK);
     analogWrite(TFT_BRIGHTNESS_PIN, 255);
-
-    //TOUCH
-    ts.begin();
-    ts.setRotation(3); // 1 for 2.4 screen, 3 for 2.8
-    //END TOUCH
 
     // Init SHT20 Sensor
     sht20.initSHT20();
@@ -158,7 +141,6 @@ void setup()
     //END REMOTE FUNCTIONS
 
     screenManager.homeScreen();
-
     tent.begin();
 
     //was there a grow in process before (re)booting?
@@ -191,27 +173,9 @@ void minutelyTick()
     systemStatus.countMinute();
 }
 
-void touchHandler(void)
-{
-    tent.displayLightHigh(); // Switch on Displaylight on touch
-
-    TS_Point p = ts.getPosition();
-    p.x += 20; // calibration
-
-    if (screenManager.current) {
-        screenManager.current->processTouch(p.x, p.y);
-    }
-}
-
 void loop(void)
 {
-    if (ts.touched()) {
-        touchHandler();
-        delay(10);
-
-    } else {
-        screenManager.renderButtons();
-    }
+    screenManager.tick();
 
     bool dimmerBtnVal = digitalRead(DIM_PIN);
     if (dimmerBtnVal == LOW) {

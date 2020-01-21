@@ -4,7 +4,6 @@
 #include "tent.h"
 #include <Adafruit_ILI9341.h>
 
-extern Adafruit_ILI9341 tft;
 extern SystemStatus systemStatus;
 extern Tent tent;
 extern Timer minutelyTicker, draw_temp_home;

@@ -2,8 +2,6 @@
 #include "icons.h"
 #include <Adafruit_ILI9341.h>
 
-extern Adafruit_ILI9341 tft;
-
 void WifiSplashScreen::render()
 {
     tft.fillScreen(ILI9341_BLACK);

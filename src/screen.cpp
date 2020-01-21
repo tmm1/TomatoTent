@@ -2,13 +2,17 @@
 #include <Arduino.h>
 #include "screen.h"
 #include "icons.h"
-#include <Adafruit_ILI9341.h>
 #include "systemStatus.h"
 #include "tent.h"
+#include "screen_manager.h"
 
-extern Adafruit_ILI9341 tft;
+extern ScreenManager screenManager;
 extern SystemStatus systemStatus;
 extern Tent tent;
+
+Screen::Screen(): tft { screenManager.tft }
+{
+}
 
 void Screen::renderButtons(bool forced)
 {
