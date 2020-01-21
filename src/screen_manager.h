@@ -14,12 +14,15 @@ enum dirtyMarker {
     WATER_LEVEL = 4,
     TIMER = 8,
     FAN = 16,
-    DAY = 32
+    DAY = 32,
+    DIMMED = 64
 };
 
 class ScreenManager {
 private:
     int dirtyMarkers;
+
+    void render();
 
 public:
     std::unique_ptr<Screen> current = std::make_unique<HomeScreen>();

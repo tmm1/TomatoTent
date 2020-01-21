@@ -33,6 +33,8 @@ void FanScreen::update()
 {
     if (screenManager.wasDirty(FAN))
         drawFanStatus();
+
+    Screen::update();
 }
 
 void FanScreen::renderButton(Button& btn)

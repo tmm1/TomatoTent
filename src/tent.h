@@ -25,12 +25,12 @@ extern ScreenManager screenManager;
 class Tent {
 
     int displayBrightness = 0;
-    int dimTimeout = 0;
     String growLightStatus;
 
 public:
     Tent();
     unsigned long lastTime = 0;
+    int dimTimeout = 0;
     Timer* tp;
     Timer* tp1;
     bool checkStats;
@@ -47,7 +47,6 @@ public:
     int growLight(String brightness);
     String getGrowLightStatus();
     void dimGrowLight();
-    void drawDimmedIndicator();
     void displayLightLow(void);
     void displayLightOff(void);
     bool displayLightHigh(void);
