@@ -101,10 +101,8 @@ void Tent::minutelyTick()
         this->dimTimeout -= 1;
         if (this->dimTimeout == 0) {
             this->growLight("HIGH");
-            tft.fillRoundRect(0, 220, 320, 25, 5, ILI9341_BLACK);
-        } else {
-            this->drawDimmedIndicator();
         }
+        screenManager.markDirty(DIMMED);
     }
 }
 
@@ -113,27 +111,12 @@ void Tent::dimGrowLight()
     this->displayLightHigh();
 
     if (this->growLightStatus == "HIGH") {
-
         this->growLight("LOW");
-        this->drawDimmedIndicator();
-
     } else if (this->growLightStatus == "LOW") {
-
         this->growLight("HIGH");
-        tft.fillRoundRect(0, 220, 320, 25, 5, ILI9341_BLACK);
     }
-}
 
-void Tent::drawDimmedIndicator()
-{
-    tft.fillRoundRect(0, 220, 320, 25, 5, ILI9341_RED);
-
-    tft.setCursor(120, 222);
-    tft.setTextColor(ILI9341_WHITE);
-    tft.setTextSize(2);
-    tft.print("Dimmed (" + String(dimTimeout) + "m)");
-
-    tft.drawBitmap(97, 222, iconBulb_16x16, 16, 16, ILI9341_WHITE);
+    screenManager.markDirty(DIMMED);
 }
 
 void Tent::displayLightLow(void)

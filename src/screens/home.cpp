@@ -46,10 +46,6 @@ void HomeScreen::render()
         buttons.push_back(Button("timerBtn", 10, 10, 115, 25, "", 18, 8));
         buttons.push_back(Button("fanBtn", 145, 10, 115, 35, "", 18, 8));
         buttons.push_back(Button("tempBtn", 50, 55, 115, 35, "", 18, 8));
-
-        if (tent.getGrowLightStatus() == "LOW") {
-            tent.drawDimmedIndicator();
-        }
     }
 
     renderButtons(true);
@@ -69,6 +65,8 @@ void HomeScreen::update()
         drawFanStatus();
     if (screenManager.wasDirty(DAY))
         drawDayCounter();
+
+    Screen::update();
 }
 
 void HomeScreen::drawTemperature()

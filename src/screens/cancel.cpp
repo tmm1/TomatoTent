@@ -32,10 +32,6 @@ void CancelScreen::render()
     buttons.push_back(Button("cancelScreenOkBtn", 20, 180, 250, 38, "Ok", 110, 8));
     buttons.push_back(Button("terminateBtn", 120, 10, 185, 28, "Terminate Grow", 10, 7));
     renderButtons(true);
-
-    if (tent.getGrowLightStatus() == "LOW") {
-        tent.drawDimmedIndicator();
-    }
 }
 
 void CancelScreen::renderButton(Button& btn)
