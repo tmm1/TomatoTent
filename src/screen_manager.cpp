@@ -10,17 +10,46 @@
 #include "screens/wifi_splash.h"
 #include "screens/wifi.h"
 
-extern Adafruit_ILI9341 tft;
 extern SystemStatus systemStatus;
 extern Tent tent;
 extern float fanSpeed;
 extern float fanSpeedPercent;
+
+void ScreenManager::setup()
+{
+    tft.begin();
+    tft.setRotation(1);
+    tft.fillScreen(ILI9341_BLACK);
+
+    ts.begin();
+    ts.setRotation(3); // 1 for 2.4 screen, 3 for 2.8
+}
+
+void ScreenManager::tick()
+{
+    if (ts.touched()) {
+        tent.displayLightHigh(); // Switch on Displaylight on touch
+
+        if (!screenManager.current) {
+            return;
+        }
+
+        TS_Point p = ts.getPosition();
+        p.x += 20; // calibration
+        screenManager.current->processTouch(p.x, p.y);
+        delay(10);
+
+    } else {
+        screenManager.renderButtons();
+    }
+}
 
 void ScreenManager::render()
 {
     if (current) {
         markNeedsRedraw(DIMMED);
         current->render();
+        current->update();
     }
 }
 

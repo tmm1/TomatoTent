@@ -1,8 +1,5 @@
 #include "grow_started.h"
 #include "icons.h"
-#include <Adafruit_ILI9341.h>
-
-extern Adafruit_ILI9341 tft;
 
 void GrowStartedScreen::render()
 {

@@ -5,7 +5,6 @@
 #include <Arduino.h>
 #include "DFRobot_SHT20.h"
 #include "screen_manager.h"
-#include "Adafruit_ILI9341.h"
 #include "icons.h"
 
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
@@ -16,7 +15,6 @@
 #define DIM_PIN DAC
 
 extern DFRobot_SHT20 sht20;
-extern Adafruit_ILI9341 tft;
 extern double temp;
 extern double hum;
 extern double waterLevel;

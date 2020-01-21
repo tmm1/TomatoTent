@@ -3,9 +3,11 @@
 
 #include <vector>
 #include "button.h"
+#include "Adafruit_ILI9341.h"
 
 class Screen {
 protected:
+    Adafruit_ILI9341& tft;
     std::vector<Button> buttons;
     void drawButton(Button& btn, int color, int textSize);
     void drawFanStatus();
@@ -13,6 +15,7 @@ protected:
     void hideDimmedIndicator();
 
 public:
+    Screen();
     void renderButtons(bool forced = false);
     void processTouch(int x, int y);
 
