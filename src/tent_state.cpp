@@ -82,19 +82,6 @@ void TentState::setFanSpeed(float fanSpeed)
     save();
 }
 
-void TentState::init()
-{
-    eeprom.dayCounter = -1; //counting days the grow was active. Starting from 1
-    eeprom.isDay = true; // true if the light is on
-    eeprom.minutesInPhotoperiod = 0; //how long has the system been in current photoperiod?  E.g. 31 minutes in NIGHT
-    eeprom.dayDuration = 18 * 60; //how long is the light on?  Starts out at 18 hrs (18*60)
-    eeprom.fanAutoMode = 1; // 1 for auto, 0 for manual
-    eeprom.fanSpeed = 30; // 0-100 %
-    eeprom.tempUnit = 'F'; // C or F. Single characters use single quotes.
-
-    save();
-}
-
 void TentState::save()
 {
     EEPROM.put(0, eeprom);

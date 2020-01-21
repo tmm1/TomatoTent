@@ -7,10 +7,10 @@
 class TentState {
 
     struct {
-        int dayCounter; //counting days the grow was active. Starting from 1
+        int dayCounter; // counting days the grow was active. Starting from 1
         bool isDay; // true if the light is on
-        int minutesInPhotoperiod; //how long has the system been in current photoperiod?  E.g. 31 minutes in NIGHT
-        int dayDuration; //how long is the light on?  Starts out at 18 hrs (18*60)
+        int minutesInPhotoperiod; // how long has the system been in current photoperiod?  E.g. 31 minutes in NIGHT
+        int dayDuration; // how long is the light on?  Starts out at 18 hrs (18*60)
         bool fanAutoMode; // 1 for auto, 0 for manual
         float fanSpeed; // 0-100%
         char tempUnit;
@@ -18,20 +18,38 @@ class TentState {
 
 public:
     TentState();
-    int getDayCount(void);
-    bool isDay(void);
-    int getMinutesInPhotoperiod(void);
-    int getDayDuration(void);
-    bool getFanAutoMode(void);
-    char getTempUnit(void);
-    float getFanSpeed();
-    void setDayCount(int);
-    void setIsDay(bool);
-    void setMinutesInPhotoperiod(int);
-    void setDayDuration(int);
-    void setFanAutoMode(bool);
-    void setFanSpeed(float);
-    void setTempUnit(char);
-    void init();
+
+    void init()
+    {
+        eeprom.dayCounter = -1;
+        eeprom.isDay = true;
+        eeprom.minutesInPhotoperiod = 0;
+        eeprom.dayDuration = 18 * 60;
+        eeprom.fanAutoMode = 1;
+        eeprom.fanSpeed = 30;
+        eeprom.tempUnit = 'F';
+        save();
+    }
     void save();
+
+    bool isDay(void);
+    void setIsDay(bool);
+
+    int getDayCount(void);
+    void setDayCount(int);
+
+    int getMinutesInPhotoperiod(void);
+    void setMinutesInPhotoperiod(int);
+
+    int getDayDuration(void);
+    void setDayDuration(int);
+
+    bool getFanAutoMode(void);
+    void setFanAutoMode(bool);
+
+    float getFanSpeed();
+    void setFanSpeed(float);
+
+    char getTempUnit(void);
+    void setTempUnit(char);
 };
