@@ -49,6 +49,7 @@ void ScreenManager::render()
     if (current) {
         markNeedsRedraw(DIMMED);
         current->render();
+        current->update();
     }
 }
 
