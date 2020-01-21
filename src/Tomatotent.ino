@@ -2,7 +2,6 @@
 #include <Arduino.h>
 #include "softap_http.h"
 #include "DFRobot_SHT20.h"
-#include "tent_state.h"
 #include "tent.h"
 #include "screen_manager.h"
 #include "assets.h"
