@@ -2,7 +2,9 @@
 #include "systemStatus.h"
 #include "icons.h"
 #include "tent.h"
+#include "screen_manager.h"
 
+extern ScreenManager screenManager;
 extern SystemStatus systemStatus;
 extern Tent tent;
 
@@ -72,13 +74,13 @@ void FanScreen::handleButton(Button& btn)
         systemStatus.setFanAutoMode(true);
         renderButton(buttons[0]);
         renderButton(buttons[1]);
-        systemStatus.check_fan();
+        tent.adjustFan();
 
     } else if (btn.getName() == "fanManualBtn") {
         systemStatus.setFanAutoMode(false);
         renderButton(buttons[0]);
         renderButton(buttons[1]);
-        systemStatus.check_fan();
+        tent.adjustFan();
 
     } else if (btn.getName() == "fanUpBtn") {
         float fanSpeedPercent = systemStatus.getFanSpeed();
@@ -89,7 +91,7 @@ void FanScreen::handleButton(Button& btn)
         if (fanSpeedPercent < 100) {
             fanSpeedPercent += 5;
             systemStatus.setFanSpeed(fanSpeedPercent);
-            systemStatus.check_fan();
+            tent.adjustFan();
         }
 
     } else if (btn.getName() == "fanDownBtn") {
@@ -101,7 +103,7 @@ void FanScreen::handleButton(Button& btn)
         if (fanSpeedPercent > 0) {
             fanSpeedPercent -= 5;
             systemStatus.setFanSpeed(fanSpeedPercent);
-            systemStatus.check_fan();
+            tent.adjustFan();
         }
 
     } else if (btn.getName() == "fanOkBtn") {

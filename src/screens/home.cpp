@@ -2,7 +2,9 @@
 #include "systemStatus.h"
 #include "icons.h"
 #include "tent.h"
+#include "screen_manager.h"
 
+extern ScreenManager screenManager;
 extern SystemStatus systemStatus;
 extern Tent tent;
 extern Timer minutelyTicker, draw_temp_home;
@@ -138,7 +140,7 @@ void HomeScreen::drawTimerStatus()
 
     if (hoursLeft < 0 || minutesLeft < 0) {
 
-        systemStatus.countMinute();
+        tent.countMinute();
 
     } else {
 
@@ -225,7 +227,7 @@ void HomeScreen::handleButton(Button& btn)
         tent.doCheckStats(); //First time right away
         draw_temp_home.start();
 
-        systemStatus.countMinute(); // First time on new grow
+        tent.countMinute(); // First time on new grow
         minutelyTicker.start();
 
     } else if (btn.getName() == "wifiBtn") {

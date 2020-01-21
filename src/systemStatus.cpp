@@ -1,9 +1,4 @@
 #include "systemStatus.h"
-#include "tent.h"
-#include "screen_manager.h"
-
-extern Tent tent;
-extern ScreenManager screenManager;
 
 SystemStatus::SystemStatus()
 {
@@ -54,30 +49,6 @@ void SystemStatus::setMinutesInPhotoperiod(int minutesInPhotoperiod)
     this->save();
 }
 
-void SystemStatus::countMinute()
-{
-    this->setMinutesInPhotoperiod(this->getMinutesInPhotoperiod() + 1);
-
-    if (this->isDay()) {
-        if (this->getMinutesInPhotoperiod() >= this->getDayDuration()) { //day is over
-            tent.growLight("OFF");
-            this->setIsDay(false);
-            this->setMinutesInPhotoperiod(0);
-        }
-
-    } else {
-        if (this->getMinutesInPhotoperiod() > ((24 * 60) - this->getDayDuration())) { //night is over
-            this->setDayCount(this->getDayCount() + 1);
-            screenManager.markNeedsRedraw(DAY);
-            tent.growLight("HIGH");
-            this->setIsDay(true);
-            this->setMinutesInPhotoperiod(0);
-        }
-    }
-
-    screenManager.markNeedsRedraw(TIMER);
-}
-
 bool SystemStatus::getFanAutoMode()
 {
     return this->status.fanAutoMode;
@@ -109,55 +80,6 @@ void SystemStatus::setFanSpeed(float fanSpeed)
 {
     this->status.fanSpeed = fanSpeed;
     this->save();
-}
-
-void SystemStatus::check_fan()
-{
-    if (this->status.fanAutoMode == 0) { //manual
-
-        int fanSpeed = map(this->status.fanSpeed, 0.0, 100.0, 0.0, 255.0);
-        analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
-
-    } else {
-
-        float fanSpeedPercent = FAN_SPEED_MIN;
-        step = 5;
-        float tempFahrenheit = temp;
-        if (this->status.tempUnit == 'C') {
-            tempFahrenheit = (temp * 1.8) + 32;
-        }
-
-        if (tempFahrenheit > 70 || hum > 40) {
-            fanSpeedPercent += step;
-        }
-
-        if (tempFahrenheit > 72 || hum > 50) {
-            fanSpeedPercent += step;
-        }
-
-        if (tempFahrenheit > 74 || hum > 60) {
-            fanSpeedPercent += step;
-        }
-        if (tempFahrenheit > 76 || hum > 70) {
-            fanSpeedPercent += step;
-        }
-        if (tempFahrenheit > 78 || hum > 80) {
-            fanSpeedPercent += step;
-        }
-        if (tempFahrenheit > 80 || hum > 90) {
-            fanSpeedPercent += step;
-        }
-        //for sensor fail
-        if (tempFahrenheit > 200 || hum > 200) {
-            fanSpeedPercent = FAN_SPEED_MIN + 15;
-        }
-
-        this->setFanSpeed(fanSpeedPercent);
-        int fanSpeed = map(fanSpeedPercent, 0.0, 100.0, 0.0, 255.0);
-        analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
-    }
-
-    screenManager.markNeedsRedraw(FAN);
 }
 
 void SystemStatus::init()

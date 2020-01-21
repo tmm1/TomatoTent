@@ -153,7 +153,7 @@ void setup()
         tent.doCheckStats(); //First time right away
         draw_temp_home.start();
 
-        systemStatus.countMinute(); //after restart
+        tent.countMinute(); //after restart
         minutelyTicker.start();
 
         //for updates from earlier version that don't have temp units
@@ -170,7 +170,6 @@ void setup()
 void minutelyTick()
 {
     tent.minutelyTick();
-    systemStatus.countMinute();
 }
 
 void loop(void)
@@ -190,7 +189,7 @@ void loop(void)
         tent.check_temperature(systemStatus.getTempUnit());
         tent.check_humidity();
         // tent.check_waterlevel(); // removed for stand alone controller
-        systemStatus.check_fan();
+        tent.adjustFan();
         tent.resetCheckStats();
     }
 

@@ -1,4 +1,9 @@
 #include "tent.h"
+#include "systemStatus.h"
+#include "screen_manager.h"
+
+extern SystemStatus systemStatus;
+extern ScreenManager screenManager;
 
 Tent::Tent()
 {
@@ -104,6 +109,8 @@ void Tent::minutelyTick()
         }
         screenManager.markNeedsRedraw(DIMMED);
     }
+
+    countMinute();
 }
 
 void Tent::dimGrowLight()
@@ -157,4 +164,77 @@ bool Tent::displayLightHigh()
     } else {
         return false;
     }
+}
+
+void Tent::countMinute()
+{
+    systemStatus.setMinutesInPhotoperiod(systemStatus.getMinutesInPhotoperiod() + 1);
+
+    if (systemStatus.isDay()) {
+        if (systemStatus.getMinutesInPhotoperiod() >= systemStatus.getDayDuration()) { //day is over
+            growLight("OFF");
+            systemStatus.setIsDay(false);
+            systemStatus.setMinutesInPhotoperiod(0);
+        }
+
+    } else {
+        if (systemStatus.getMinutesInPhotoperiod() > ((24 * 60) - systemStatus.getDayDuration())) { //night is over
+            systemStatus.setDayCount(systemStatus.getDayCount() + 1);
+            screenManager.markNeedsRedraw(DAY);
+            growLight("HIGH");
+            systemStatus.setIsDay(true);
+            systemStatus.setMinutesInPhotoperiod(0);
+        }
+    }
+
+    screenManager.markNeedsRedraw(TIMER);
+}
+
+void Tent::adjustFan()
+{
+    if (!systemStatus.getFanAutoMode()) { //manual
+
+        int fanSpeed = map(systemStatus.getFanSpeed(), 0.0, 100.0, 0.0, 255.0);
+        analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
+
+    } else {
+
+        float fanSpeedPercent = FAN_SPEED_MIN;
+        float step = 5;
+        float tempFahrenheit = temp;
+        if (systemStatus.getTempUnit() == 'C') {
+            tempFahrenheit = (temp * 1.8) + 32;
+        }
+
+        if (tempFahrenheit > 70 || hum > 40) {
+            fanSpeedPercent += step;
+        }
+
+        if (tempFahrenheit > 72 || hum > 50) {
+            fanSpeedPercent += step;
+        }
+
+        if (tempFahrenheit > 74 || hum > 60) {
+            fanSpeedPercent += step;
+        }
+        if (tempFahrenheit > 76 || hum > 70) {
+            fanSpeedPercent += step;
+        }
+        if (tempFahrenheit > 78 || hum > 80) {
+            fanSpeedPercent += step;
+        }
+        if (tempFahrenheit > 80 || hum > 90) {
+            fanSpeedPercent += step;
+        }
+        //for sensor fail
+        if (tempFahrenheit > 200 || hum > 200) {
+            fanSpeedPercent = FAN_SPEED_MIN + 15;
+        }
+
+        systemStatus.setFanSpeed(fanSpeedPercent);
+        int fanSpeed = map(fanSpeedPercent, 0.0, 100.0, 0.0, 255.0);
+        analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
+    }
+
+    screenManager.markNeedsRedraw(FAN);
 }

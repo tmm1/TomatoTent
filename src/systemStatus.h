@@ -7,8 +7,6 @@
 
 class SystemStatus {
 
-    double step;
-
     struct Status {
         int dayCounter; //counting days the grow was active. Starting from 1
         bool isDay; // true if the light is on
@@ -30,7 +28,6 @@ public:
     bool getFanAutoMode(void);
     char getTempUnit(void);
     float getFanSpeed();
-    void check_fan();
     void setDayCount(int);
     void setIsDay(bool);
     void setMinutesInPhotoperiod(int);
@@ -38,7 +35,6 @@ public:
     void setFanAutoMode(bool);
     void setFanSpeed(float);
     void setTempUnit(char);
-    void countMinute();
     void init();
     void save();
 };

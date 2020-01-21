@@ -2,7 +2,9 @@
 #include "systemStatus.h"
 #include "icons.h"
 #include "tent.h"
+#include "screen_manager.h"
 
+extern ScreenManager screenManager;
 extern SystemStatus systemStatus;
 extern Tent tent;
 
