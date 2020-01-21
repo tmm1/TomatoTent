@@ -1,11 +1,9 @@
 #include "fan.h"
-#include "systemStatus.h"
 #include "icons.h"
 #include "tent.h"
 #include "screen_manager.h"
 
 extern ScreenManager screenManager;
-extern SystemStatus systemStatus;
 extern Tent tent;
 
 void FanScreen::render()
@@ -40,10 +38,10 @@ void FanScreen::update()
 void FanScreen::renderButton(Button& btn)
 {
     if (btn.getName() == "fanAutoBtn") {
-        drawButton(btn, systemStatus.getFanAutoMode() ? ILI9341_OLIVE : ILI9341_BLACK, 2);
+        drawButton(btn, tent.state.getFanAutoMode() ? ILI9341_OLIVE : ILI9341_BLACK, 2);
 
     } else if (btn.getName() == "fanManualBtn") {
-        drawButton(btn, !systemStatus.getFanAutoMode() ? ILI9341_OLIVE : ILI9341_BLACK, 2);
+        drawButton(btn, !tent.state.getFanAutoMode() ? ILI9341_OLIVE : ILI9341_BLACK, 2);
 
     } else if (btn.getName() == "fanUpBtn") {
         tft.fillTriangle(240, 95, 260, 55, 280, 95, ILI9341_RED);
@@ -71,38 +69,38 @@ void FanScreen::renderButtonPressed(Button& btn)
 void FanScreen::handleButton(Button& btn)
 {
     if (btn.getName() == "fanAutoBtn") {
-        systemStatus.setFanAutoMode(true);
+        tent.state.setFanAutoMode(true);
         renderButton(buttons[0]);
         renderButton(buttons[1]);
         tent.adjustFan();
 
     } else if (btn.getName() == "fanManualBtn") {
-        systemStatus.setFanAutoMode(false);
+        tent.state.setFanAutoMode(false);
         renderButton(buttons[0]);
         renderButton(buttons[1]);
         tent.adjustFan();
 
     } else if (btn.getName() == "fanUpBtn") {
-        float fanSpeedPercent = systemStatus.getFanSpeed();
-        systemStatus.setFanAutoMode(false);
+        float fanSpeedPercent = tent.state.getFanSpeed();
+        tent.state.setFanAutoMode(false);
         renderButton(buttons[0]);
         renderButton(buttons[1]);
 
         if (fanSpeedPercent < 100) {
             fanSpeedPercent += 5;
-            systemStatus.setFanSpeed(fanSpeedPercent);
+            tent.state.setFanSpeed(fanSpeedPercent);
             tent.adjustFan();
         }
 
     } else if (btn.getName() == "fanDownBtn") {
-        float fanSpeedPercent = systemStatus.getFanSpeed();
-        systemStatus.setFanAutoMode(false);
+        float fanSpeedPercent = tent.state.getFanSpeed();
+        tent.state.setFanAutoMode(false);
         renderButton(buttons[0]);
         renderButton(buttons[1]);
 
         if (fanSpeedPercent > 0) {
             fanSpeedPercent -= 5;
-            systemStatus.setFanSpeed(fanSpeedPercent);
+            tent.state.setFanSpeed(fanSpeedPercent);
             tent.adjustFan();
         }
 

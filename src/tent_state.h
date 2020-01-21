@@ -1,13 +1,12 @@
-#ifndef SYSTEMSTATUS_H
-#define SYSTEMSTATUS_H
+#pragma once
 
 #include "Particle.h"
 #include <Arduino.h>
 #include "math.h"
 
-class SystemStatus {
+class TentState {
 
-    struct Status {
+    struct {
         int dayCounter; //counting days the grow was active. Starting from 1
         bool isDay; // true if the light is on
         int minutesInPhotoperiod; //how long has the system been in current photoperiod?  E.g. 31 minutes in NIGHT
@@ -15,12 +14,10 @@ class SystemStatus {
         bool fanAutoMode; // 1 for auto, 0 for manual
         float fanSpeed; // 0-100%
         char tempUnit;
-    };
-
-    Status status;
+    } eeprom;
 
 public:
-    SystemStatus();
+    TentState();
     int getDayCount(void);
     bool isDay(void);
     int getMinutesInPhotoperiod(void);
@@ -38,4 +35,3 @@ public:
     void init();
     void save();
 };
-#endif

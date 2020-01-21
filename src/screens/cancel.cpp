@@ -1,11 +1,9 @@
 #include "cancel.h"
-#include "systemStatus.h"
 #include "icons.h"
 #include "tent.h"
 #include "screen_manager.h"
 
 extern ScreenManager screenManager;
-extern SystemStatus systemStatus;
 extern Tent tent;
 
 void CancelScreen::render()
@@ -15,7 +13,7 @@ void CancelScreen::render()
     tft.setCursor(20, 70);
     tft.setTextColor(ILI9341_WHITE);
     tft.setTextSize(2);
-    tft.print("Your grow is " + String(systemStatus.getDayCount() - 1) + " days old.");
+    tft.print("Your grow is " + String(tent.state.getDayCount() - 1) + " days old.");
 
     tft.setCursor(20, 100);
     tft.print("Most Cannabis is ready");

@@ -4,6 +4,7 @@
 #include "Particle.h"
 #include <Arduino.h>
 #include "DFRobot_SHT20.h"
+#include "tent_state.h"
 
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
 #define GROW_LIGHT_ON_OFF_PIN D7
@@ -24,6 +25,7 @@ private:
 
 public:
     Tent();
+    TentState state;
     unsigned long lastTime = 0;
     int dimTimeout = 0;
     Timer* tp;

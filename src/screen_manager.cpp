@@ -1,5 +1,4 @@
 #include "screen_manager.h"
-#include "systemStatus.h"
 #include "tent.h"
 #include "screens/cancel.h"
 #include "screens/cancel_confirm.h"
@@ -10,7 +9,6 @@
 #include "screens/wifi_splash.h"
 #include "screens/wifi.h"
 
-extern SystemStatus systemStatus;
 extern Tent tent;
 extern float fanSpeed;
 extern float fanSpeedPercent;

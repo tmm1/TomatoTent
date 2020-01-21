@@ -1,11 +1,9 @@
 #include "temp_unit.h"
-#include "systemStatus.h"
 #include "icons.h"
 #include "tent.h"
 #include "screen_manager.h"
 
 extern ScreenManager screenManager;
-extern SystemStatus systemStatus;
 extern Tent tent;
 
 void TempUnitScreen::render()
@@ -28,10 +26,10 @@ void TempUnitScreen::render()
 void TempUnitScreen::renderButton(Button& btn)
 {
     if (btn.getName() == "tempFahrenheitBtn") {
-        drawButton(btn, systemStatus.getTempUnit() == 'F' ? ILI9341_OLIVE : ILI9341_BLACK, 2);
+        drawButton(btn, tent.state.getTempUnit() == 'F' ? ILI9341_OLIVE : ILI9341_BLACK, 2);
 
     } else if (btn.getName() == "tempCelsiusBtn") {
-        drawButton(btn, systemStatus.getTempUnit() == 'C' ? ILI9341_OLIVE : ILI9341_BLACK, 2);
+        drawButton(btn, tent.state.getTempUnit() == 'C' ? ILI9341_OLIVE : ILI9341_BLACK, 2);
     }
 }
 
@@ -42,15 +40,15 @@ void TempUnitScreen::renderButtonPressed(Button& btn)
 void TempUnitScreen::handleButton(Button& btn)
 {
     if (btn.getName() == "tempFahrenheitBtn") {
-        systemStatus.setTempUnit('F');
+        tent.state.setTempUnit('F');
         renderButtons(true);
         screenManager.homeScreen();
-        tent.check_temperature(systemStatus.getTempUnit());
+        tent.check_temperature(tent.state.getTempUnit());
 
     } else if (btn.getName() == "tempCelsiusBtn") {
-        systemStatus.setTempUnit('C');
+        tent.state.setTempUnit('C');
         renderButtons(true);
         screenManager.homeScreen();
-        tent.check_temperature(systemStatus.getTempUnit());
+        tent.check_temperature(tent.state.getTempUnit());
     }
 }

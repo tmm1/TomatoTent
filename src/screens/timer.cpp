@@ -1,11 +1,9 @@
 #include "timer.h"
-#include "systemStatus.h"
 #include "icons.h"
 #include "tent.h"
 #include "screen_manager.h"
 
 extern ScreenManager screenManager;
-extern SystemStatus systemStatus;
 extern Tent tent;
 
 void TimerScreen::render()
@@ -17,7 +15,7 @@ void TimerScreen::render()
     tft.setTextSize(2);
     tft.print("Light Timer");
 
-    int dayDuration = systemStatus.getDayDuration();
+    int dayDuration = tent.state.getDayDuration();
     renderDayDuration(dayDuration);
 
     buttons.push_back(Button("timerUpBtn", 240, 50, 40, 40, "", 0, 0));
@@ -68,19 +66,19 @@ void TimerScreen::renderDayDuration(int dayDuration)
 void TimerScreen::handleButton(Button& btn)
 {
     if (btn.getName() == "timerUpBtn") {
-        int dayDuration = systemStatus.getDayDuration() + 60;
+        int dayDuration = tent.state.getDayDuration() + 60;
         if (dayDuration > 1440) {
             dayDuration = 60;
         }
-        systemStatus.setDayDuration(dayDuration);
+        tent.state.setDayDuration(dayDuration);
         renderDayDuration(dayDuration);
 
     } else if (btn.getName() == "timerDownBtn") {
-        int dayDuration = systemStatus.getDayDuration() - 60;
+        int dayDuration = tent.state.getDayDuration() - 60;
         if (dayDuration <= 0) {
             dayDuration = 1440;
         }
-        systemStatus.setDayDuration(dayDuration);
+        tent.state.setDayDuration(dayDuration);
         renderDayDuration(dayDuration);
 
     } else if (btn.getName() == "timerOkBtn") {

@@ -1,8 +1,6 @@
 #include "tent.h"
-#include "systemStatus.h"
 #include "screen_manager.h"
 
-extern SystemStatus systemStatus;
 extern ScreenManager screenManager;
 
 Tent::Tent()
@@ -168,22 +166,22 @@ bool Tent::displayLightHigh()
 
 void Tent::countMinute()
 {
-    systemStatus.setMinutesInPhotoperiod(systemStatus.getMinutesInPhotoperiod() + 1);
+    state.setMinutesInPhotoperiod(state.getMinutesInPhotoperiod() + 1);
 
-    if (systemStatus.isDay()) {
-        if (systemStatus.getMinutesInPhotoperiod() >= systemStatus.getDayDuration()) { //day is over
+    if (state.isDay()) {
+        if (state.getMinutesInPhotoperiod() >= state.getDayDuration()) { //day is over
             growLight("OFF");
-            systemStatus.setIsDay(false);
-            systemStatus.setMinutesInPhotoperiod(0);
+            state.setIsDay(false);
+            state.setMinutesInPhotoperiod(0);
         }
 
     } else {
-        if (systemStatus.getMinutesInPhotoperiod() > ((24 * 60) - systemStatus.getDayDuration())) { //night is over
-            systemStatus.setDayCount(systemStatus.getDayCount() + 1);
+        if (state.getMinutesInPhotoperiod() > ((24 * 60) - state.getDayDuration())) { //night is over
+            state.setDayCount(state.getDayCount() + 1);
             screenManager.markNeedsRedraw(DAY);
             growLight("HIGH");
-            systemStatus.setIsDay(true);
-            systemStatus.setMinutesInPhotoperiod(0);
+            state.setIsDay(true);
+            state.setMinutesInPhotoperiod(0);
         }
     }
 
@@ -192,9 +190,9 @@ void Tent::countMinute()
 
 void Tent::adjustFan()
 {
-    if (!systemStatus.getFanAutoMode()) { //manual
+    if (!state.getFanAutoMode()) { //manual
 
-        int fanSpeed = map(systemStatus.getFanSpeed(), 0.0, 100.0, 0.0, 255.0);
+        int fanSpeed = map(state.getFanSpeed(), 0.0, 100.0, 0.0, 255.0);
         analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
 
     } else {
@@ -202,7 +200,7 @@ void Tent::adjustFan()
         float fanSpeedPercent = FAN_SPEED_MIN;
         float step = 5;
         float tempFahrenheit = temp;
-        if (systemStatus.getTempUnit() == 'C') {
+        if (state.getTempUnit() == 'C') {
             tempFahrenheit = (temp * 1.8) + 32;
         }
 
@@ -231,7 +229,7 @@ void Tent::adjustFan()
             fanSpeedPercent = FAN_SPEED_MIN + 15;
         }
 
-        systemStatus.setFanSpeed(fanSpeedPercent);
+        state.setFanSpeed(fanSpeedPercent);
         int fanSpeed = map(fanSpeedPercent, 0.0, 100.0, 0.0, 255.0);
         analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
     }
