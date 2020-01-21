@@ -30,17 +30,17 @@ void ScreenManager::tick()
     if (ts.touched()) {
         tent.displayLightHigh(); // Switch on Displaylight on touch
 
-        if (!screenManager.current) {
+        if (!current) {
             return;
         }
 
         TS_Point p = ts.getPosition();
         p.x += 20; // calibration
-        screenManager.current->processTouch(p.x, p.y);
+        current->processTouch(p.x, p.y);
         delay(10);
 
     } else {
-        screenManager.renderButtons();
+        renderButtons();
     }
 }
 
