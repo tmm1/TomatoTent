@@ -3,13 +3,14 @@
 
 #include "../screen.h"
 
-class TimerScreen: public Screen {
+class TimerScreen : public Screen {
 public:
     String getName() { return "timerScreen"; }
     void render();
     void renderButton(Button& btn);
     void renderButtonPressed(Button& btn);
-    void handleButton(Button &btn);
+    void handleButton(Button& btn);
+
 private:
     void renderDayDuration(int dayDuration);
 };

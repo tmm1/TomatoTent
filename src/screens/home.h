@@ -3,7 +3,7 @@
 
 #include "../screen.h"
 
-class HomeScreen: public Screen {
+class HomeScreen : public Screen {
 private:
     void drawTemperature();
     void drawHumidity();
@@ -11,12 +11,13 @@ private:
     void drawDayCounter();
     void drawTimerStatus();
     void drawClock();
+
 public:
     String getName() { return "homeScreen"; }
     void render();
     void update();
     void renderButton(Button& btn);
     void renderButtonPressed(Button& btn);
-    void handleButton(Button &btn);
+    void handleButton(Button& btn);
 };
 #endif

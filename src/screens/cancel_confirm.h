@@ -3,12 +3,12 @@
 
 #include "../screen.h"
 
-class CancelConfirmScreen: public Screen {
+class CancelConfirmScreen : public Screen {
 public:
     String getName() { return "cancelConfirmScreen"; }
     void render();
     void renderButton(Button& btn);
     void renderButtonPressed(Button& btn);
-    void handleButton(Button &btn);
+    void handleButton(Button& btn);
 };
 #endif
