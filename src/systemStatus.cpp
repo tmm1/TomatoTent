@@ -71,97 +71,14 @@ void SystemStatus::countMinute()
     } else {
         if (this->getMinutesInPhotoperiod() > ((24 * 60) - this->getDayDuration())) { //night is over
             this->setDayCount(this->getDayCount() + 1);
-            this->drawDayCounter();
+            screenManager.markDirty(DAY);
             tent.growLight("HIGH");
             this->setIsDay(true);
             this->setMinutesInPhotoperiod(0);
         }
     }
 
-    if (screenManager.currentScreen == "homeScreen") {
-        this->drawTimerStatus();
-    }
-}
-
-void SystemStatus::drawTimerStatus()
-{
-    int hoursLeft;
-    int minutesLeft;
-
-    if (this->isDay()) {
-        tft.setTextColor(ILI9341_YELLOW);
-        hoursLeft = floor((this->getDayDuration() - this->getMinutesInPhotoperiod()) / 60);
-        minutesLeft = (this->getDayDuration() - this->getMinutesInPhotoperiod()) % 60;
-    } else {
-        tft.setTextColor(ILI9341_BLUE);
-        hoursLeft = floor((((24 * 60) - this->getDayDuration()) - this->getMinutesInPhotoperiod()) / 60);
-        minutesLeft = (((24 * 60) - this->getDayDuration()) - this->getMinutesInPhotoperiod()) % 60;
-    }
-
-    if (hoursLeft < 0 || minutesLeft < 0) {
-
-        this->countMinute();
-
-    } else {
-
-        tft.fillRect(5, 5, 137, 37, ILI9341_BLACK);
-
-        tft.setCursor(50, 10);
-        tft.setTextSize(2);
-
-        tft.print(String(hoursLeft));
-        tft.setTextSize(1);
-        tft.print("hrs ");
-        tft.setTextSize(2);
-        tft.print("" + String(minutesLeft));
-        tft.setTextSize(1);
-        tft.print("min");
-
-        tft.setCursor(53, 31);
-        tft.setTextSize(1);
-        if (this->isDay()) {
-            tft.drawBitmap(7, 5, sun_36, 36, 36, ILI9341_YELLOW);
-            tft.print("until sunset");
-        } else {
-            tft.drawBitmap(7, 5, moon_and_stars_36, 36, 36, ILI9341_BLUE);
-            tft.print("until sunrise");
-        }
-    }
-}
-
-void SystemStatus::drawDayCounter()
-{
-    tft.fillRect(130, 180, 80, 25, ILI9341_BLACK);
-
-    tft.setCursor(70, 180);
-    tft.setTextColor(ILI9341_WHITE);
-    tft.setTextSize(3);
-
-    tft.print("Day " + String(this->getDayCount()));
-}
-
-void SystemStatus::drawFanSpeed()
-{
-    //write status to screen
-    tft.fillRect(200, 10, 56, 35, ILI9341_BLACK);
-
-    tft.setCursor(210, 10);
-    tft.setTextSize(2);
-    tft.setTextColor(ILI9341_WHITE);
-
-    //tft.print(String(String::format("%.0f",this->status.fanSpeed)));
-    tft.print(String(String::format("%.0f", this->status.fanSpeed + 5)));
-
-    tft.print("%");
-
-    tft.setTextSize(1);
-    if (this->status.fanAutoMode) {
-        tft.setCursor(200, 30);
-        tft.print("automatic");
-    } else {
-        tft.setCursor(210, 30);
-        tft.print("manual");
-    }
+    screenManager.markDirty(TIMER);
 }
 
 bool SystemStatus::getFanAutoMode()
@@ -243,9 +160,7 @@ void SystemStatus::check_fan()
         analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
     }
 
-    if (screenManager.currentScreen == "homeScreen" || screenManager.currentScreen == "fanScreen") {
-        this->drawFanSpeed();
-    }
+    screenManager.markDirty(FAN);
 }
 
 void SystemStatus::init()

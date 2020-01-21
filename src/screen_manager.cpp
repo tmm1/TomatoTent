@@ -85,3 +85,15 @@ void ScreenManager::renderButtons(bool forced)
         current->renderButtons(forced);
     }
 }
+
+void ScreenManager::markDirty(dirtyMarker m)
+{
+    dirtyMarkers |= (int)m;
+}
+
+bool ScreenManager::wasDirty(dirtyMarker m)
+{
+    bool ret = dirtyMarkers & m;
+    dirtyMarkers &= ~m;
+    return ret;
+}

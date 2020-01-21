@@ -229,4 +229,8 @@ void loop(void)
         systemStatus.check_fan();
         tent.resetCheckStats();
     }
+
+    if (screenManager.current) {
+        screenManager.current->update();
+    }
 }

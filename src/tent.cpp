@@ -23,30 +23,7 @@ void Tent::check_temperature(char tempUnit)
 
     if ((temp == 0) || (temp != currentTemp)) {
         temp = currentTemp;
-        this->draw_temperature_home(tempUnit);
-    }
-}
-
-void Tent::draw_temperature_home(char tempUnit)
-{
-    if (screenManager.currentScreen == "homeScreen") {
-
-        //reset screen
-        tft.fillRect(50, 60, 141, 25, ILI9341_BLACK);
-
-        //Temperature
-        tft.setCursor(50, 60);
-        tft.setTextColor(ILI9341_GREEN);
-        tft.setTextSize(3);
-
-        tft.print(String::format("%.1f", temp));
-        tft.setTextSize(2);
-
-        if (tempUnit == 'F') {
-            tft.print(" F");
-        } else {
-            tft.print(" C");
-        }
+        screenManager.markDirty(TEMPERATURE);
     }
 }
 
@@ -56,24 +33,7 @@ void Tent::check_humidity()
 
     if ((hum == 0) || (hum != currentHumidity)) {
         hum = currentHumidity;
-        this->draw_humidity_home();
-    }
-}
-
-void Tent::draw_humidity_home()
-{
-    if (screenManager.currentScreen == "homeScreen") {
-        /////// Humidity
-        tft.fillRect(50, 110, 141, 25, ILI9341_BLACK);
-
-        tft.setCursor(50, 110);
-        tft.setTextColor(ILI9341_PINK);
-        tft.setTextSize(3);
-
-        tft.print(String::format("%.1f", hum));
-
-        tft.setTextSize(2);
-        tft.print(" %");
+        screenManager.markDirty(HUMIDITY);
     }
 }
 
@@ -83,31 +43,7 @@ void Tent::check_waterlevel()
 
     if ((waterLevel == 0) || (waterLevel != currentWaterLevel)) {
         waterLevel = currentWaterLevel;
-        this->draw_waterlevel_home();
-    }
-}
-
-void Tent::draw_waterlevel_home()
-{
-    if (screenManager.currentScreen == "homeScreen") {
-        const float waterLevelBoxHeight = 150;
-        const int waterLevelBoxTop = 60;
-
-        int waterLevelHeight = floor((waterLevelBoxHeight / 100) * waterLevel);
-
-        int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight) + waterLevelBoxTop - 1;
-
-        //icon
-        tft.drawBitmap(280, 30, iconWateringCan_24x24, 24, 24, ILI9341_GREEN);
-
-        //outside box
-        tft.drawRect(280, waterLevelBoxTop, 25, waterLevelBoxHeight, ILI9341_DARKGREY);
-
-        //reset the box
-        tft.fillRect(281, waterLevelBoxTop + 1, 23, waterLevelBoxHeight - 2, ILI9341_BLACK);
-
-        //draw current water level
-        tft.fillRect(281, waterLevelTop, 23, waterLevelHeight, ILI9341_BLUE);
+        screenManager.markDirty(WATER_LEVEL);
     }
 }
 
@@ -131,13 +67,6 @@ bool Tent::getCheckStats()
 void Tent::resetCheckStats()
 {
     this->checkStats = false;
-}
-
-void Tent::drawStats(char tempUnit)
-{ //only draws stats
-    this->draw_temperature_home(tempUnit);
-    this->draw_humidity_home();
-    this->draw_waterlevel_home(); //remove for stand alone controller
 }
 
 int Tent::growLight(String brightness)
@@ -246,17 +175,3 @@ bool Tent::displayLightHigh()
         return false;
     }
 }
-
-/* 
-void Tent::drawTime() {
-    String currentTime = Time.format(Time.now(), "%l:%M %P %S");
-
-    tft.fillRect(190,7,140,18,ILI9341_BLACK);
-
-    tft.setCursor(190, 7);
-    tft.setTextColor(ILI9341_WHITE);
-    tft.setTextSize(2);
-
-    tft.print(currentTime);
-}
-*/

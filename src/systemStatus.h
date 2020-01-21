@@ -39,9 +39,6 @@ public:
     void setFanSpeed(float);
     void setTempUnit(char);
     void countMinute();
-    void drawTimerStatus();
-    void drawFanSpeed();
-    void drawDayCounter();
     void init();
     void save();
 };

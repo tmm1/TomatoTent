@@ -33,19 +33,19 @@ void HomeScreen::render()
     } else { // a grow is in progress
 
         tft.drawRect(20, 180, 250, 38, ILI9341_BLACK);
+        tft.drawBitmap(165, 4, fan_36, 36, 36, ILI9341_WHITE);
 
-        systemStatus.drawDayCounter();
+        drawDayCounter();
+        drawTemperature();
+        drawHumidity();
+        drawWaterLevel();
+        drawTimerStatus();
+        drawFanStatus();
 
         buttons.push_back(Button("dayCounterBtn", 20, 180, 250, 38, "", 18, 8));
         buttons.push_back(Button("timerBtn", 10, 10, 115, 25, "", 18, 8));
         buttons.push_back(Button("fanBtn", 145, 10, 115, 35, "", 18, 8));
         buttons.push_back(Button("tempBtn", 50, 55, 115, 35, "", 18, 8));
-
-        tft.drawBitmap(165, 4, fan_36, 36, 36, ILI9341_WHITE);
-
-        systemStatus.drawTimerStatus();
-        systemStatus.check_fan();
-        tent.drawStats(systemStatus.getTempUnit());
 
         if (tent.getGrowLightStatus() == "LOW") {
             tent.drawDimmedIndicator();
@@ -53,6 +53,146 @@ void HomeScreen::render()
     }
 
     renderButtons(true);
+}
+
+void HomeScreen::update()
+{
+    if (screenManager.wasDirty(TIMER))
+        drawTimerStatus();
+    if (screenManager.wasDirty(TEMPERATURE))
+        drawTemperature();
+    if (screenManager.wasDirty(HUMIDITY))
+        drawHumidity();
+    if (screenManager.wasDirty(WATER_LEVEL))
+        drawWaterLevel();
+    if (screenManager.wasDirty(FAN))
+        drawFanStatus();
+    if (screenManager.wasDirty(DAY))
+        drawDayCounter();
+}
+
+void HomeScreen::drawTemperature()
+{
+    char tempUnit = systemStatus.getTempUnit();
+
+    tft.fillRect(50, 60, 141, 25, ILI9341_BLACK);
+    tft.setCursor(50, 60);
+    tft.setTextColor(ILI9341_GREEN);
+    tft.setTextSize(3);
+
+    tft.print(String::format("%.1f", temp));
+    tft.setTextSize(2);
+
+    if (tempUnit == 'F') {
+        tft.print(" F");
+    } else {
+        tft.print(" C");
+    }
+}
+
+void HomeScreen::drawHumidity()
+{
+    tft.fillRect(50, 110, 141, 25, ILI9341_BLACK);
+    tft.setCursor(50, 110);
+    tft.setTextColor(ILI9341_PINK);
+    tft.setTextSize(3);
+
+    tft.print(String::format("%.1f", hum));
+
+    tft.setTextSize(2);
+    tft.print(" %");
+}
+
+void HomeScreen::drawWaterLevel()
+{
+    const float waterLevelBoxHeight = 150;
+    const int waterLevelBoxTop = 60;
+
+    int waterLevelHeight = floor((waterLevelBoxHeight / 100) * waterLevel);
+
+    int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight) + waterLevelBoxTop - 1;
+
+    //icon
+    tft.drawBitmap(280, 30, iconWateringCan_24x24, 24, 24, ILI9341_GREEN);
+
+    //outside box
+    tft.drawRect(280, waterLevelBoxTop, 25, waterLevelBoxHeight, ILI9341_DARKGREY);
+
+    //reset the box
+    tft.fillRect(281, waterLevelBoxTop + 1, 23, waterLevelBoxHeight - 2, ILI9341_BLACK);
+
+    //draw current water level
+    tft.fillRect(281, waterLevelTop, 23, waterLevelHeight, ILI9341_BLUE);
+}
+
+void HomeScreen::drawTimerStatus()
+{
+    int hoursLeft;
+    int minutesLeft;
+
+    if (systemStatus.isDay()) {
+        tft.setTextColor(ILI9341_YELLOW);
+        hoursLeft = floor((systemStatus.getDayDuration() - systemStatus.getMinutesInPhotoperiod()) / 60);
+        minutesLeft = (systemStatus.getDayDuration() - systemStatus.getMinutesInPhotoperiod()) % 60;
+    } else {
+        tft.setTextColor(ILI9341_BLUE);
+        hoursLeft = floor((((24 * 60) - systemStatus.getDayDuration()) - systemStatus.getMinutesInPhotoperiod()) / 60);
+        minutesLeft = (((24 * 60) - systemStatus.getDayDuration()) - systemStatus.getMinutesInPhotoperiod()) % 60;
+    }
+
+    if (hoursLeft < 0 || minutesLeft < 0) {
+
+        systemStatus.countMinute();
+
+    } else {
+
+        tft.fillRect(5, 5, 137, 37, ILI9341_BLACK);
+
+        tft.setCursor(50, 10);
+        tft.setTextSize(2);
+
+        tft.print(String(hoursLeft));
+        tft.setTextSize(1);
+        tft.print("hrs ");
+        tft.setTextSize(2);
+        tft.print("" + String(minutesLeft));
+        tft.setTextSize(1);
+        tft.print("min");
+
+        tft.setCursor(53, 31);
+        tft.setTextSize(1);
+        if (systemStatus.isDay()) {
+            tft.drawBitmap(7, 5, sun_36, 36, 36, ILI9341_YELLOW);
+            tft.print("until sunset");
+        } else {
+            tft.drawBitmap(7, 5, moon_and_stars_36, 36, 36, ILI9341_BLUE);
+            tft.print("until sunrise");
+        }
+    }
+}
+
+void HomeScreen::drawDayCounter()
+{
+    tft.fillRect(130, 180, 80, 25, ILI9341_BLACK);
+
+    tft.setCursor(70, 180);
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(3);
+
+    tft.print("Day " + String(systemStatus.getDayCount()));
+}
+
+void HomeScreen::drawClock()
+{
+    String currentTime = Time.format(Time.now(), "%l:%M %P %S");
+
+    tft.fillRect(190, 7, 140, 18, ILI9341_BLACK);
+
+    tft.setCursor(190, 7);
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(2);
+
+    tft.print(currentTime);
 }
 
 void HomeScreen::renderButton(Button& btn)

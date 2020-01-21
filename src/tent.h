@@ -37,17 +37,13 @@ public:
 
     void begin();
     void check_temperature(char tempUnit);
-    void draw_temperature_home(char tempUnit);
     void check_humidity();
-    void draw_humidity_home();
     void check_waterlevel();
-    void draw_waterlevel_home();
     void fan(String fanStatus);
     void doCheckStats();
     bool getCheckStats();
     void resetCheckStats();
     void minutelyTick();
-    void drawStats(char tempUnit);
     int growLight(String brightness);
     String getGrowLightStatus();
     void dimGrowLight();
@@ -55,7 +51,5 @@ public:
     void displayLightLow(void);
     void displayLightOff(void);
     bool displayLightHigh(void);
-
-    // void drawTime();
 };
 #endif

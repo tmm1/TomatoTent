@@ -7,6 +7,7 @@ class FanScreen: public Screen {
 public:
     String getName() { return "fanScreen"; }
     void render();
+    void update();
     void renderButton(Button& btn);
     void renderButtonPressed(Button& btn);
     void handleButton(Button &btn);
