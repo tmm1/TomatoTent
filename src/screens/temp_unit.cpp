@@ -2,7 +2,6 @@
 #include "systemStatus.h"
 #include "icons.h"
 #include "tent.h"
-#include <Adafruit_ILI9341.h>
 
 extern SystemStatus systemStatus;
 extern Tent tent;

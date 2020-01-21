@@ -1,6 +1,5 @@
 #include "wifi_splash.h"
 #include "icons.h"
-#include <Adafruit_ILI9341.h>
 
 void WifiSplashScreen::render()
 {

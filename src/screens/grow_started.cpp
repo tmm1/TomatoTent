@@ -1,6 +1,5 @@
 #include "grow_started.h"
 #include "icons.h"
-#include <Adafruit_ILI9341.h>
 
 void GrowStartedScreen::render()
 {
