@@ -35,7 +35,7 @@ public:
     void begin();
     void adjustFan();
     void countMinute();
-    void check_temperature(char tempUnit);
+    void check_temperature();
     void check_humidity();
     void check_waterlevel();
     void fan(String fanStatus);

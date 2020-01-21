@@ -16,9 +16,10 @@ void Tent::begin()
     this->displayLightHigh();
 }
 
-void Tent::check_temperature(char tempUnit)
+void Tent::check_temperature()
 {
     double currentTemp = sht20.readTemperature();
+    char tempUnit = state.getTempUnit();
 
     if (tempUnit == 'F') {
         currentTemp = (currentTemp * 1.8) + 32;
