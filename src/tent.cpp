@@ -291,10 +291,13 @@ void Tent::adjustFan()
             fanSpeedPercent = FAN_SPEED_MIN + 15;
         }
 
-        state.setFanSpeed(fanSpeedPercent);
-        int fanSpeed = map(fanSpeedPercent, 0.0, 100.0, 0.0, 255.0);
-        analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
+        if (fanSpeedPercent != state.getFanSpeed()) {
+            state.setFanSpeed(fanSpeedPercent);
+            int fanSpeed = map(fanSpeedPercent, 0.0, 100.0, 0.0, 255.0);
+            analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
+
+            screenManager.markNeedsRedraw(FAN);
+        }
     }
 
-    screenManager.markNeedsRedraw(FAN);
 }
