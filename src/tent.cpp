@@ -16,7 +16,7 @@ void Tent::begin()
     this->displayLightHigh();
 }
 
-void Tent::check_temperature()
+void Tent::checkTemperature()
 {
     double currentTemp = sht20.readTemperature();
     char tempUnit = state.getTempUnit();
@@ -31,7 +31,7 @@ void Tent::check_temperature()
     }
 }
 
-void Tent::check_humidity()
+void Tent::checkHumidity()
 {
     double currentHumidity = sht20.readHumidity();
 
@@ -41,7 +41,7 @@ void Tent::check_humidity()
     }
 }
 
-void Tent::check_waterlevel()
+void Tent::checkWaterLevel()
 {
     double currentWaterLevel = sht20.readHumidity();
 

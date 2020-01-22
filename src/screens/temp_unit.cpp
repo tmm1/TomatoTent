@@ -43,12 +43,12 @@ void TempUnitScreen::handleButton(Button& btn)
         tent.state.setTempUnit('F');
         renderButtons(true);
         screenManager.homeScreen();
-        tent.check_temperature();
+        tent.checkTemperature();
 
     } else if (btn.getName() == "tempCelsiusBtn") {
         tent.state.setTempUnit('C');
         renderButtons(true);
         screenManager.homeScreen();
-        tent.check_temperature();
+        tent.checkTemperature();
     }
 }
