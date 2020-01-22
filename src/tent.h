@@ -23,11 +23,13 @@ private:
     String growLightStatus;
     unsigned long lastDisplayLightTime = 0;
 
+    bool needsSensorUpdate;
+    void markNeedsSensorUpdate();
+
 public:
     Tent();
     TentState state;
     int dimTimeout = 0;
-    bool checkStats;
 
     struct {
         double tentTemperatureC;
@@ -42,19 +44,19 @@ public:
 
     void adjustFan();
     void countMinute();
+    void minutelyTick();
+
+    void checkSensors();
     void checkTemperature();
     void checkHumidity();
     void checkWaterLevel();
+
     void fan(String fanStatus);
-    void doCheckStats();
-    bool getCheckStats();
-    void resetCheckStats();
-    void minutelyTick();
     int growLight(String brightness);
     String getGrowLightStatus();
     void dimGrowLight();
-    void displayLightLow(void);
-    void displayLightOff(void);
-    bool displayLightHigh(void);
+    void displayLightLow();
+    void displayLightOff();
+    bool displayLightHigh();
 };
 #endif

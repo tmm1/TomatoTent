@@ -4,7 +4,7 @@
 extern ScreenManager screenManager;
 
 Tent::Tent()
-    : sensorTimer { Timer(7013, &Tent::doCheckStats, *this) }
+    : sensorTimer { Timer(7013, &Tent::markNeedsSensorUpdate, *this) }
     , minuteTimer { Timer(60000, &Tent::minutelyTick, *this) }
     , displayDimTimer { Timer(50000, &Tent::displayLightLow, *this, 1) }
     , displayOffTimer { Timer(60000, &Tent::displayLightOff, *this, 1) }
@@ -33,8 +33,6 @@ void Tent::setup()
             growLight("HIGH");
         }
 
-        doCheckStats(); // First time right away
-        countMinute(); // after restart
         start();
 
     } else {
@@ -46,6 +44,9 @@ void Tent::start()
 {
     minuteTimer.start();
     sensorTimer.start();
+
+    markNeedsSensorUpdate();
+    countMinute();
 }
 
 void Tent::stop()
@@ -92,19 +93,22 @@ void Tent::fan(String fanStatus)
     }
 }
 
-void Tent::doCheckStats()
-{ //checks & draws stats
-    this->checkStats = true;
+void Tent::markNeedsSensorUpdate()
+{
+    needsSensorUpdate = true;
 }
 
-bool Tent::getCheckStats()
+void Tent::checkSensors()
 {
-    return this->checkStats;
-}
+    if (!needsSensorUpdate) {
+        return;
+    }
+    needsSensorUpdate = false;
 
-void Tent::resetCheckStats()
-{
-    this->checkStats = false;
+    checkTemperature();
+    checkHumidity();
+    //checkWaterLevel();
+    adjustFan();
 }
 
 int Tent::growLight(String brightness)
