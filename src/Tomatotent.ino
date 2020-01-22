@@ -20,7 +20,7 @@ Tent tent;
 ScreenManager screenManager;
 
 Timer draw_temp_home(7013, &Tent::doCheckStats, tent);
-Timer minutelyTicker(60000, &minutelyTick);
+Timer minutelyTicker(60000, &Tent::minutelyTick, tent);
 
 SYSTEM_MODE(SEMI_AUTOMATIC);
 
@@ -161,11 +161,6 @@ void setup()
     } else {
         tent.state.init();
     }
-}
-
-void minutelyTick()
-{
-    tent.minutelyTick();
 }
 
 void loop(void)
