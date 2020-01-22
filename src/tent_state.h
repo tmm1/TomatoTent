@@ -30,6 +30,13 @@ public:
         eeprom.tempUnit = 'F';
         save();
     }
+    void migrate()
+    {
+        //for updates from earlier version that don't have temp units
+        if (getTempUnit() != 'F' && getTempUnit() != 'C') {
+            setTempUnit('F');
+        }
+    }
     void save();
 
     bool isDay(void);

@@ -4,20 +4,54 @@
 extern ScreenManager screenManager;
 
 Tent::Tent()
+    : sensorTimer { Timer(7013, &Tent::doCheckStats, *this) }
+    , minuteTimer { Timer(60000, &Tent::minutelyTick, *this) }
+    , displayDimTimer { Timer(50000, &Tent::displayLightLow, *this, 1) }
+    , displayOffTimer { Timer(60000, &Tent::displayLightOff, *this, 1) }
 {
     this->growLightStatus = "OFF";
 }
 
-void Tent::begin()
+void Tent::setup()
 {
     Particle.variable("tentTemperatureC", sensors.tentTemperatureC);
     Particle.variable("tentTemperatureF", sensors.tentTemperatureF);
     Particle.variable("tentHumidity", sensors.tentHumidity);
 
-    tp = new Timer(50000, &Tent::displayLightLow, *this, 1);
-    tp1 = new Timer(60000, &Tent::displayLightOff, *this, 1);
+    // Init SHT20 Sensor
+    sht20.initSHT20();
+    delay(255);
+    sht20.checkSHT20();
 
     this->displayLightHigh();
+
+    // was there a grow in process before (re)booting?
+    if (state.getDayCount() > -1) {
+        state.migrate();
+
+        if (state.isDay()) { // was the light on when we restarted?
+            growLight("HIGH");
+        }
+
+        doCheckStats(); // First time right away
+        countMinute(); // after restart
+        start();
+
+    } else {
+        state.init();
+    }
+}
+
+void Tent::start()
+{
+    minuteTimer.start();
+    sensorTimer.start();
+}
+
+void Tent::stop()
+{
+    minuteTimer.stop();
+    sensorTimer.stop();
 }
 
 void Tent::checkTemperature()
@@ -156,8 +190,8 @@ bool Tent::displayLightHigh()
         RGB.brightness(255);
         RGB.control(false);
 
-        tp->start();
-        tp1->start();
+        displayDimTimer.start();
+        displayOffTimer.start();
         return true;
 
     } else {

@@ -5,7 +5,6 @@
 
 extern ScreenManager screenManager;
 extern Tent tent;
-extern Timer minutelyTicker, draw_temp_home;
 
 void CancelConfirmScreen::render()
 {
@@ -40,9 +39,8 @@ void CancelConfirmScreen::handleButton(Button& btn)
 {
     if (btn.getName() == "terminateYesBtn") {
         tent.growLight("OFF");
-        draw_temp_home.stop();
         tent.fan("OFF");
-        minutelyTicker.stop();
+        tent.stop();
 
         tent.state.init();
         screenManager.homeScreen();

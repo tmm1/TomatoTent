@@ -1,7 +1,6 @@
 #include "Particle.h"
 #include <Arduino.h>
 #include "softap_http.h"
-#include "DFRobot_SHT20.h"
 #include "tent.h"
 #include "screen_manager.h"
 #include "assets.h"
@@ -11,13 +10,8 @@ PRODUCT_VERSION(9);
 
 unsigned long dimmerBtnTime = 0;
 
-DFRobot_SHT20 sht20;
-
 Tent tent;
 ScreenManager screenManager;
-
-Timer draw_temp_home(7013, &Tent::doCheckStats, tent);
-Timer minutelyTicker(60000, &Tent::minutelyTick, tent);
 
 SYSTEM_MODE(SEMI_AUTOMATIC);
 
@@ -75,21 +69,23 @@ void myPage(const char* url, ResponseCallback* cb, void* cbArg, Reader* body, Wr
 void setup_handler()
 {
     screenManager.wifiSplashScreen();
-    tent.tp->stop();
-    tent.tp1->stop();
+    tent.stop();
 }
 
 void setup_finished_handler()
 {
-    tent.tp->start();
-    tent.tp1->start();
     screenManager.homeScreen();
+    tent.start();
 }
 
 STARTUP(
     softap_set_application_page_handler(myPage, nullptr);
     pinMode(FAN_SPEED_PIN, OUTPUT);
-    analogWrite(FAN_SPEED_PIN, 255, 25000);)
+    analogWrite(FAN_SPEED_PIN, 255, 25000);
+    pinMode(TFT_BRIGHTNESS_PIN, OUTPUT);
+    pinMode(GROW_LIGHT_BRIGHTNESS_PIN, OUTPUT);
+    pinMode(GROW_LIGHT_ON_OFF_PIN, OUTPUT);
+    pinMode(DIM_PIN, INPUT_PULLUP);)
 
 void setup()
 {
@@ -98,59 +94,18 @@ void setup()
     System.on(setup_begin, setup_handler);
     System.on(setup_end, setup_finished_handler);
 
-    /*SET WIFI 
-        Can remember up to 5 Networks,
-        Set through Particle phone app or here in-code
-        Needs to be set only once then will remember
-    */
     if (WiFi.hasCredentials()) {
         Particle.connect();
     } else {
         WiFi.off();
-        //WiFi.setCredentials("WiFi-YY9V", "");
     }
-    //END SET WIFI
 
     // Time.zone(+8);
 
     screenManager.setup();
-
-    //DISPLAY BRIGHNESS
-    pinMode(TFT_BRIGHTNESS_PIN, OUTPUT);
-    pinMode(GROW_LIGHT_BRIGHTNESS_PIN, OUTPUT);
-    pinMode(GROW_LIGHT_ON_OFF_PIN, OUTPUT);
-    pinMode(DIM_PIN, INPUT_PULLUP);
-    analogWrite(TFT_BRIGHTNESS_PIN, 255);
-
-    // Init SHT20 Sensor
-    sht20.initSHT20();
-    delay(255);
-    sht20.checkSHT20();
-
     screenManager.homeScreen();
-    tent.begin();
-
-    //was there a grow in process before (re)booting?
-    if (tent.state.getDayCount() > -1) {
-
-        if (tent.state.isDay()) { //was the light on when we restarted?
-            tent.growLight("HIGH");
-        }
-
-        tent.doCheckStats(); //First time right away
-        draw_temp_home.start();
-
-        tent.countMinute(); //after restart
-        minutelyTicker.start();
-
-        //for updates from earlier version that don't have temp units
-        if (tent.state.getTempUnit() != 'F' && tent.state.getTempUnit() != 'C') {
-            tent.state.setTempUnit('F');
-        }
-
-    } else {
-        tent.state.init();
-    }
+    analogWrite(TFT_BRIGHTNESS_PIN, 255); // turn on screen
+    tent.setup();
 }
 
 void loop(void)
