@@ -5,7 +5,6 @@
 
 extern ScreenManager screenManager;
 extern Tent tent;
-extern Timer minutelyTicker, draw_temp_home;
 
 void HomeScreen::render()
 {
@@ -224,12 +223,9 @@ void HomeScreen::handleButton(Button& btn)
         delay(3000);
 
         screenManager.homeScreen();
-
-        tent.doCheckStats(); //First time right away
-        draw_temp_home.start();
-
-        tent.countMinute(); // First time on new grow
-        minutelyTicker.start();
+        tent.doCheckStats();
+        tent.countMinute();
+        tent.start();
 
     } else if (btn.getName() == "wifiBtn") {
         screenManager.wifiScreen();

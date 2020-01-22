@@ -13,10 +13,11 @@
 #define TFT_BRIGHTNESS_PIN WKP
 #define DIM_PIN DAC
 
-
 class Tent {
 private:
     DFRobot_SHT20 sht20;
+    Timer sensorTimer, minuteTimer;
+    Timer displayDimTimer, displayOffTimer;
 
     int displayBrightness = 0;
     String growLightStatus;
@@ -26,8 +27,6 @@ public:
     TentState state;
     unsigned long lastTime = 0;
     int dimTimeout = 0;
-    Timer* tp;
-    Timer* tp1;
     bool checkStats;
 
     struct {
@@ -37,7 +36,10 @@ public:
         double waterLevel;
     } sensors;
 
-    void begin();
+    void setup();
+    void start();
+    void stop();
+
     void adjustFan();
     void countMinute();
     void checkTemperature();

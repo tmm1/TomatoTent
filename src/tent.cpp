@@ -2,14 +2,17 @@
 #include "screen_manager.h"
 
 extern ScreenManager screenManager;
-extern Timer minutelyTicker, draw_temp_home;
 
 Tent::Tent()
+    : sensorTimer { Timer(7013, &Tent::doCheckStats, *this) }
+    , minuteTimer { Timer(60000, &Tent::minutelyTick, *this) }
+    , displayDimTimer { Timer(50000, &Tent::displayLightLow, *this, 1) }
+    , displayOffTimer { Timer(60000, &Tent::displayLightOff, *this, 1) }
 {
     this->growLightStatus = "OFF";
 }
 
-void Tent::begin()
+void Tent::setup()
 {
     Particle.variable("tentTemperatureC", sensors.tentTemperatureC);
     Particle.variable("tentTemperatureF", sensors.tentTemperatureF);
@@ -19,9 +22,6 @@ void Tent::begin()
     sht20.initSHT20();
     delay(255);
     sht20.checkSHT20();
-
-    tp = new Timer(50000, &Tent::displayLightLow, *this, 1);
-    tp1 = new Timer(60000, &Tent::displayLightOff, *this, 1);
 
     this->displayLightHigh();
 
@@ -35,12 +35,23 @@ void Tent::begin()
 
         doCheckStats(); // First time right away
         countMinute(); // after restart
-        draw_temp_home.start();
-        minutelyTicker.start();
+        start();
 
     } else {
         state.init();
     }
+}
+
+void Tent::start()
+{
+    minuteTimer.start();
+    sensorTimer.start();
+}
+
+void Tent::stop()
+{
+    minuteTimer.stop();
+    sensorTimer.stop();
 }
 
 void Tent::checkTemperature()
@@ -179,8 +190,8 @@ bool Tent::displayLightHigh()
         RGB.brightness(255);
         RGB.control(false);
 
-        tp->start();
-        tp1->start();
+        displayDimTimer.start();
+        displayOffTimer.start();
         return true;
 
     } else {

@@ -13,9 +13,6 @@ unsigned long dimmerBtnTime = 0;
 Tent tent;
 ScreenManager screenManager;
 
-Timer draw_temp_home(7013, &Tent::doCheckStats, tent);
-Timer minutelyTicker(60000, &Tent::minutelyTick, tent);
-
 SYSTEM_MODE(SEMI_AUTOMATIC);
 
 struct Page {
@@ -72,15 +69,13 @@ void myPage(const char* url, ResponseCallback* cb, void* cbArg, Reader* body, Wr
 void setup_handler()
 {
     screenManager.wifiSplashScreen();
-    tent.tp->stop();
-    tent.tp1->stop();
+    tent.stop();
 }
 
 void setup_finished_handler()
 {
-    tent.tp->start();
-    tent.tp1->start();
     screenManager.homeScreen();
+    tent.start();
 }
 
 STARTUP(
@@ -110,7 +105,7 @@ void setup()
     screenManager.setup();
     screenManager.homeScreen();
     analogWrite(TFT_BRIGHTNESS_PIN, 255); // turn on screen
-    tent.begin();
+    tent.setup();
 }
 
 void loop(void)
