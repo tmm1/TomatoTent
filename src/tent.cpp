@@ -111,6 +111,17 @@ void Tent::checkSensors()
     adjustFan();
 }
 
+void Tent::checkInputs()
+{
+    if (digitalRead(DIM_PIN) == LOW) {
+        unsigned long now = millis();
+        if ((now - lastDimmerBtnTime) >= 1000 || lastDimmerBtnTime == 0) {
+            lastDimmerBtnTime = now;
+            dimGrowLight();
+        }
+    }
+}
+
 int Tent::growLight(String brightness)
 {
     if (brightness == "HIGH") {

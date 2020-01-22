@@ -22,6 +22,7 @@ private:
     int displayBrightness = 0;
     String growLightStatus;
     unsigned long lastDisplayLightTime = 0;
+    unsigned long lastDimmerBtnTime = 0;
 
     bool needsSensorUpdate;
     void markNeedsSensorUpdate();
@@ -46,6 +47,7 @@ public:
     void countMinute();
     void minutelyTick();
 
+    void checkInputs();
     void checkSensors();
     void checkTemperature();
     void checkHumidity();
