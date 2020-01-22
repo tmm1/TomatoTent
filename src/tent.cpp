@@ -66,7 +66,7 @@ void Tent::checkTemperature()
 
     if ((sensors.tentTemperatureC == 0) || (sensors.tentTemperatureC != currentTemp)) {
         sensors.tentTemperatureC = currentTemp;
-        sensors.tentTemperatureF = (currentTemp * 1.8) + 32;
+        sensors.tentTemperatureF = (currentTemp == 0 || currentTemp > 900) ? currentTemp : (currentTemp * 1.8 + 32);
         screenManager.markNeedsRedraw(TEMPERATURE);
     }
 }
@@ -86,7 +86,7 @@ void Tent::checkWaterLevel()
     sht30.update();
     sensors.soilMoisture = sht30.humidity;
     sensors.soilTemperatureC = sht30.temperature;
-    sensors.soilTemperatureF = (sht30.temperature * 1.8) + 32;
+    sensors.soilTemperatureF = (sht30.temperature == 0) ? 0 : (sht30.temperature * 1.8 + 32);
 
     double currentWaterLevel = sensors.soilMoisture;
 
