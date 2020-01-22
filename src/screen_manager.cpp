@@ -10,8 +10,6 @@
 #include "screens/wifi.h"
 
 extern Tent tent;
-extern float fanSpeed;
-extern float fanSpeedPercent;
 
 void ScreenManager::setup()
 {
