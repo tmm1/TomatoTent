@@ -8,8 +8,6 @@
 PRODUCT_ID(10167);
 PRODUCT_VERSION(9);
 
-unsigned long dimmerBtnTime = 0;
-
 Tent tent;
 ScreenManager screenManager;
 
@@ -112,22 +110,8 @@ void loop(void)
 {
     screenManager.tick();
 
-    bool dimmerBtnVal = digitalRead(DIM_PIN);
-    if (dimmerBtnVal == LOW) {
-        unsigned long now = millis();
-        if ((now - dimmerBtnTime) >= 1000 || dimmerBtnTime == 0) {
-            dimmerBtnTime = now;
-            tent.dimGrowLight();
-        }
-    }
-
-    if (tent.getCheckStats()) {
-        tent.checkTemperature();
-        tent.checkHumidity();
-        tent.checkWaterLevel();
-        tent.adjustFan();
-        tent.resetCheckStats();
-    }
+    tent.checkInputs();
+    tent.checkSensors();
 
     if (screenManager.current) {
         screenManager.current->update();

@@ -223,8 +223,6 @@ void HomeScreen::handleButton(Button& btn)
         delay(3000);
 
         screenManager.homeScreen();
-        tent.doCheckStats();
-        tent.countMinute();
         tent.start();
 
     } else if (btn.getName() == "wifiBtn") {

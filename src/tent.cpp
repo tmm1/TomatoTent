@@ -4,7 +4,7 @@
 extern ScreenManager screenManager;
 
 Tent::Tent()
-    : sensorTimer { Timer(7013, &Tent::doCheckStats, *this) }
+    : sensorTimer { Timer(7013, &Tent::markNeedsSensorUpdate, *this) }
     , minuteTimer { Timer(60000, &Tent::minutelyTick, *this) }
     , displayDimTimer { Timer(50000, &Tent::displayLightLow, *this, 1) }
     , displayOffTimer { Timer(60000, &Tent::displayLightOff, *this, 1) }
@@ -38,8 +38,6 @@ void Tent::setup()
             growLight("HIGH");
         }
 
-        doCheckStats(); // First time right away
-        countMinute(); // after restart
         start();
 
     } else {
@@ -51,6 +49,9 @@ void Tent::start()
 {
     minuteTimer.start();
     sensorTimer.start();
+
+    markNeedsSensorUpdate();
+    countMinute();
 }
 
 void Tent::stop()
@@ -102,19 +103,33 @@ void Tent::fan(String fanStatus)
     }
 }
 
-void Tent::doCheckStats()
-{ //checks & draws stats
-    this->checkStats = true;
+void Tent::markNeedsSensorUpdate()
+{
+    needsSensorUpdate = true;
 }
 
-bool Tent::getCheckStats()
+void Tent::checkSensors()
 {
-    return this->checkStats;
+    if (!needsSensorUpdate) {
+        return;
+    }
+    needsSensorUpdate = false;
+
+    checkTemperature();
+    checkHumidity();
+    checkWaterLevel();
+    adjustFan();
 }
 
-void Tent::resetCheckStats()
+void Tent::checkInputs()
 {
-    this->checkStats = false;
+    if (digitalRead(DIM_PIN) == LOW) {
+        unsigned long now = millis();
+        if ((now - lastDimmerBtnTime) >= 1000 || lastDimmerBtnTime == 0) {
+            lastDimmerBtnTime = now;
+            dimGrowLight();
+        }
+    }
 }
 
 int Tent::growLight(String brightness)
@@ -189,8 +204,8 @@ bool Tent::displayLightHigh()
 {
     unsigned long now = millis();
 
-    if ((now - lastTime) >= 15000 || lastTime == 0) {
-        lastTime = now;
+    if ((now - lastDisplayLightTime) >= 15000 || lastDisplayLightTime == 0) {
+        lastDisplayLightTime = now;
 
         while (displayBrightness < 255) {
             displayBrightness += 5;
