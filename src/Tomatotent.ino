@@ -9,9 +9,6 @@
 PRODUCT_ID(10167);
 PRODUCT_VERSION(9);
 
-double temp;
-double hum;
-double waterLevel;
 unsigned long dimmerBtnTime = 0;
 
 DFRobot_SHT20 sht20;
@@ -20,7 +17,7 @@ Tent tent;
 ScreenManager screenManager;
 
 Timer draw_temp_home(7013, &Tent::doCheckStats, tent);
-Timer minutelyTicker(60000, &minutelyTick);
+Timer minutelyTicker(60000, &Tent::minutelyTick, tent);
 
 SYSTEM_MODE(SEMI_AUTOMATIC);
 
@@ -130,13 +127,6 @@ void setup()
     delay(255);
     sht20.checkSHT20();
 
-    //REMOTE FUNCTIONS
-    Particle.variable("temperature", temp);
-    Particle.variable("humidity", hum);
-    //Particle.variable("fanSpeed", fanSpeed);
-
-    //END REMOTE FUNCTIONS
-
     screenManager.homeScreen();
     tent.begin();
 
@@ -163,11 +153,6 @@ void setup()
     }
 }
 
-void minutelyTick()
-{
-    tent.minutelyTick();
-}
-
 void loop(void)
 {
     screenManager.tick();
@@ -182,9 +167,9 @@ void loop(void)
     }
 
     if (tent.getCheckStats()) {
-        tent.check_temperature();
-        tent.check_humidity();
-        // tent.check_waterlevel(); // removed for stand alone controller
+        tent.checkTemperature();
+        tent.checkHumidity();
+        // tent.checkWaterLevel(); // removed for stand alone controller
         tent.adjustFan();
         tent.resetCheckStats();
     }

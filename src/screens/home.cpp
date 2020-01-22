@@ -74,11 +74,15 @@ void HomeScreen::drawTemperature()
     tft.fillRect(50, 60, 141, 25, ILI9341_BLACK);
     tft.setCursor(50, 60);
     tft.setTextColor(ILI9341_GREEN);
+
     tft.setTextSize(3);
+    if (tempUnit == 'F') {
+        tft.print(String::format("%.1f", tent.sensors.tentTemperatureF));
+    } else {
+        tft.print(String::format("%.1f", tent.sensors.tentTemperatureC));
+    }
 
-    tft.print(String::format("%.1f", temp));
     tft.setTextSize(2);
-
     if (tempUnit == 'F') {
         tft.print(" F");
     } else {
@@ -93,7 +97,7 @@ void HomeScreen::drawHumidity()
     tft.setTextColor(ILI9341_PINK);
     tft.setTextSize(3);
 
-    tft.print(String::format("%.1f", hum));
+    tft.print(String::format("%.1f", tent.sensors.tentHumidity));
 
     tft.setTextSize(2);
     tft.print(" %");
@@ -104,8 +108,7 @@ void HomeScreen::drawWaterLevel()
     const float waterLevelBoxHeight = 150;
     const int waterLevelBoxTop = 60;
 
-    int waterLevelHeight = floor((waterLevelBoxHeight / 100) * waterLevel);
-
+    int waterLevelHeight = floor((waterLevelBoxHeight / 100) * tent.sensors.waterLevel);
     int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight) + waterLevelBoxTop - 1;
 
     //icon
