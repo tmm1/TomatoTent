@@ -6,6 +6,9 @@
 extern ScreenManager screenManager;
 extern Tent tent;
 
+const float waterLevelBoxHeight = 140;
+const int waterLevelBoxTop = 60;
+
 void HomeScreen::render()
 {
     tft.fillScreen(ILI9341_BLACK);
@@ -35,7 +38,8 @@ void HomeScreen::render()
         drawDayCounter();
         drawTemperature();
         drawHumidity();
-        drawWaterLevel();
+        drawSoilMoisture();
+        drawSoilTemperature();
         drawTimerStatus();
         drawFanStatus();
 
@@ -56,8 +60,10 @@ void HomeScreen::update()
         drawTemperature();
     if (screenManager.wasNeedsRedraw(HUMIDITY))
         drawHumidity();
-    if (screenManager.wasNeedsRedraw(WATER_LEVEL))
-        drawWaterLevel();
+    if (screenManager.wasNeedsRedraw(SOIL_MOISTURE))
+        drawSoilMoisture();
+    if (screenManager.wasNeedsRedraw(SOIL_TEMPERATURE))
+        drawSoilTemperature();
     if (screenManager.wasNeedsRedraw(FAN))
         drawFanStatus();
     if (screenManager.wasNeedsRedraw(DAY))
@@ -102,11 +108,8 @@ void HomeScreen::drawHumidity()
     tft.print(" %");
 }
 
-void HomeScreen::drawWaterLevel()
+void HomeScreen::drawSoilMoisture()
 {
-    const float waterLevelBoxHeight = 150;
-    const int waterLevelBoxTop = 60;
-
     int waterLevelHeight = floor((waterLevelBoxHeight / 100) * tent.sensors.waterLevel);
     int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight) + waterLevelBoxTop - 1;
 
@@ -121,6 +124,24 @@ void HomeScreen::drawWaterLevel()
 
     //draw current water level
     tft.fillRect(281, waterLevelTop, 23, waterLevelHeight, ILI9341_BLUE);
+}
+
+void HomeScreen::drawSoilTemperature()
+{
+    char tempUnit = tent.state.getTempUnit();
+    float temp = tempUnit == 'F' ? tent.sensors.soilTemperatureF : tent.sensors.soilTemperatureC;
+    int x = 277;
+    int y = waterLevelBoxTop + waterLevelBoxHeight + 6;
+
+    tft.fillRect(x, y, 32, 12, ILI9341_BLACK);
+
+    tft.setCursor(x, y);
+    tft.setTextSize(1);
+    tft.setTextColor(ILI9341_OLIVE);
+    tft.print(String::format("%.1f", temp));
+
+    tft.setCursor(x+27, y);
+    tft.print(String::format("%c", tempUnit));
 }
 
 void HomeScreen::drawTimerStatus()

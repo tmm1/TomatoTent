@@ -19,11 +19,12 @@
 enum redrawMarker {
     TEMPERATURE = 1,
     HUMIDITY = 2,
-    WATER_LEVEL = 4,
+    SOIL_MOISTURE = 4,
     TIMER = 8,
     FAN = 16,
     DAY = 32,
-    DIMMED = 64
+    DIMMED = 64,
+    SOIL_TEMPERATURE = 128
 };
 
 class ScreenManager {

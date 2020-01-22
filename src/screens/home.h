@@ -7,7 +7,8 @@ class HomeScreen : public Screen {
 private:
     void drawTemperature();
     void drawHumidity();
-    void drawWaterLevel();
+    void drawSoilMoisture();
+    void drawSoilTemperature();
     void drawDayCounter();
     void drawTimerStatus();
     void drawClock();

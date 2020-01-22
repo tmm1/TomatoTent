@@ -41,7 +41,7 @@ public:
         double soilTemperatureC;
         double soilTemperatureF;
         double soilMoisture;
-        double waterLevel;
+        int waterLevel;
     } sensors;
 
     void setup();
@@ -56,7 +56,7 @@ public:
     void checkSensors();
     void checkTemperature();
     void checkHumidity();
-    void checkWaterLevel();
+    void checkSoil();
 
     void fan(String fanStatus);
     int growLight(String brightness);
