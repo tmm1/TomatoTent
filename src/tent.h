@@ -4,6 +4,7 @@
 #include "Particle.h"
 #include <Arduino.h>
 #include "DFRobot_SHT20.h"
+#include "libs/SHT30.h"
 #include "tent_state.h"
 
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
@@ -16,6 +17,7 @@
 class Tent {
 private:
     DFRobot_SHT20 sht20;
+    SHT30 sht30;
     Timer sensorTimer, minuteTimer;
     Timer displayDimTimer, displayOffTimer;
 
@@ -33,6 +35,9 @@ public:
         double tentTemperatureC;
         double tentTemperatureF;
         double tentHumidity;
+        double soilTemperatureC;
+        double soilTemperatureF;
+        double soilMoisture;
         double waterLevel;
     } sensors;
 

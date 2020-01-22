@@ -124,7 +124,7 @@ void loop(void)
     if (tent.getCheckStats()) {
         tent.checkTemperature();
         tent.checkHumidity();
-        // tent.checkWaterLevel(); // removed for stand alone controller
+        tent.checkWaterLevel();
         tent.adjustFan();
         tent.resetCheckStats();
     }

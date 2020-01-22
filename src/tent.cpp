@@ -17,11 +17,16 @@ void Tent::setup()
     Particle.variable("tentTemperatureC", sensors.tentTemperatureC);
     Particle.variable("tentTemperatureF", sensors.tentTemperatureF);
     Particle.variable("tentHumidity", sensors.tentHumidity);
+    Particle.variable("soilTemperatureC", sensors.soilTemperatureC);
+    Particle.variable("soilTemperatureF", sensors.soilTemperatureF);
+    Particle.variable("soilMoisture", sensors.soilMoisture);
 
-    // Init SHT20 Sensor
+    // init sensors
     sht20.initSHT20();
     delay(255);
     sht20.checkSHT20();
+    sht30.setAddress(0);
+    sht30.update();
 
     this->displayLightHigh();
 
@@ -77,7 +82,12 @@ void Tent::checkHumidity()
 
 void Tent::checkWaterLevel()
 {
-    double currentWaterLevel = sht20.readHumidity();
+    sht30.update();
+    sensors.soilMoisture = sht30.humidity;
+    sensors.soilTemperatureC = sht30.temperature;
+    sensors.soilTemperatureF = (sht30.temperature * 1.8) + 32;
+
+    double currentWaterLevel = sensors.soilMoisture;
 
     if ((sensors.waterLevel == 0) || (sensors.waterLevel != currentWaterLevel)) {
         sensors.waterLevel = currentWaterLevel;
