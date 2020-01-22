@@ -73,12 +73,14 @@ void FanScreen::handleButton(Button& btn)
         renderButton(buttons[0]);
         renderButton(buttons[1]);
         tent.adjustFan();
+        screenManager.markNeedsRedraw(FAN);
 
     } else if (btn.getName() == "fanManualBtn") {
         tent.state.setFanAutoMode(false);
         renderButton(buttons[0]);
         renderButton(buttons[1]);
         tent.adjustFan();
+        screenManager.markNeedsRedraw(FAN);
 
     } else if (btn.getName() == "fanUpBtn") {
         float fanSpeedPercent = tent.state.getFanSpeed();
@@ -90,6 +92,7 @@ void FanScreen::handleButton(Button& btn)
             fanSpeedPercent += 5;
             tent.state.setFanSpeed(fanSpeedPercent);
             tent.adjustFan();
+            screenManager.markNeedsRedraw(FAN);
         }
 
     } else if (btn.getName() == "fanDownBtn") {
@@ -102,6 +105,7 @@ void FanScreen::handleButton(Button& btn)
             fanSpeedPercent -= 5;
             tent.state.setFanSpeed(fanSpeedPercent);
             tent.adjustFan();
+            screenManager.markNeedsRedraw(FAN);
         }
 
     } else if (btn.getName() == "fanOkBtn") {
