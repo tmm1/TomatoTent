@@ -9,9 +9,6 @@
 PRODUCT_ID(10167);
 PRODUCT_VERSION(9);
 
-double temp;
-double hum;
-double waterLevel;
 unsigned long dimmerBtnTime = 0;
 
 DFRobot_SHT20 sht20;
@@ -129,13 +126,6 @@ void setup()
     sht20.initSHT20();
     delay(255);
     sht20.checkSHT20();
-
-    //REMOTE FUNCTIONS
-    Particle.variable("temperature", temp);
-    Particle.variable("humidity", hum);
-    //Particle.variable("fanSpeed", fanSpeed);
-
-    //END REMOTE FUNCTIONS
 
     screenManager.homeScreen();
     tent.begin();

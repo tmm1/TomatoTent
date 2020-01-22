@@ -14,9 +14,6 @@
 #define DIM_PIN DAC
 
 extern DFRobot_SHT20 sht20;
-extern double temp;
-extern double hum;
-extern double waterLevel;
 
 class Tent {
 private:
@@ -31,6 +28,13 @@ public:
     Timer* tp;
     Timer* tp1;
     bool checkStats;
+
+    struct {
+        double tentTemperatureC;
+        double tentTemperatureF;
+        double tentHumidity;
+        double waterLevel;
+    } sensors;
 
     void begin();
     void adjustFan();

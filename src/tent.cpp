@@ -10,6 +10,10 @@ Tent::Tent()
 
 void Tent::begin()
 {
+    Particle.variable("tentTemperatureC", sensors.tentTemperatureC);
+    Particle.variable("tentTemperatureF", sensors.tentTemperatureF);
+    Particle.variable("tentHumidity", sensors.tentHumidity);
+
     tp = new Timer(50000, &Tent::displayLightLow, *this, 1);
     tp1 = new Timer(60000, &Tent::displayLightOff, *this, 1);
 
@@ -19,14 +23,10 @@ void Tent::begin()
 void Tent::checkTemperature()
 {
     double currentTemp = sht20.readTemperature();
-    char tempUnit = state.getTempUnit();
 
-    if (tempUnit == 'F') {
-        currentTemp = (currentTemp * 1.8) + 32;
-    }
-
-    if ((temp == 0) || (temp != currentTemp)) {
-        temp = currentTemp;
+    if ((sensors.tentTemperatureC == 0) || (sensors.tentTemperatureC != currentTemp)) {
+        sensors.tentTemperatureC = currentTemp;
+        sensors.tentTemperatureF = (currentTemp * 1.8) + 32;
         screenManager.markNeedsRedraw(TEMPERATURE);
     }
 }
@@ -35,8 +35,8 @@ void Tent::checkHumidity()
 {
     double currentHumidity = sht20.readHumidity();
 
-    if ((hum == 0) || (hum != currentHumidity)) {
-        hum = currentHumidity;
+    if ((sensors.tentHumidity == 0) || (sensors.tentHumidity != currentHumidity)) {
+        sensors.tentHumidity = currentHumidity;
         screenManager.markNeedsRedraw(HUMIDITY);
     }
 }
@@ -45,8 +45,8 @@ void Tent::checkWaterLevel()
 {
     double currentWaterLevel = sht20.readHumidity();
 
-    if ((waterLevel == 0) || (waterLevel != currentWaterLevel)) {
-        waterLevel = currentWaterLevel;
+    if ((sensors.waterLevel == 0) || (sensors.waterLevel != currentWaterLevel)) {
+        sensors.waterLevel = currentWaterLevel;
         screenManager.markNeedsRedraw(WATER_LEVEL);
     }
 }
@@ -200,33 +200,29 @@ void Tent::adjustFan()
 
         float fanSpeedPercent = FAN_SPEED_MIN;
         float step = 5;
-        float tempFahrenheit = temp;
-        if (state.getTempUnit() == 'C') {
-            tempFahrenheit = (temp * 1.8) + 32;
-        }
 
-        if (tempFahrenheit > 70 || hum > 40) {
+        if (sensors.tentTemperatureF > 70 || sensors.tentHumidity > 40) {
             fanSpeedPercent += step;
         }
 
-        if (tempFahrenheit > 72 || hum > 50) {
+        if (sensors.tentTemperatureF > 72 || sensors.tentHumidity > 50) {
             fanSpeedPercent += step;
         }
 
-        if (tempFahrenheit > 74 || hum > 60) {
+        if (sensors.tentTemperatureF > 74 || sensors.tentHumidity > 60) {
             fanSpeedPercent += step;
         }
-        if (tempFahrenheit > 76 || hum > 70) {
+        if (sensors.tentTemperatureF > 76 || sensors.tentHumidity > 70) {
             fanSpeedPercent += step;
         }
-        if (tempFahrenheit > 78 || hum > 80) {
+        if (sensors.tentTemperatureF > 78 || sensors.tentHumidity > 80) {
             fanSpeedPercent += step;
         }
-        if (tempFahrenheit > 80 || hum > 90) {
+        if (sensors.tentTemperatureF > 80 || sensors.tentHumidity > 90) {
             fanSpeedPercent += step;
         }
         //for sensor fail
-        if (tempFahrenheit > 200 || hum > 200) {
+        if (sensors.tentTemperatureF > 200 || sensors.tentHumidity > 200) {
             fanSpeedPercent = FAN_SPEED_MIN + 15;
         }
 
