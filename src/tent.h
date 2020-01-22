@@ -21,11 +21,11 @@ private:
 
     int displayBrightness = 0;
     String growLightStatus;
+    unsigned long lastDisplayLightTime = 0;
 
 public:
     Tent();
     TentState state;
-    unsigned long lastTime = 0;
     int dimTimeout = 0;
     bool checkStats;
 
