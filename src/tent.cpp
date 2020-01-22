@@ -2,6 +2,7 @@
 #include "screen_manager.h"
 
 extern ScreenManager screenManager;
+extern Timer minutelyTicker, draw_temp_home;
 
 Tent::Tent()
 {
@@ -14,10 +15,32 @@ void Tent::begin()
     Particle.variable("tentTemperatureF", sensors.tentTemperatureF);
     Particle.variable("tentHumidity", sensors.tentHumidity);
 
+    // Init SHT20 Sensor
+    sht20.initSHT20();
+    delay(255);
+    sht20.checkSHT20();
+
     tp = new Timer(50000, &Tent::displayLightLow, *this, 1);
     tp1 = new Timer(60000, &Tent::displayLightOff, *this, 1);
 
     this->displayLightHigh();
+
+    // was there a grow in process before (re)booting?
+    if (state.getDayCount() > -1) {
+        state.migrate();
+
+        if (state.isDay()) { // was the light on when we restarted?
+            growLight("HIGH");
+        }
+
+        doCheckStats(); // First time right away
+        countMinute(); // after restart
+        draw_temp_home.start();
+        minutelyTicker.start();
+
+    } else {
+        state.init();
+    }
 }
 
 void Tent::checkTemperature()

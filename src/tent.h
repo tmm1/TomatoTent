@@ -13,10 +13,11 @@
 #define TFT_BRIGHTNESS_PIN WKP
 #define DIM_PIN DAC
 
-extern DFRobot_SHT20 sht20;
 
 class Tent {
 private:
+    DFRobot_SHT20 sht20;
+
     int displayBrightness = 0;
     String growLightStatus;
 
