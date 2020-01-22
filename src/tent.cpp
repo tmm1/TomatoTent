@@ -17,11 +17,16 @@ void Tent::setup()
     Particle.variable("tentTemperatureC", sensors.tentTemperatureC);
     Particle.variable("tentTemperatureF", sensors.tentTemperatureF);
     Particle.variable("tentHumidity", sensors.tentHumidity);
+    Particle.variable("soilTemperatureC", sensors.soilTemperatureC);
+    Particle.variable("soilTemperatureF", sensors.soilTemperatureF);
+    Particle.variable("soilMoisture", sensors.soilMoisture);
 
-    // Init SHT20 Sensor
+    // init sensors
     sht20.initSHT20();
     delay(255);
     sht20.checkSHT20();
+    sht30.setAddress(0);
+    sht30.update();
 
     this->displayLightHigh();
 
@@ -61,7 +66,7 @@ void Tent::checkTemperature()
 
     if ((sensors.tentTemperatureC == 0) || (sensors.tentTemperatureC != currentTemp)) {
         sensors.tentTemperatureC = currentTemp;
-        sensors.tentTemperatureF = (currentTemp * 1.8) + 32;
+        sensors.tentTemperatureF = (currentTemp == 0 || currentTemp > 900) ? currentTemp : (currentTemp * 1.8 + 32);
         screenManager.markNeedsRedraw(TEMPERATURE);
     }
 }
@@ -76,13 +81,24 @@ void Tent::checkHumidity()
     }
 }
 
-void Tent::checkWaterLevel()
+void Tent::checkSoil()
 {
-    double currentWaterLevel = sht20.readHumidity();
+    sht30.update();
 
-    if ((sensors.waterLevel == 0) || (sensors.waterLevel != currentWaterLevel)) {
-        sensors.waterLevel = currentWaterLevel;
-        screenManager.markNeedsRedraw(WATER_LEVEL);
+    double moisture = sht30.humidity;
+    double temperature = sht30.temperature;
+    int waterLevel = (int)moisture;
+
+    sensors.soilMoisture = moisture;
+    if ((sensors.waterLevel == 0) || (sensors.waterLevel != waterLevel)) {
+        sensors.waterLevel = waterLevel;
+        screenManager.markNeedsRedraw(SOIL_MOISTURE);
+    }
+
+    if ((sensors.soilTemperatureC == 0) || (sensors.soilTemperatureC != temperature)) {
+        sensors.soilTemperatureC = sht30.temperature;
+        sensors.soilTemperatureF = (sht30.temperature == 0) ? 0 : (sht30.temperature * 1.8 + 32);
+        screenManager.markNeedsRedraw(SOIL_TEMPERATURE);
     }
 }
 
@@ -107,7 +123,7 @@ void Tent::checkSensors()
 
     checkTemperature();
     checkHumidity();
-    //checkWaterLevel();
+    checkSoil();
     adjustFan();
 }
 
