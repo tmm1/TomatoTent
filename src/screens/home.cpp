@@ -38,6 +38,7 @@ void HomeScreen::render()
         drawDayCounter();
         drawTemperature();
         drawHumidity();
+        drawSoilMoistureMeter();
         drawSoilMoisture();
         drawSoilTemperature();
         drawTimerStatus();
@@ -100,16 +101,19 @@ void HomeScreen::drawHumidity()
     tft.print(" %");
 }
 
-void HomeScreen::drawSoilMoisture()
+void HomeScreen::drawSoilMoistureMeter()
 {
-    int waterLevelHeight = floor((waterLevelBoxHeight / 100) * tent.sensors.waterLevel);
-    int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight) + waterLevelBoxTop - 1;
-
     //icon
     tft.drawBitmap(280, 30, iconWateringCan_24x24, 24, 24, ILI9341_GREEN);
 
     //outside box
     tft.drawRect(280, waterLevelBoxTop, 25, waterLevelBoxHeight, ILI9341_DARKGREY);
+}
+
+void HomeScreen::drawSoilMoisture()
+{
+    int waterLevelHeight = floor((waterLevelBoxHeight / 100) * tent.sensors.waterLevel);
+    int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight) + waterLevelBoxTop - 1;
 
     //reset the box
     tft.fillRect(281, waterLevelBoxTop + 1, 23, waterLevelBoxHeight - 2, ILI9341_BLACK);
