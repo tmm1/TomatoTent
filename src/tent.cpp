@@ -130,11 +130,23 @@ void Tent::checkSensors()
 void Tent::checkInputs()
 {
     if (digitalRead(DIM_PIN) == LOW) {
-        unsigned long now = millis();
-        if ((now - lastDimmerBtnTime) >= 1000 || lastDimmerBtnTime == 0) {
-            lastDimmerBtnTime = now;
-            dimGrowLight();
-        }
+        displayLightHigh();
+        dimmerBtnPressed = true;
+        return;
+    } else if (!dimmerBtnPressed) {
+        return;
+    }
+
+    unsigned long now = millis();
+    unsigned long diff = now - lastDimmerBtnTime;
+
+    lastDimmerBtnTime = now;
+    dimmerBtnPressed = false;
+
+    if (diff <= 300 && growLightStatus == "LOW") {
+        muteGrowLight();
+    } else {
+        dimGrowLight();
     }
 }
 
@@ -143,17 +155,21 @@ int Tent::growLight(String brightness)
     if (brightness == "HIGH") {
         analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 255, 25000);
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
-        this->growLightStatus = "HIGH";
+        growLightStatus = brightness;
 
     } else if (brightness == "LOW") {
         analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 20, 25000);
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
-        this->growLightStatus = "LOW";
-        this->dimTimeout = 15;
+        growLightStatus = brightness;
+        dimTimeout = 15;
+
+    } else if (brightness == "MUTE") {
+        digitalWrite(GROW_LIGHT_ON_OFF_PIN, LOW);
+        growLightStatus = brightness;
 
     } else if (brightness == "OFF") {
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, LOW);
-        this->growLightStatus = "OFF";
+        growLightStatus = brightness;
     }
 
     return 1;
@@ -179,12 +195,19 @@ void Tent::minutelyTick()
 
 void Tent::dimGrowLight()
 {
-    this->displayLightHigh();
+    if (growLightStatus == "HIGH") {
+        growLight("LOW");
+    } else if (growLightStatus == "LOW" || growLightStatus == "MUTE") {
+        growLight("HIGH");
+    }
 
-    if (this->growLightStatus == "HIGH") {
-        this->growLight("LOW");
-    } else if (this->growLightStatus == "LOW") {
-        this->growLight("HIGH");
+    screenManager.markNeedsRedraw(DIMMED);
+}
+
+void Tent::muteGrowLight()
+{
+    if (growLightStatus != "MUTE") {
+        growLight("MUTE");
     }
 
     screenManager.markNeedsRedraw(DIMMED);
