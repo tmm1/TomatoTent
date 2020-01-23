@@ -6,7 +6,7 @@
 #include "assets.h"
 
 PRODUCT_ID(10167);
-PRODUCT_VERSION(9);
+PRODUCT_VERSION(10);
 
 Tent tent;
 ScreenManager screenManager;
