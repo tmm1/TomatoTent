@@ -62,7 +62,7 @@ void Tent::stop()
 
 void Tent::checkTemperature()
 {
-    double currentTemp = sht20.readTemperature();
+    double currentTemp = (int)(sht20.readTemperature() * 10) / 10.0;
 
     if ((sensors.tentTemperatureC == 0) || (sensors.tentTemperatureC != currentTemp)) {
         sensors.tentTemperatureC = currentTemp;
@@ -73,7 +73,7 @@ void Tent::checkTemperature()
 
 void Tent::checkHumidity()
 {
-    double currentHumidity = sht20.readHumidity();
+    double currentHumidity = (int)(sht20.readHumidity() * 10) / 10.0;
 
     if ((sensors.tentHumidity == 0) || (sensors.tentHumidity != currentHumidity)) {
         sensors.tentHumidity = currentHumidity;
@@ -85,8 +85,8 @@ void Tent::checkSoil()
 {
     sht30.update();
 
-    double moisture = sht30.humidity;
-    double temperature = sht30.temperature;
+    double moisture = (int)(sht30.humidity * 10) / 10.0;
+    double temperature = (int)(sht30.temperature * 10) / 10.0;
     int waterLevel = (int)moisture;
 
     sensors.soilMoisture = moisture;
@@ -96,8 +96,8 @@ void Tent::checkSoil()
     }
 
     if ((sensors.soilTemperatureC == 0) || (sensors.soilTemperatureC != temperature)) {
-        sensors.soilTemperatureC = sht30.temperature;
-        sensors.soilTemperatureF = (sht30.temperature == 0) ? 0 : (sht30.temperature * 1.8 + 32);
+        sensors.soilTemperatureC = temperature;
+        sensors.soilTemperatureF = (temperature == 0) ? 0 : (temperature * 1.8 + 32);
         screenManager.markNeedsRedraw(SOIL_TEMPERATURE);
     }
 }
