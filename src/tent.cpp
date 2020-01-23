@@ -6,8 +6,8 @@ extern ScreenManager screenManager;
 Tent::Tent()
     : sensorTimer { Timer(7013, &Tent::markNeedsSensorUpdate, *this) }
     , minuteTimer { Timer(60000, &Tent::minutelyTick, *this) }
-    , displayDimTimer { Timer(50000, &Tent::displayLightLow, *this, 1) }
-    , displayOffTimer { Timer(60000, &Tent::displayLightOff, *this, 1) }
+    , displayDimTimer { Timer(300000, &Tent::displayLightLow, *this, 1) }
+    , displayOffTimer { Timer(120000, &Tent::displayLightOff, *this, 1) }
 {
     this->growLightStatus = "OFF";
 }
