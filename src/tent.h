@@ -32,6 +32,8 @@ private:
 
     void dimGrowLight();
     void muteGrowLight();
+    void fadeGrowLight(String mode, int percent);
+
     void displayLightLow();
     void displayLightOff();
 
