@@ -195,9 +195,11 @@ void Tent::minutelyTick()
 
 void Tent::fadeGrowLight(String mode, int percent)
 {
-    int brightness = 20 + (235 * percent / 100);
-    if (mode == "SUNSET") {
-        brightness = 255 - brightness;
+    int brightness = 128;
+    if (mode == "SUNRISE") {
+        brightness = 20 + (235 * percent / 100);
+    } else if (mode == "SUNSET") {
+        brightness = 255 - (235 * percent / 100);
     }
     analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, brightness, 25000);
     digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
