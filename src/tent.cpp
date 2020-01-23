@@ -6,8 +6,8 @@ extern ScreenManager screenManager;
 Tent::Tent()
     : sensorTimer { Timer(7013, &Tent::markNeedsSensorUpdate, *this) }
     , minuteTimer { Timer(60000, &Tent::minutelyTick, *this) }
-    , displayDimTimer { Timer(300000, &Tent::displayLightLow, *this, 1) }
-    , displayOffTimer { Timer(120000, &Tent::displayLightOff, *this, 1) }
+    , displayDimTimer { Timer(120000, &Tent::displayLightLow, *this, true) }
+    , displayOffTimer { Timer(300000, &Tent::displayLightOff, *this, true) }
 {
     this->growLightStatus = "OFF";
 }
@@ -28,7 +28,7 @@ void Tent::setup()
     sht30.setAddress(0);
     sht30.update();
 
-    this->displayLightHigh();
+    displayLightHigh();
 
     // was there a grow in process before (re)booting?
     if (state.getDayCount() > -1) {
