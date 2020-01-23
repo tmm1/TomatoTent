@@ -10,8 +10,8 @@ bool SHT30::setAddress(int a0)
     Wire.beginTransmission(address);
     byte status = Wire.endTransmission();
     if (status != 0) {
-        return false;
         Serial.println("Init failed");
+        return false;
     }
 }
 
