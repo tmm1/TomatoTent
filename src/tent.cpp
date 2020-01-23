@@ -262,15 +262,16 @@ void Tent::countMinute()
             growLight("OFF");
             state.setIsDay(false);
             state.setMinutesInPhotoperiod(0);
+            screenManager.markNeedsRedraw(DAY);
         }
 
     } else {
         if (state.getMinutesInPhotoperiod() > ((24 * 60) - state.getDayDuration())) { //night is over
             state.setDayCount(state.getDayCount() + 1);
-            screenManager.markNeedsRedraw(DAY);
             growLight("HIGH");
             state.setIsDay(true);
             state.setMinutesInPhotoperiod(0);
+            screenManager.markNeedsRedraw(DAY);
         }
     }
 
