@@ -84,7 +84,7 @@ void Screen::drawFanStatus()
 void Screen::update()
 {
     if (screenManager.wasNeedsRedraw(DIMMED)) {
-        if (tent.getGrowLightStatus() == "LOW") {
+        if (tent.getGrowLightStatus() == "LOW" || tent.getGrowLightStatus() == "MUTE") {
             drawDimmedIndicator();
         } else {
             hideDimmedIndicator();
@@ -99,7 +99,12 @@ void Screen::drawDimmedIndicator()
     tft.setCursor(120, 222);
     tft.setTextColor(ILI9341_WHITE);
     tft.setTextSize(2);
-    tft.print("Dimmed (" + String(tent.dimTimeout) + "m)");
+
+    if (tent.getGrowLightStatus() == "LOW") {
+        tft.print("Dimmed (" + String(tent.dimTimeout) + "m)");
+    } else {
+        tft.print("Lights Off");
+    }
 
     tft.drawBitmap(97, 222, iconBulb_16x16, 16, 16, ILI9341_WHITE);
 }

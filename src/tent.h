@@ -24,10 +24,16 @@ private:
     int displayBrightness = 0;
     String growLightStatus;
     unsigned long lastDisplayLightTime = 0;
+    bool dimmerBtnPressed = false;
     unsigned long lastDimmerBtnTime = 0;
 
     bool needsSensorUpdate;
     void markNeedsSensorUpdate();
+
+    void dimGrowLight();
+    void muteGrowLight();
+    void displayLightLow();
+    void displayLightOff();
 
 public:
     Tent();
@@ -61,9 +67,6 @@ public:
     void fan(String fanStatus);
     int growLight(String brightness);
     String getGrowLightStatus();
-    void dimGrowLight();
-    void displayLightLow();
-    void displayLightOff();
     bool displayLightHigh();
 };
 #endif
