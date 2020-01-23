@@ -126,13 +126,17 @@ void HomeScreen::drawSoilTemperature()
 {
     char tempUnit = tent.state.getTempUnit();
     float temp = tempUnit == 'F' ? tent.sensors.soilTemperatureF : tent.sensors.soilTemperatureC;
-    int x = 276;
+    int x = 272;
     int y = waterLevelBoxTop + waterLevelBoxHeight + 6;
 
     tft.fillRect(x, y, 320-x, 12, ILI9341_BLACK);
 
     if (temp == 0) {
         return;
+    }
+
+    if (temp < 100) {
+        x += 4;
     }
 
     tft.setCursor(x, y);
