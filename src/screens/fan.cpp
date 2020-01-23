@@ -21,7 +21,7 @@ void FanScreen::render()
     buttons.push_back(Button("fanManualBtn", 20, 115, 150, 38, "Manual", 40, 11));
     buttons.push_back(Button("fanUpBtn", 240, 50, 40, 40, "", 0, 0));
     buttons.push_back(Button("fanDownBtn", 240, 110, 40, 40, "", 0, 0));
-    buttons.push_back(Button("fanOkBtn", 20, 180, 250, 38, "Ok", 110, 8));
+    buttons.push_back(Button("fanOkBtn", 20, 170, 250, 38, "Ok", 110, 8));
 
     renderButtons(true);
     drawFanStatus();

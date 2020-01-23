@@ -322,5 +322,4 @@ void Tent::adjustFan()
             screenManager.markNeedsRedraw(FAN);
         }
     }
-
 }
