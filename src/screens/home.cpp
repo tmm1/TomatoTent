@@ -129,7 +129,7 @@ void HomeScreen::drawSoilTemperature()
     int x = 272;
     int y = waterLevelBoxTop + waterLevelBoxHeight + 6;
 
-    tft.fillRect(x, y, 320-x, 12, ILI9341_BLACK);
+    tft.fillRect(x, y, 320 - x, 12, ILI9341_BLACK);
 
     if (temp == 0) {
         return;
