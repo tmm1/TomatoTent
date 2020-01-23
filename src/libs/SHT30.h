@@ -16,5 +16,7 @@ public:
 private:
     int address = 0x44;
     int buffer[6] = { 0, 0, 0, 0, 0, 0 };
+
+    bool crc8(uint8_t msb, uint8_t lsb, uint8_t crc);
 };
 #endif
