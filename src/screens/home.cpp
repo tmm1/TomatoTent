@@ -126,18 +126,15 @@ void HomeScreen::drawSoilTemperature()
 {
     char tempUnit = tent.state.getTempUnit();
     float temp = tempUnit == 'F' ? tent.sensors.soilTemperatureF : tent.sensors.soilTemperatureC;
-    int x = 277;
+    int x = 276;
     int y = waterLevelBoxTop + waterLevelBoxHeight + 6;
 
-    tft.fillRect(x, y, 32, 12, ILI9341_BLACK);
+    tft.fillRect(x, y, 320-x, 12, ILI9341_BLACK);
 
     tft.setCursor(x, y);
     tft.setTextSize(1);
     tft.setTextColor(ILI9341_OLIVE);
-    tft.print(String::format("%.1f", temp));
-
-    tft.setCursor(x + 27, y);
-    tft.print(String::format("%c", tempUnit));
+    tft.print(String::format("%.1f %c", temp, tempUnit));
 }
 
 void HomeScreen::drawTimerStatus()
