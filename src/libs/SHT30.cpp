@@ -18,8 +18,8 @@ bool SHT30::setAddress(int a0)
 bool SHT30::update()
 {
     Wire.beginTransmission(address);
-    Wire.write(0x27);
-    Wire.write(0x37);
+    Wire.write(0x2c);
+    Wire.write(0x06);
     byte status = Wire.endTransmission();
     if (status != 0) {
         return false;
@@ -34,7 +34,7 @@ bool SHT30::update()
     buffer[3] = Wire.read();
     buffer[4] = Wire.read();
     buffer[5] = Wire.read();
-    temperature = (buffer[0] * 256 + buffer[1]) * 0.00267 - 45;
-    humidity = (buffer[3] * 256 + buffer[4]) * 0.001526;
+    temperature = (buffer[0] * 256 + buffer[1]) * 0.00267033 - 45;
+    humidity = (buffer[3] * 256 + buffer[4]) * 0.0015259;
     return true;
 }
