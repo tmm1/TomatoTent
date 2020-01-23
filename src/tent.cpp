@@ -50,6 +50,7 @@ void Tent::start()
     minuteTimer.start();
     sensorTimer.start();
 
+    fan("ON");
     markNeedsSensorUpdate();
     countMinute();
 }
@@ -106,6 +107,9 @@ void Tent::fan(String fanStatus)
 {
     if (fanStatus == "OFF") {
         analogWrite(FAN_SPEED_PIN, 255, 25000);
+    } else {
+        int fanSpeed = map(state.getFanSpeed(), 0.0, 100.0, 0.0, 255.0);
+        analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
     }
 }
 
@@ -282,8 +286,7 @@ void Tent::adjustFan()
 {
     if (!state.getFanAutoMode()) { //manual
 
-        int fanSpeed = map(state.getFanSpeed(), 0.0, 100.0, 0.0, 255.0);
-        analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
+        fan("ON");
 
     } else {
 
@@ -317,9 +320,7 @@ void Tent::adjustFan()
 
         if (fanSpeedPercent != state.getFanSpeed()) {
             state.setFanSpeed(fanSpeedPercent);
-            int fanSpeed = map(fanSpeedPercent, 0.0, 100.0, 0.0, 255.0);
-            analogWrite(FAN_SPEED_PIN, 255 - fanSpeed, 25000);
-
+            fan("ON");
             screenManager.markNeedsRedraw(FAN);
         }
     }
