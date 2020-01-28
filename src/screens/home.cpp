@@ -55,6 +55,10 @@ void HomeScreen::render()
 
 void HomeScreen::update()
 {
+    if (tent.state.getDayCount() == -1) {
+        return;
+    }
+
     if (screenManager.wasNeedsRedraw(TIMER))
         drawTimerStatus();
     if (screenManager.wasNeedsRedraw(TEMPERATURE))
