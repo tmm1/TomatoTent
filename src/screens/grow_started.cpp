@@ -15,3 +15,8 @@ void GrowStartedScreen::render()
 
     tft.drawBitmap(124, 160, plant_filled_72x72, 72, 72, ILI9341_WHITE);
 }
+
+void GrowStartedScreen::update()
+{
+    // override to prevent dimmer overlays
+}
