@@ -278,7 +278,7 @@ void Tent::countMinute()
     int nightDuration = (24 * 60) - dayDuration;
 
     if (state.isDay()) {
-        if (minutesInPeriod >= dayDuration) { //day is over
+        if (minutesInPeriod > dayDuration) { //day is over
             growLight("OFF");
             state.setIsDay(false);
             state.setMinutesInPhotoperiod(0);
