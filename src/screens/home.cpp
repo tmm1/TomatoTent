@@ -55,6 +55,10 @@ void HomeScreen::render()
 
 void HomeScreen::update()
 {
+    if (tent.state.getDayCount() == -1) {
+        return;
+    }
+
     if (screenManager.wasNeedsRedraw(TIMER))
         drawTimerStatus();
     if (screenManager.wasNeedsRedraw(TEMPERATURE))
@@ -131,7 +135,7 @@ void HomeScreen::drawSoilTemperature()
 
     tft.fillRect(x, y, 320 - x, 12, ILI9341_BLACK);
 
-    if (temp == 0) {
+    if (temp == 0 || temp > 900) {
         return;
     }
 

@@ -11,10 +11,11 @@
 #include "Adafruit_ILI9341.h"
 #include "Adafruit_mfGFX.h"
 
-#define CS_PIN D5
+#define TCS_PIN D5
 #define TIRQ_PIN A0
 #define TFT_DC A1
 #define TFT_CS A2
+#define TFT_RST D6
 
 enum redrawMarker {
     TEMPERATURE = 1,
@@ -32,10 +33,10 @@ private:
     int redrawMarkers;
     void render();
 
-    XPT2046_Touchscreen ts = XPT2046_Touchscreen(SPI1, 320, 240, CS_PIN, TIRQ_PIN);
+    XPT2046_Touchscreen ts = XPT2046_Touchscreen(SPI1, 320, 240, TCS_PIN, TIRQ_PIN);
 
 public:
-    Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, D6);
+    Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST);
     std::unique_ptr<Screen> current = std::make_unique<HomeScreen>();
 
     void setup();
