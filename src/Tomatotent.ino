@@ -102,7 +102,6 @@ void setup()
 
     screenManager.setup();
     screenManager.homeScreen();
-    analogWrite(TFT_BRIGHTNESS_PIN, 255); // turn on screen
     tent.setup();
 }
 
