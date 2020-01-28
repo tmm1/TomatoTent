@@ -97,7 +97,7 @@ void Tent::checkSoil()
 
     if ((sensors.soilTemperatureC == 0) || (sensors.soilTemperatureC != temperature)) {
         sensors.soilTemperatureC = temperature;
-        sensors.soilTemperatureF = (temperature == 0) ? 0 : (temperature * 1.8 + 32);
+        sensors.soilTemperatureF = (temperature == 0 || temperature > 900) ? temperature : (temperature * 1.8 + 32);
         screenManager.markNeedsRedraw(SOIL_TEMPERATURE);
     }
 }
