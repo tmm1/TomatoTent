@@ -197,6 +197,18 @@ void Tent::minutelyTick()
     countMinute();
 }
 
+void Tent::fadeGrowLight(String mode, int percent)
+{
+    int brightness = 128;
+    if (mode == "SUNRISE") {
+        brightness = 20 + (235 * percent / 100);
+    } else if (mode == "SUNSET") {
+        brightness = 255 - (235 * percent / 100);
+    }
+    analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, brightness, 25000);
+    digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
+}
+
 void Tent::dimGrowLight()
 {
     if (growLightStatus == "HIGH") {
@@ -261,21 +273,35 @@ void Tent::countMinute()
 {
     state.setMinutesInPhotoperiod(state.getMinutesInPhotoperiod() + 1);
 
+    int minutesInPeriod = state.getMinutesInPhotoperiod();
+    int dayDuration = state.getDayDuration();
+    int nightDuration = (24 * 60) - dayDuration;
+
     if (state.isDay()) {
-        if (state.getMinutesInPhotoperiod() >= state.getDayDuration()) { //day is over
+        if (minutesInPeriod > dayDuration) { //day is over
             growLight("OFF");
             state.setIsDay(false);
             state.setMinutesInPhotoperiod(0);
             screenManager.markNeedsRedraw(DAY);
+
+        } else if (minutesInPeriod >= dayDuration - 10) { //day is ending
+            if (growLightStatus == "HIGH") {
+                fadeGrowLight("SUNSET", (10 - (dayDuration - minutesInPeriod)) * 10);
+            }
         }
 
     } else {
-        if (state.getMinutesInPhotoperiod() > ((24 * 60) - state.getDayDuration())) { //night is over
+        if (minutesInPeriod > nightDuration) { //night is over
             state.setDayCount(state.getDayCount() + 1);
             growLight("HIGH");
             state.setIsDay(true);
             state.setMinutesInPhotoperiod(0);
             screenManager.markNeedsRedraw(DAY);
+
+        } else if (minutesInPeriod >= nightDuration - 10) { //night is ending
+            if (growLightStatus == "OFF") {
+                fadeGrowLight("SUNRISE", (10 - (nightDuration - minutesInPeriod)) * 10);
+            }
         }
     }
 
