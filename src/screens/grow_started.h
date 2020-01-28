@@ -10,5 +10,6 @@ public:
     void renderButton(Button& btn) {}
     void renderButtonPressed(Button& btn) {}
     void handleButton(Button& btn) {}
+    void update();
 };
 #endif

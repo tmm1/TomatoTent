@@ -6,7 +6,7 @@
 #include "assets.h"
 
 PRODUCT_ID(10167);
-PRODUCT_VERSION(9);
+PRODUCT_VERSION(11);
 
 Tent tent;
 ScreenManager screenManager;
@@ -102,7 +102,6 @@ void setup()
 
     screenManager.setup();
     screenManager.homeScreen();
-    analogWrite(TFT_BRIGHTNESS_PIN, 255); // turn on screen
     tent.setup();
 }
 

@@ -10,20 +10,22 @@ bool SHT30::setAddress(int a0)
     Wire.beginTransmission(address);
     byte status = Wire.endTransmission();
     if (status != 0) {
-        return false;
         Serial.println("Init failed");
+        return false;
     }
 }
 
 bool SHT30::update()
 {
     Wire.beginTransmission(address);
-    Wire.write(0x27);
-    Wire.write(0x37);
+    Wire.write(0x2c);
+    Wire.write(0x06);
     byte status = Wire.endTransmission();
     if (status != 0) {
-        return false;
+        temperature = 998;
+        humidity = 0;
         Serial.println("Sensor did not respond to update call");
+        return false;
     }
     delay(10);
     Wire.requestFrom(address, 6);
@@ -34,7 +36,31 @@ bool SHT30::update()
     buffer[3] = Wire.read();
     buffer[4] = Wire.read();
     buffer[5] = Wire.read();
-    temperature = (buffer[0] * 256 + buffer[1]) * 0.00267 - 45;
-    humidity = (buffer[3] * 256 + buffer[4]) * 0.001526;
+    if (crc8(buffer[0], buffer[1], buffer[2])) {
+        temperature = (buffer[0] * 256 + buffer[1]) * 0.00267033 - 45;
+    } else {
+        temperature = 997;
+    }
+    if (crc8(buffer[3], buffer[4], buffer[5])) {
+        humidity = (buffer[3] * 256 + buffer[4]) * 0.0015259;
+    } else {
+        humidity = 0;
+    }
     return true;
+}
+
+bool SHT30::crc8(uint8_t msb, uint8_t lsb, uint8_t crc)
+{
+    uint8_t computed = 0xFF;
+    uint8_t i;
+
+    computed ^= msb;
+    for (i = 0; i < 8; i++)
+        computed = computed & 0x80 ? (computed << 1) ^ 0x31 : computed << 1;
+
+    computed ^= lsb;
+    for (i = 0; i < 8; i++)
+        computed = computed & 0x80 ? (computed << 1) ^ 0x31 : computed << 1;
+
+    return crc == computed;
 }
