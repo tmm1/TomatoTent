@@ -9,10 +9,9 @@ class Button {
     String currentStatus;
 
 public:
-    uint16_t x0;
-    uint16_t y0;
-    uint16_t w;
-    uint16_t h;
+    uint16_t x0, x1;
+    uint16_t y0, y1;
+    uint16_t w, h;
     String buttonText;
     uint16_t textOffsetLeft;
     uint16_t textOffsetTop;
