@@ -5,14 +5,34 @@
 
 extern ScreenManager screenManager;
 extern Tent tent;
+extern uint16_t __system_product_version;
 
 void WifiScreen::render()
 {
     tft.fillScreen(ILI9341_BLACK);
 
-    buttons.push_back(Button("wifiOnBtn", 20, 40, 250, 38, "On", 110, 8));
-    buttons.push_back(Button("wifiOffBtn", 20, 100, 250, 38, "Off", 110, 8));
-    buttons.push_back(Button("wifiOkBtn", 20, 180, 250, 38, "Ok", 110, 8));
+    tft.drawBitmap(20, 14, iconWifi_24x24, 24, 24, ILI9341_WHITE);
+
+    tft.setCursor(60, 18);
+    tft.setTextColor(ILI9341_GREEN);
+    tft.setTextSize(2);
+    tft.print("WiFi");
+
+    tft.setCursor(60, 38);
+    tft.setTextSize(1);
+    if (WiFi.ready())
+        tft.print(String::format("Connected: %s (%d%%)", WiFi.SSID(), (int)WiFi.RSSI().getStrength()));
+    else
+        tft.print("Disconnected");
+
+    tft.setCursor(60, 52);
+    tft.setTextColor(ILI9341_LIGHTGREY);
+    tft.setTextSize(1);
+    tft.print(String::format("TomatoTent v%d", __system_product_version));
+
+    buttons.push_back(Button("wifiOnBtn", 30, 100, 125, 38, "On", 50, 8));
+    buttons.push_back(Button("wifiOffBtn", 160, 100, 125, 38, "Off", 40, 8));
+    buttons.push_back(Button("wifiOkBtn", 30, 160, 255, 38, "Back", 100, 8));
 
     renderButtons(true);
 }
@@ -20,10 +40,10 @@ void WifiScreen::render()
 void WifiScreen::renderButton(Button& btn)
 {
     if (btn.getName() == "wifiOnBtn") {
-        drawButton(btn, ILI9341_OLIVE, 3);
+        drawButton(btn, WiFi.ready() ? ILI9341_OLIVE : ILI9341_BLACK, 3);
 
     } else if (btn.getName() == "wifiOffBtn") {
-        drawButton(btn, ILI9341_OLIVE, 3);
+        drawButton(btn, !WiFi.ready() ? ILI9341_OLIVE : ILI9341_BLACK, 3);
 
     } else if (btn.getName() == "wifiOkBtn") {
         drawButton(btn, ILI9341_OLIVE, 3);
