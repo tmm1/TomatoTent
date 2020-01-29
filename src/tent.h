@@ -3,7 +3,7 @@
 
 #include "Particle.h"
 #include <Arduino.h>
-#include "DFRobot_SHT20.h"
+#include "libs/DFRobot_SHT20.h"
 #include "libs/SHT30.h"
 #include "tent_state.h"
 
