@@ -14,6 +14,8 @@ private:
     void drawTimerStatus();
     void drawClock();
 
+    bool wifiReady;
+
 public:
     String getName() { return "homeScreen"; }
     void render();

@@ -6,14 +6,14 @@
 extern ScreenManager screenManager;
 extern Tent tent;
 
-const float waterLevelBoxHeight = 140;
-const int waterLevelBoxTop = 60;
+const float waterLevelBoxHeight = 120;
+const int waterLevelBoxTop = 80;
 
 void HomeScreen::render()
 {
     tft.fillScreen(ILI9341_BLACK);
     buttons.clear();
-    buttons.push_back(Button("wifiBtn", 260, 0, 60, 30, "", 18, 8));
+    buttons.push_back(Button("wifiBtn", 260, 5, 60, 30, "", 18, 8));
 
     if (tent.state.getDayCount() == -1) {
 
@@ -45,7 +45,7 @@ void HomeScreen::render()
         drawFanStatus();
 
         buttons.push_back(Button("dayCounterBtn", 20, 180, 250, 38, "", 18, 8));
-        buttons.push_back(Button("timerBtn", 10, 10, 115, 25, "", 18, 8));
+        buttons.push_back(Button("timerBtn", 10, 10, 115, 30, "", 18, 8));
         buttons.push_back(Button("fanBtn", 145, 10, 115, 35, "", 18, 8));
         buttons.push_back(Button("tempBtn", 50, 55, 115, 35, "", 18, 8));
     }
@@ -55,6 +55,11 @@ void HomeScreen::render()
 
 void HomeScreen::update()
 {
+    if (wifiReady != WiFi.ready()) {
+        wifiReady = WiFi.ready();
+        renderButton(buttons[0]);
+    }
+
     if (tent.state.getDayCount() == -1) {
         return;
     }
@@ -108,7 +113,7 @@ void HomeScreen::drawHumidity()
 void HomeScreen::drawSoilMoistureMeter()
 {
     //icon
-    tft.drawBitmap(280, 30, iconWateringCan_24x24, 24, 24, ILI9341_GREEN);
+    tft.drawBitmap(280, waterLevelBoxTop - 30, iconWateringCan_24x24, 24, 24, ILI9341_GREEN);
 
     //outside box
     tft.drawRect(280, waterLevelBoxTop, 25, waterLevelBoxHeight, ILI9341_DARKGREY);
@@ -225,7 +230,7 @@ void HomeScreen::renderButton(Button& btn)
         drawButton(btn, ILI9341_OLIVE, 3);
 
     } else if (btn.getName() == "wifiBtn") {
-        tft.drawBitmap(289, 5, iconWifi_24x24, 24, 24, ILI9341_DARKGREY);
+        tft.drawBitmap(btn.x0 + 19, btn.y0 + 5, iconWifi_24x24, 24, 24, WiFi.ready() ? ILI9341_LIGHTGREY : ILI9341_DARKGREY);
     }
 }
 
