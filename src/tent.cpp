@@ -63,9 +63,15 @@ void Tent::stop()
 
 void Tent::checkTent()
 {
-    double currentTemp = (int)(sht20.readTemperature() * 10) / 10.0;
-    double currentHumidity = (int)(sht20.readHumidity() * 10) / 10.0;
+    double rawTemp = sht20.readTemperature();
+    if (rawTemp == 998.0) {
+        sensors.tentTemperatureC = sensors.tentTemperatureF = -1;
+        sensors.tentHumidity = -1;
+        return;
+    }
 
+    double currentTemp = (int)(rawTemp * 10) / 10.0;
+    double currentHumidity = (int)(sht20.readHumidity() * 10) / 10.0;
     Serial.printlnf("action=sensor name=tent humidity=%.1f temperature=%.1f", currentHumidity, currentTemp);
 
     if ((sensors.tentTemperatureC == 0) || (sensors.tentTemperatureC != currentTemp)) {
@@ -82,12 +88,16 @@ void Tent::checkTent()
 
 void Tent::checkSoil()
 {
-    sht30.update();
+    bool updated = sht30.update();
+    if (!updated) {
+        sensors.waterLevel = 0;
+        sensors.soilTemperatureC = sensors.soilTemperatureF = -1;
+        return;
+    }
 
     double moisture = (int)(sht30.humidity * 10) / 10.0;
     double temperature = (int)(sht30.temperature * 10) / 10.0;
     int waterLevel = (int)moisture;
-
     Serial.printlnf("action=sensor name=soil moisture=%.1f temperature=%.1f", moisture, temperature);
 
     sensors.soilMoisture = moisture;

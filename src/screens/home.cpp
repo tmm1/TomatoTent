@@ -90,6 +90,13 @@ void HomeScreen::drawTemperature()
     tft.setCursor(50, 70);
     tft.setTextColor(ILI9341_GREEN);
 
+    if (tent.sensors.tentHumidity <= 0) {
+        tft.setTextSize(3);
+        tft.setTextColor(ILI9341_MAGENTA);
+        tft.print("Sensor");
+        return;
+    }
+
     tft.setTextSize(3);
     tft.print(String::format("%.1f", tempUnit == 'F' ? tent.sensors.tentTemperatureF : tent.sensors.tentTemperatureC));
 
@@ -102,6 +109,13 @@ void HomeScreen::drawHumidity()
     tft.fillRect(50, 120, 141, 25, ILI9341_BLACK);
     tft.setCursor(50, 120);
     tft.setTextColor(ILI9341_PINK);
+
+    if (tent.sensors.tentHumidity <= 0) {
+        tft.setTextSize(3);
+        tft.setTextColor(ILI9341_MAGENTA);
+        tft.print("Error");
+        return;
+    }
 
     tft.setTextSize(3);
     tft.print(String::format("%.1f", tent.sensors.tentHumidity));
@@ -140,7 +154,7 @@ void HomeScreen::drawSoilTemperature()
 
     tft.fillRect(x, y, 320 - x, 12, ILI9341_BLACK);
 
-    if (temp == 0 || temp > 900) {
+    if (temp <= 0) {
         return;
     }
 
