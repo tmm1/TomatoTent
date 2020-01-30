@@ -65,8 +65,14 @@ void Tent::checkTent()
 {
     double rawTemp = sht20.readTemperature();
     if (rawTemp == 998.0) {
-        sensors.tentTemperatureC = sensors.tentTemperatureF = -1;
-        sensors.tentHumidity = -1;
+        if (sensors.tentTemperatureC != -1) {
+            sensors.tentTemperatureC = sensors.tentTemperatureF = -1;
+            screenManager.markNeedsRedraw(TEMPERATURE);
+        }
+        if (sensors.tentHumidity != -1) {
+            sensors.tentHumidity = -1;
+            screenManager.markNeedsRedraw(HUMIDITY);
+        }
         return;
     }
 
@@ -90,8 +96,15 @@ void Tent::checkSoil()
 {
     bool updated = sht30.update();
     if (!updated || sht30.temperature > 900) {
-        sensors.waterLevel = 0;
-        sensors.soilTemperatureC = sensors.soilTemperatureF = -1;
+        if (sensors.soilTemperatureC != -1) {
+            sensors.soilTemperatureC = sensors.soilTemperatureF = -1;
+            screenManager.markNeedsRedraw(SOIL_TEMPERATURE);
+        }
+        if (sensors.soilMoisture != -1) {
+            sensors.soilMoisture = -1;
+            sensors.waterLevel = 0;
+            screenManager.markNeedsRedraw(SOIL_MOISTURE);
+        }
         return;
     }
 

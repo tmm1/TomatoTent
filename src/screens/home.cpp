@@ -84,18 +84,18 @@ void HomeScreen::update()
 
 void HomeScreen::drawTemperature()
 {
-    char tempUnit = tent.state.getTempUnit();
-
     tft.fillRect(50, 70, 141, 25, ILI9341_BLACK);
     tft.setCursor(50, 70);
     tft.setTextColor(ILI9341_GREEN);
 
-    if (tent.sensors.tentHumidity <= 0) {
+    if (tent.sensors.tentHumidity < 0) {
         tft.setTextSize(3);
         tft.setTextColor(ILI9341_MAGENTA);
         tft.print("Sensor");
         return;
     }
+
+    char tempUnit = tent.state.getTempUnit();
 
     tft.setTextSize(3);
     tft.print(String::format("%.1f", tempUnit == 'F' ? tent.sensors.tentTemperatureF : tent.sensors.tentTemperatureC));
@@ -110,7 +110,7 @@ void HomeScreen::drawHumidity()
     tft.setCursor(50, 120);
     tft.setTextColor(ILI9341_PINK);
 
-    if (tent.sensors.tentHumidity <= 0) {
+    if (tent.sensors.tentHumidity < 0) {
         tft.setTextSize(3);
         tft.setTextColor(ILI9341_MAGENTA);
         tft.print("Error");
