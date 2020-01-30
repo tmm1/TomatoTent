@@ -24,7 +24,6 @@ bool SHT30::update()
     if (status != 0) {
         temperature = 998;
         humidity = 0;
-        Serial.println("Sensor did not respond to update call");
         return false;
     }
     delay(10);

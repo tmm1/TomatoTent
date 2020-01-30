@@ -89,7 +89,7 @@ void Tent::checkTent()
 void Tent::checkSoil()
 {
     bool updated = sht30.update();
-    if (!updated) {
+    if (!updated || sht30.temperature > 900) {
         sensors.waterLevel = 0;
         sensors.soilTemperatureC = sensors.soilTemperatureF = -1;
         return;
