@@ -124,8 +124,8 @@ void HomeScreen::drawSoilMoisture()
     int waterLevelHeight = floor((waterLevelBoxHeight / 100) * tent.sensors.waterLevel);
     int waterLevelTop = (waterLevelBoxHeight - waterLevelHeight) + waterLevelBoxTop - 1;
 
-    //reset the box
-    tft.fillRect(281, waterLevelBoxTop + 1, 23, waterLevelBoxHeight - 2, ILI9341_BLACK);
+    //draw black over remainder
+    tft.fillRect(281, waterLevelBoxTop + 1, 23, waterLevelBoxHeight - waterLevelHeight - 2, ILI9341_BLACK);
 
     //draw current water level
     tft.fillRect(281, waterLevelTop, 23, waterLevelHeight, ILI9341_BLUE);
