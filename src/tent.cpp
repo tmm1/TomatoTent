@@ -4,7 +4,7 @@
 extern ScreenManager screenManager;
 
 Tent::Tent()
-    : sensorTimer { Timer(7013, &Tent::markNeedsSensorUpdate, *this) }
+    : sensorTimer { Timer(5000, &Tent::markNeedsSensorUpdate, *this) }
     , minuteTimer { Timer(60000, &Tent::minutelyTick, *this) }
     , displayDimTimer { Timer(120000, &Tent::displayLightLow, *this, true) }
     , displayOffTimer { Timer(300000, &Tent::displayLightOff, *this, true) }
@@ -61,20 +61,30 @@ void Tent::stop()
     sensorTimer.stop();
 }
 
-void Tent::checkTemperature()
+void Tent::checkTent()
 {
-    double currentTemp = (int)(sht20.readTemperature() * 10) / 10.0;
+    double rawTemp = sht20.readTemperature();
+    if (rawTemp == 998.0) {
+        if (sensors.tentTemperatureC != -1) {
+            sensors.tentTemperatureC = sensors.tentTemperatureF = -1;
+            screenManager.markNeedsRedraw(TEMPERATURE);
+        }
+        if (sensors.tentHumidity != -1) {
+            sensors.tentHumidity = -1;
+            screenManager.markNeedsRedraw(HUMIDITY);
+        }
+        return;
+    }
+
+    double currentTemp = (int)(rawTemp * 10) / 10.0;
+    double currentHumidity = (int)(sht20.readHumidity() * 10) / 10.0;
+    Serial.printlnf("action=sensor name=tent humidity=%.1f temperature=%.1f", currentHumidity, currentTemp);
 
     if ((sensors.tentTemperatureC == 0) || (sensors.tentTemperatureC != currentTemp)) {
         sensors.tentTemperatureC = currentTemp;
         sensors.tentTemperatureF = (currentTemp == 0 || currentTemp > 900) ? currentTemp : (currentTemp * 1.8 + 32);
         screenManager.markNeedsRedraw(TEMPERATURE);
     }
-}
-
-void Tent::checkHumidity()
-{
-    double currentHumidity = (int)(sht20.readHumidity() * 10) / 10.0;
 
     if ((sensors.tentHumidity == 0) || (sensors.tentHumidity != currentHumidity)) {
         sensors.tentHumidity = currentHumidity;
@@ -84,11 +94,24 @@ void Tent::checkHumidity()
 
 void Tent::checkSoil()
 {
-    sht30.update();
+    bool updated = sht30.update();
+    if (!updated || sht30.temperature > 900) {
+        if (sensors.soilTemperatureC != -1) {
+            sensors.soilTemperatureC = sensors.soilTemperatureF = -1;
+            screenManager.markNeedsRedraw(SOIL_TEMPERATURE);
+        }
+        if (sensors.soilMoisture != -1) {
+            sensors.soilMoisture = -1;
+            sensors.waterLevel = 0;
+            screenManager.markNeedsRedraw(SOIL_MOISTURE);
+        }
+        return;
+    }
 
     double moisture = (int)(sht30.humidity * 10) / 10.0;
     double temperature = (int)(sht30.temperature * 10) / 10.0;
     int waterLevel = (int)moisture;
+    Serial.printlnf("action=sensor name=soil moisture=%.1f temperature=%.1f", moisture, temperature);
 
     sensors.soilMoisture = moisture;
     if ((sensors.waterLevel == 0) || (sensors.waterLevel != waterLevel)) {
@@ -125,8 +148,7 @@ void Tent::checkSensors()
     }
     needsSensorUpdate = false;
 
-    checkTemperature();
-    checkHumidity();
+    checkTent();
     checkSoil();
     adjustFan();
 }

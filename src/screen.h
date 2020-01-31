@@ -10,6 +10,8 @@ protected:
     Adafruit_ILI9341& tft;
     std::vector<Button> buttons;
     void drawButton(Button& btn, int color, int textSize);
+    void drawButtonTriangleUp(Button& btn, int color);
+    void drawButtonTriangleDown(Button& btn, int color);
     void drawFanStatus();
     void drawDimmedIndicator();
     void hideDimmedIndicator();

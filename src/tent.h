@@ -62,8 +62,7 @@ public:
 
     void checkInputs();
     void checkSensors();
-    void checkTemperature();
-    void checkHumidity();
+    void checkTent();
     void checkSoil();
 
     void fan(String fanStatus);
