@@ -4,7 +4,7 @@
 extern ScreenManager screenManager;
 
 Tent::Tent()
-    : sensorTimer { Timer(7013, &Tent::markNeedsSensorUpdate, *this) }
+    : sensorTimer { Timer(5000, &Tent::markNeedsSensorUpdate, *this) }
     , minuteTimer { Timer(60000, &Tent::minutelyTick, *this) }
     , displayDimTimer { Timer(120000, &Tent::displayLightLow, *this, true) }
     , displayOffTimer { Timer(300000, &Tent::displayLightOff, *this, true) }
