@@ -19,7 +19,7 @@ void FanScreen::render()
 
     buttons.push_back(Button("fanAutoBtn", 20, 65, 150, 38, "Automatic", 20, 11));
     buttons.push_back(Button("fanManualBtn", 20, 115, 150, 38, "Manual", 40, 11));
-    buttons.push_back(Button("fanUpBtn", 240, 50, 40, 40, "", 0, 0));
+    buttons.push_back(Button("fanUpBtn", 240, 55, 40, 40, "", 0, 0));
     buttons.push_back(Button("fanDownBtn", 240, 110, 40, 40, "", 0, 0));
     buttons.push_back(Button("fanOkBtn", 20, 170, 250, 38, "Ok", 110, 8));
 
@@ -44,12 +44,10 @@ void FanScreen::renderButton(Button& btn)
         drawButton(btn, !tent.state.getFanAutoMode() ? ILI9341_OLIVE : ILI9341_BLACK, 2);
 
     } else if (btn.getName() == "fanUpBtn") {
-        tft.fillTriangle(240, 95, 260, 55, 280, 95, ILI9341_RED);
-        tft.drawTriangle(240, 95, 260, 55, 280, 95, ILI9341_LIGHTGREY);
+        drawButtonTriangleUp(btn, ILI9341_RED);
 
     } else if (btn.getName() == "fanDownBtn") {
-        tft.fillTriangle(240, 110, 260, 150, 280, 110, ILI9341_RED);
-        tft.drawTriangle(240, 110, 260, 150, 280, 110, ILI9341_LIGHTGREY);
+        drawButtonTriangleDown(btn, ILI9341_RED);
 
     } else if (btn.getName() == "fanOkBtn") {
         drawButton(btn, ILI9341_OLIVE, 3);
@@ -59,10 +57,10 @@ void FanScreen::renderButton(Button& btn)
 void FanScreen::renderButtonPressed(Button& btn)
 {
     if (btn.getName() == "fanUpBtn") {
-        tft.fillTriangle(240, 95, 260, 55, 280, 95, ILI9341_WHITE);
+        drawButtonTriangleUp(btn, ILI9341_WHITE);
 
     } else if (btn.getName() == "fanDownBtn") {
-        tft.fillTriangle(240, 110, 260, 150, 280, 110, ILI9341_WHITE);
+        drawButtonTriangleDown(btn, ILI9341_WHITE);
     }
 }
 

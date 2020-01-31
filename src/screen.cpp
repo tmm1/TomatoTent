@@ -58,6 +58,18 @@ void Screen::drawButton(Button& btn, int color, int textSize)
     tft.print(buttonText);
 }
 
+void Screen::drawButtonTriangleUp(Button& btn, int color)
+{
+    tft.fillTriangle(btn.x0, btn.y1, btn.x0 + btn.w/2, btn.y0, btn.x1, btn.y1, color);
+    tft.drawTriangle(btn.x0, btn.y1, btn.x0 + btn.w/2, btn.y0, btn.x1, btn.y1, ILI9341_LIGHTGREY);
+}
+
+void Screen::drawButtonTriangleDown(Button& btn, int color)
+{
+    tft.fillTriangle(btn.x0, btn.y0, btn.x0 + btn.w/2, btn.y1, btn.x1, btn.y0, color);
+    tft.drawTriangle(btn.x0, btn.y0, btn.x0 + btn.w/2, btn.y1, btn.x1, btn.y0, ILI9341_LIGHTGREY);
+}
+
 void Screen::drawFanStatus()
 {
     //write status to screen
