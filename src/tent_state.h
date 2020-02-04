@@ -37,6 +37,7 @@ public:
             setTempUnit('F');
         }
     }
+    void begin();
     void save();
 
     bool isDay(void);

@@ -5,6 +5,14 @@ TentState::TentState()
     EEPROM.get(0, eeprom);
 }
 
+void TentState::begin()
+{
+    Particle.variable("dayCounter", eeprom.dayCounter);
+    Particle.variable("fanAutoMode", eeprom.fanAutoMode);
+    Particle.variable("minutesInPhotoperiod", eeprom.minutesInPhotoperiod);
+    Particle.variable("dayDuration", eeprom.dayDuration);
+}
+
 int TentState::getDayCount()
 {
     return eeprom.dayCounter;

@@ -43,6 +43,8 @@ void Tent::setup()
     } else {
         state.init();
     }
+
+    state.begin();
 }
 
 void Tent::start()
