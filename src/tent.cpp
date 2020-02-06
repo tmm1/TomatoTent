@@ -3,6 +3,8 @@
 
 extern ScreenManager screenManager;
 
+const int minBrightness = 20, maxBrightness = 255;
+
 Tent::Tent()
     : sensorTimer { Timer(5000, &Tent::markNeedsSensorUpdate, *this) }
     , minuteTimer { Timer(60000, &Tent::minutelyTick, *this) }
@@ -181,12 +183,12 @@ void Tent::checkInputs()
 int Tent::growLight(String brightness)
 {
     if (brightness == "HIGH") {
-        analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 255, 25000);
+        analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, maxBrightness, 25000);
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
         growLightStatus = brightness;
 
     } else if (brightness == "LOW") {
-        analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, 20, 25000);
+        analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, minBrightness, 25000);
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
         growLightStatus = brightness;
         dimTimeout = 15;
@@ -223,11 +225,12 @@ void Tent::minutelyTick()
 
 void Tent::fadeGrowLight(String mode, int percent)
 {
-    int brightness = 128;
+    int brightnessRange = maxBrightness - minBrightness;
+    int brightness = maxBrightness / 2;
     if (mode == "SUNRISE") {
-        brightness = 20 + (235 * percent / 100);
+        brightness = minBrightness + (brightnessRange * percent / 100);
     } else if (mode == "SUNSET") {
-        brightness = 255 - (235 * percent / 100);
+        brightness = maxBrightness - (brightnessRange * percent / 100);
     }
     analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, brightness, 25000);
     digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
