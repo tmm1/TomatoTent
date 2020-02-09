@@ -349,11 +349,9 @@ void Tent::adjustFan()
         if (sensors.tentTemperatureF > 70 || sensors.tentHumidity > 40) {
             fanSpeedPercent += step;
         }
-
         if (sensors.tentTemperatureF > 72 || sensors.tentHumidity > 50) {
             fanSpeedPercent += step;
         }
-
         if (sensors.tentTemperatureF > 74 || sensors.tentHumidity > 60) {
             fanSpeedPercent += step;
         }
@@ -364,6 +362,9 @@ void Tent::adjustFan()
             fanSpeedPercent += step;
         }
         if (sensors.tentTemperatureF > 80 || sensors.tentHumidity > 90) {
+            fanSpeedPercent += step;
+        }
+        if (sensors.tentTemperatureF > 82 || sensors.tentHumidity > 95) {
             fanSpeedPercent += step;
         }
         //for sensor fail
