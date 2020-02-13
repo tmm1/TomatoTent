@@ -29,6 +29,7 @@ void Tent::setup()
     sht20.checkSHT20();
     sht30.setAddress(0);
     sht30.update();
+    soil.begin();
 
     displayLightHigh();
 
@@ -98,8 +99,12 @@ void Tent::checkTent()
 
 void Tent::checkSoil()
 {
-    bool updated = sht30.update();
-    if (!updated || sht30.temperature > 900) {
+    double temp = soil.getTemperature() / 10.0;
+    double moisture = soil.getCapacitance();
+    if (moisture == 65535 || temp == -0.1) {
+        temp = 999;
+    }
+    if (temp > 900) {
         if (sensors.soilTemperatureC != -1) {
             sensors.soilTemperatureC = sensors.soilTemperatureF = -1;
             screenManager.markNeedsRedraw(SOIL_TEMPERATURE);
@@ -112,10 +117,13 @@ void Tent::checkSoil()
         return;
     }
 
-    double moisture = (int)(sht30.humidity * 10) / 10.0;
-    double temperature = (int)(sht30.temperature * 10) / 10.0;
-    int waterLevel = (int)moisture;
-    Serial.printlnf("action=sensor name=soil moisture=%.1f temperature=%.1f", moisture, temperature);
+    int waterLevel = (int)((moisture - 244) * 100 / (425.0 - 244.0));
+    if (waterLevel > 99) {
+        waterLevel = 99;
+    } else if (waterLevel < 0) {
+        waterLevel = 0;
+    }
+    Serial.printlnf("action=sensor name=soil moisture=%.1f temperature=%.1f", moisture, temp);
 
     sensors.soilMoisture = moisture;
     if ((sensors.waterLevel == 0) || (sensors.waterLevel != waterLevel)) {
@@ -123,9 +131,9 @@ void Tent::checkSoil()
         screenManager.markNeedsRedraw(SOIL_MOISTURE);
     }
 
-    if ((sensors.soilTemperatureC == 0) || (sensors.soilTemperatureC != temperature)) {
-        sensors.soilTemperatureC = temperature;
-        sensors.soilTemperatureF = (temperature == 0 || temperature > 900) ? temperature : (temperature * 1.8 + 32);
+    if ((sensors.soilTemperatureC == 0) || (sensors.soilTemperatureC != temp)) {
+        sensors.soilTemperatureC = temp;
+        sensors.soilTemperatureF = (temp == 0 || temp > 900) ? temp : (temp * 1.8 + 32);
         screenManager.markNeedsRedraw(SOIL_TEMPERATURE);
     }
 }

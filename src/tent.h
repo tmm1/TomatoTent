@@ -5,6 +5,7 @@
 #include <Arduino.h>
 #include "libs/DFRobot_SHT20.h"
 #include "libs/SHT30.h"
+#include "libs/I2CSoilMoistureSensor.h"
 #include "tent_state.h"
 
 #define GROW_LIGHT_BRIGHTNESS_PIN TX
@@ -18,6 +19,7 @@ class Tent {
 private:
     DFRobot_SHT20 sht20;
     SHT30 sht30;
+    I2CSoilMoistureSensor soil;
     Timer sensorTimer, minuteTimer;
     Timer displayDimTimer, displayOffTimer;
 
