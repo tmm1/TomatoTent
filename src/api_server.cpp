@@ -57,7 +57,7 @@ void metricsCmd(WebServer& server, WebServer::ConnectionType type, char* url_tai
     if (tent.rawSensors.soilMoisture != -1) {
         server << "# HELP tomatotent_soil_moisture The moisture level in the soil\n";
         server << "# TYPE tomatotent_soil_moisture gauge\n";
-        server << "tomatotent_soil_moisture " << tent.rawSensors.soilMoisture << "\n";
+        server << "tomatotent_soil_moisture " << tent.sensors.waterLevel << "\n";
     }
 
     if (tent.state.getDayCount() != -1) {
@@ -67,7 +67,7 @@ void metricsCmd(WebServer& server, WebServer::ConnectionType type, char* url_tai
 
         server << "# HELP tomatotent_light_on Is it daylight in the tent?\n";
         server << "# TYPE tomatotent_light_on gauge\n";
-        server << "tomatotent_light_on " << (tent.state.isDay() ? 1 : 0) << "\n"; // TODO expose sunrise/sunset
+        server << "tomatotent_light_on " << tent.rawSensors.lightBrightness << "\n";
 
         server << "# HELP tomatotent_light_period How many minutes of daylight in the tent?\n";
         server << "# TYPE tomatotent_light_period gauge\n";

@@ -54,6 +54,7 @@ public:
     } sensors;
 
     struct {
+        double lightBrightness;
         double tentTemperature;
         double tentHumidity;
         double soilTemperature;

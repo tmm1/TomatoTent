@@ -199,20 +199,24 @@ int Tent::growLight(String brightness)
         analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, maxBrightness, 25000);
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
         growLightStatus = brightness;
+        rawSensors.lightBrightness = 1.0;
 
     } else if (brightness == "LOW") {
         analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, minBrightness, 25000);
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
         growLightStatus = brightness;
         dimTimeout = 15;
+        rawSensors.lightBrightness = 0.1;
 
     } else if (brightness == "MUTE") {
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, LOW);
         growLightStatus = brightness;
+        rawSensors.lightBrightness = 0.0;
 
     } else if (brightness == "OFF") {
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, LOW);
         growLightStatus = brightness;
+        rawSensors.lightBrightness = 0.0;
     }
 
     return 1;
@@ -247,6 +251,7 @@ void Tent::fadeGrowLight(String mode, int percent)
     }
     analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, brightness, 25000);
     digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
+    rawSensors.lightBrightness = percent / 100.0;
 }
 
 void Tent::dimGrowLight()
