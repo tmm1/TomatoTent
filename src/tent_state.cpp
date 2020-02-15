@@ -7,6 +7,7 @@ TentState::TentState()
 
 void TentState::begin()
 {
+    Particle.variable("isDay", eeprom.isDay);
     Particle.variable("dayCounter", eeprom.dayCounter);
     Particle.variable("fanAutoMode", eeprom.fanAutoMode);
     Particle.variable("minutesInPhotoperiod", eeprom.minutesInPhotoperiod);
