@@ -21,6 +21,17 @@ void defaultCmd(WebServer& server, WebServer::ConnectionType type, char* url_tai
     server << "welcome to tomatotent";
 }
 
+void apiCmd(WebServer& server, WebServer::ConnectionType type, char* url_tail, bool tail_complete)
+{
+    switch (type) {
+    case WebServer::GET: {
+        server.httpSuccess();
+        server << "api help";
+        break;
+    }
+    }
+}
+
 void metricsCmd(WebServer& server, WebServer::ConnectionType type, char* url_tail, bool tail_complete)
 {
     server.httpSuccess("text/plain; version=0.0.4; charset=utf-8");
@@ -63,5 +74,6 @@ void ApiServer::begin()
     WebServer::begin();
 
     setDefaultCommand(&defaultCmd);
+    addCommand("api", &apiCmd);
     addCommand("metrics", &metricsCmd);
 }
