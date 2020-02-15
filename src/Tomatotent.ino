@@ -4,12 +4,14 @@
 #include "tent.h"
 #include "screen_manager.h"
 #include "assets.h"
+#include "api_server.h"
 
 PRODUCT_ID(10167);
 PRODUCT_VERSION(13);
 
 Tent tent;
 ScreenManager screenManager;
+ApiServer server;
 
 SYSTEM_MODE(SEMI_AUTOMATIC);
 
@@ -103,6 +105,8 @@ void setup()
     screenManager.setup();
     screenManager.homeScreen();
     tent.setup();
+
+    server.begin();
 }
 
 void loop(void)
@@ -115,4 +119,6 @@ void loop(void)
     if (screenManager.current) {
         screenManager.current->update();
     }
+
+    server.processConnection();
 }
