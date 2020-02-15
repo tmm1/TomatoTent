@@ -50,9 +50,15 @@ public:
         double tentHumidity;
         double soilTemperatureC;
         double soilTemperatureF;
-        double soilMoisture;
         int waterLevel;
     } sensors;
+
+    struct {
+        double tentTemperature;
+        double tentHumidity;
+        double soilTemperature;
+        int soilMoisture;
+    } rawSensors;
 
     void setup();
     void start();

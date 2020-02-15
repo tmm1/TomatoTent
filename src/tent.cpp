@@ -21,7 +21,7 @@ void Tent::setup()
     Particle.variable("tentHumidity", sensors.tentHumidity);
     Particle.variable("soilTemperatureC", sensors.soilTemperatureC);
     Particle.variable("soilTemperatureF", sensors.soilTemperatureF);
-    Particle.variable("soilMoisture", sensors.soilMoisture);
+    Particle.variable("waterLevel", sensors.waterLevel);
 
     // init sensors
     sht20.initSHT20();
@@ -78,11 +78,16 @@ void Tent::checkTent()
             sensors.tentHumidity = -1;
             screenManager.markNeedsRedraw(HUMIDITY);
         }
+        rawSensors.tentTemperature = -1;
+        rawSensors.tentHumidity = -1;
         return;
     }
 
-    double currentTemp = (int)(rawTemp * 10) / 10.0;
-    double currentHumidity = (int)(sht20.readHumidity() * 10) / 10.0;
+    rawSensors.tentTemperature = rawTemp;
+    rawSensors.tentHumidity = sht20.readHumidity();
+
+    double currentTemp = (int)(rawSensors.tentTemperature * 10) / 10.0;
+    double currentHumidity = (int)(rawSensors.tentHumidity * 10) / 10.0;
     Serial.printlnf("action=sensor name=tent humidity=%.1f temperature=%.1f", currentHumidity, currentTemp);
 
     if ((sensors.tentTemperatureC == 0) || (sensors.tentTemperatureC != currentTemp)) {
@@ -100,20 +105,18 @@ void Tent::checkTent()
 void Tent::checkSoil()
 {
     double temp = soil.getTemperature() / 10.0;
-    double moisture = soil.getCapacitance();
+    int moisture = soil.getCapacitance();
     if (moisture == 65535 || temp == -0.1) {
-        temp = 999;
-    }
-    if (temp > 900) {
         if (sensors.soilTemperatureC != -1) {
             sensors.soilTemperatureC = sensors.soilTemperatureF = -1;
             screenManager.markNeedsRedraw(SOIL_TEMPERATURE);
         }
-        if (sensors.soilMoisture != -1) {
-            sensors.soilMoisture = -1;
+        if (sensors.waterLevel != 0) {
             sensors.waterLevel = 0;
             screenManager.markNeedsRedraw(SOIL_MOISTURE);
         }
+        rawSensors.soilTemperature = -1;
+        rawSensors.soilMoisture = -1;
         return;
     }
 
@@ -123,9 +126,11 @@ void Tent::checkSoil()
     } else if (waterLevel < 0) {
         waterLevel = 0;
     }
-    Serial.printlnf("action=sensor name=soil moisture=%.1f temperature=%.1f", moisture, temp);
+    Serial.printlnf("action=sensor name=soil moisture=%d temperature=%.1f", moisture, temp);
 
-    sensors.soilMoisture = moisture;
+    rawSensors.soilMoisture = moisture;
+    rawSensors.soilTemperature = temp;
+
     if ((sensors.waterLevel == 0) || (sensors.waterLevel != waterLevel)) {
         sensors.waterLevel = waterLevel;
         screenManager.markNeedsRedraw(SOIL_MOISTURE);
