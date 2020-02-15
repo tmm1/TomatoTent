@@ -83,7 +83,7 @@ void metricsCmd(WebServer& server, WebServer::ConnectionType type, char* url_tai
 
         server << "# HELP tomatotent_fan_speed Speed of the fan\n";
         server << "# TYPE tomatotent_fan_speed gauge\n";
-        server << "tomatotent_fan_auto " << (tent.state.getFanSpeed() + 5) << "\n";
+        server << "tomatotent_fan_speed " << (tent.state.getFanSpeed() + 5) << "\n";
     }
 }
 
