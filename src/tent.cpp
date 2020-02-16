@@ -251,7 +251,7 @@ void Tent::fadeGrowLight(String mode, int percent)
     }
     analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, brightness, 25000);
     digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
-    rawSensors.lightBrightness = percent / 100.0;
+    rawSensors.lightBrightness = brightness / 255.0;
 }
 
 void Tent::dimGrowLight()
