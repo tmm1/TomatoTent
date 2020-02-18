@@ -58,6 +58,10 @@ void metricsCmd(WebServer& server, WebServer::ConnectionType type, char* url_tai
         server << "# HELP tomatotent_soil_moisture The moisture level in the soil\n";
         server << "# TYPE tomatotent_soil_moisture gauge\n";
         server << "tomatotent_soil_moisture " << tent.sensors.waterLevel << "\n";
+
+        server << "# HELP tomatotent_soil_capacitance The capacitance level of the moisture sensor in the soil\n";
+        server << "# TYPE tomatotent_soil_capacitance gauge\n";
+        server << "tomatotent_soil_capacitance " << tent.rawSensors.soilMoisture << "\n";
     }
 
     if (tent.state.getDayCount() != -1) {

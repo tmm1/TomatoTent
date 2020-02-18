@@ -21,6 +21,7 @@ void Tent::setup()
     Particle.variable("tentHumidity", sensors.tentHumidity);
     Particle.variable("soilTemperatureC", sensors.soilTemperatureC);
     Particle.variable("soilTemperatureF", sensors.soilTemperatureF);
+    Particle.variable("soilMoisture", rawSensors.soilMoisture);
     Particle.variable("waterLevel", sensors.waterLevel);
 
     // init sensors
