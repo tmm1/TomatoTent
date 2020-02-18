@@ -1,5 +1,6 @@
 #include "tent.h"
 #include "screen_manager.h"
+#include <ArduinoJson.h>
 
 extern ScreenManager screenManager;
 
@@ -239,6 +240,42 @@ void Tent::minutelyTick()
     }
 
     countMinute();
+    publishMetrics();
+}
+
+void Tent::publishMetrics()
+{
+    if (!Particle.connected())
+        return;
+
+    const size_t capa = JSON_OBJECT_SIZE(12);
+    DynamicJsonDocument json(capa);
+    json["time"] = Time.now();
+    if (rawSensors.tentTemperature != -1) {
+        json["air_temperature"] = rawSensors.tentTemperature;
+    }
+    if (rawSensors.tentHumidity != -1) {
+        json["air_humidity"] = rawSensors.tentHumidity;
+    }
+    if (rawSensors.soilMoisture != -1) {
+        json["soil_capacitance"] = rawSensors.soilMoisture;
+        json["soil_moisture"] = sensors.waterLevel;
+    }
+    if (rawSensors.soilTemperature != -1) {
+        json["soil_temperature"] = rawSensors.soilTemperature;
+    }
+    if (state.getDayCount() != -1) {
+        json["grow_days"] = state.getDayCount();
+        json["light_on"] = rawSensors.lightBrightness;
+        json["light_period"] = state.getDayDuration();
+        json["period_progress"] = state.getMinutesInPhotoperiod();
+        json["fan_auto"] = state.getFanAutoMode() ? 1 : 0;
+        json["fan_speed"] = state.getFanSpeed() + 5;
+    }
+
+    String data;
+    serializeJson(json, data);
+    Particle.publish("metrics", data, PRIVATE);
 }
 
 void Tent::fadeGrowLight(String mode, int percent)

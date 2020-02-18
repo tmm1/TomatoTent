@@ -39,6 +39,8 @@ private:
     void displayLightLow();
     void displayLightOff();
 
+    void publishMetrics();
+
 public:
     Tent();
     TentState state;
