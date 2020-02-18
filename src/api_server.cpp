@@ -1,10 +1,15 @@
 #include "Particle.h"
 #define WEBDUINO_FAVICON_DATA ""
+#define WEBDUINO_SUPRESS_SERVER_HEADER
 #include <WebServer.h>
 #include "api_server.h"
 #include "tent.h"
+#include "screen_manager.h"
+#include <ArduinoJson.h>
 
 extern Tent tent;
+extern ScreenManager screenManager;
+extern uint16_t __system_product_version;
 
 // no-cost stream operator as described at
 // http://sundial.org/arduino/?page_id=119
@@ -17,16 +22,49 @@ inline Print& operator<<(Print& obj, T arg)
 
 void defaultCmd(WebServer& server, WebServer::ConnectionType type, char* url_tail, bool tail_complete)
 {
-    server.httpSuccess();
-    server << "welcome to tomatotent";
+    server.httpSuccess("text/plain");
+    server << "TomatoTent v" << __system_product_version;
 }
 
 void apiCmd(WebServer& server, WebServer::ConnectionType type, char* url_tail, bool tail_complete)
 {
     switch (type) {
     case WebServer::GET: {
+        server.httpSuccess("text/plain");
+        server << "GET /api/fan - Get fan mode and speed\n";
+        server << "PUT /api/fan - Set fan mode and speed\n";
+        break;
+    }
+    }
+}
+
+void apiFanCmd(WebServer& server, WebServer::ConnectionType type, char* url_tail, bool tail_complete)
+{
+    const int capa = JSON_OBJECT_SIZE(2) + 21;
+    switch (type) {
+    case WebServer::GET: {
+        StaticJsonDocument<capa> json;
+        json["mode"] = tent.state.getFanAutoMode() ? "automatic" : "manual";
+        json["speed"] = tent.state.getFanSpeed() + 5;
         server.httpSuccess();
-        server << "api help";
+        serializeJson(json, server);
+        break;
+    }
+    case WebServer::PUT: {
+        StaticJsonDocument<capa> json;
+        deserializeJson(json, server);
+        if (json["mode"] == "automatic") {
+            tent.state.setFanAutoMode(true);
+        } else if (json["mode"] == "manual") {
+            tent.state.setFanAutoMode(false);
+            int speed = json["speed"];
+            if (speed > 5 && speed <= 100) {
+                tent.state.setFanSpeed(speed - 5);
+            }
+        }
+        tent.adjustFan();
+        screenManager.markNeedsRedraw(FAN);
+        server.httpSeeOther("/api/fan");
         break;
     }
     }
@@ -97,5 +135,6 @@ void ApiServer::begin()
 
     setDefaultCommand(&defaultCmd);
     addCommand("api", &apiCmd);
+    addCommand("api/fan", &apiFanCmd);
     addCommand("metrics", &metricsCmd);
 }
