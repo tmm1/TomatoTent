@@ -122,7 +122,7 @@ void Tent::checkSoil()
         return;
     }
 
-    int waterLevel = (int)((moisture - 244) * 100 / (425.0 - 244.0));
+    int waterLevel = (int)((moisture - 244) * 100 / (465.0 - 244.0));
     if (waterLevel > 99) {
         waterLevel = 99;
     } else if (waterLevel < 0) {
