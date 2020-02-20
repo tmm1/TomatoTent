@@ -29,6 +29,8 @@ void WifiScreen::render()
     tft.setTextColor(ILI9341_LIGHTGREY);
     tft.setTextSize(1);
     tft.print(String::format("TomatoTent v%d", __system_product_version));
+    if (WiFi.ready())
+        tft.print(String::format(" on http://%s", WiFi.localIP().toString().c_str()));
 
     buttons.push_back(Button("wifiOnBtn", 30, 100, 125, 38, "On", 50, 8));
     buttons.push_back(Button("wifiOffBtn", 160, 100, 125, 38, "Off", 40, 8));
