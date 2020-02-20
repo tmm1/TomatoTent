@@ -1,5 +1,6 @@
 #include "tent.h"
 #include "screen_manager.h"
+#include <ArduinoJson.h>
 
 extern ScreenManager screenManager;
 
@@ -21,7 +22,8 @@ void Tent::setup()
     Particle.variable("tentHumidity", sensors.tentHumidity);
     Particle.variable("soilTemperatureC", sensors.soilTemperatureC);
     Particle.variable("soilTemperatureF", sensors.soilTemperatureF);
-    Particle.variable("soilMoisture", sensors.soilMoisture);
+    Particle.variable("soilMoisture", rawSensors.soilMoisture);
+    Particle.variable("waterLevel", sensors.waterLevel);
 
     // init sensors
     sht20.initSHT20();
@@ -78,11 +80,16 @@ void Tent::checkTent()
             sensors.tentHumidity = -1;
             screenManager.markNeedsRedraw(HUMIDITY);
         }
+        rawSensors.tentTemperature = -1;
+        rawSensors.tentHumidity = -1;
         return;
     }
 
-    double currentTemp = (int)(rawTemp * 10) / 10.0;
-    double currentHumidity = (int)(sht20.readHumidity() * 10) / 10.0;
+    rawSensors.tentTemperature = rawTemp;
+    rawSensors.tentHumidity = sht20.readHumidity();
+
+    double currentTemp = (int)(rawSensors.tentTemperature * 10) / 10.0;
+    double currentHumidity = (int)(rawSensors.tentHumidity * 10) / 10.0;
     Serial.printlnf("action=sensor name=tent humidity=%.1f temperature=%.1f", currentHumidity, currentTemp);
 
     if ((sensors.tentTemperatureC == 0) || (sensors.tentTemperatureC != currentTemp)) {
@@ -100,32 +107,32 @@ void Tent::checkTent()
 void Tent::checkSoil()
 {
     double temp = soil.getTemperature() / 10.0;
-    double moisture = soil.getCapacitance();
+    int moisture = soil.getCapacitance();
     if (moisture == 65535 || temp == -0.1) {
-        temp = 999;
-    }
-    if (temp > 900) {
         if (sensors.soilTemperatureC != -1) {
             sensors.soilTemperatureC = sensors.soilTemperatureF = -1;
             screenManager.markNeedsRedraw(SOIL_TEMPERATURE);
         }
-        if (sensors.soilMoisture != -1) {
-            sensors.soilMoisture = -1;
+        if (sensors.waterLevel != 0) {
             sensors.waterLevel = 0;
             screenManager.markNeedsRedraw(SOIL_MOISTURE);
         }
+        rawSensors.soilTemperature = -1;
+        rawSensors.soilMoisture = -1;
         return;
     }
 
-    int waterLevel = (int)((moisture - 244) * 100 / (425.0 - 244.0));
+    int waterLevel = (int)((moisture - 244) * 100 / (465.0 - 244.0));
     if (waterLevel > 99) {
         waterLevel = 99;
     } else if (waterLevel < 0) {
         waterLevel = 0;
     }
-    Serial.printlnf("action=sensor name=soil moisture=%.1f temperature=%.1f", moisture, temp);
+    Serial.printlnf("action=sensor name=soil moisture=%d temperature=%.1f", moisture, temp);
 
-    sensors.soilMoisture = moisture;
+    rawSensors.soilMoisture = moisture;
+    rawSensors.soilTemperature = temp;
+
     if ((sensors.waterLevel == 0) || (sensors.waterLevel != waterLevel)) {
         sensors.waterLevel = waterLevel;
         screenManager.markNeedsRedraw(SOIL_MOISTURE);
@@ -194,20 +201,24 @@ int Tent::growLight(String brightness)
         analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, maxBrightness, 25000);
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
         growLightStatus = brightness;
+        rawSensors.lightBrightness = 1.0;
 
     } else if (brightness == "LOW") {
         analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, minBrightness, 25000);
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
         growLightStatus = brightness;
         dimTimeout = 15;
+        rawSensors.lightBrightness = 0.1;
 
     } else if (brightness == "MUTE") {
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, LOW);
         growLightStatus = brightness;
+        rawSensors.lightBrightness = 0.0;
 
     } else if (brightness == "OFF") {
         digitalWrite(GROW_LIGHT_ON_OFF_PIN, LOW);
         growLightStatus = brightness;
+        rawSensors.lightBrightness = 0.0;
     }
 
     return 1;
@@ -229,6 +240,42 @@ void Tent::minutelyTick()
     }
 
     countMinute();
+    publishMetrics();
+}
+
+void Tent::publishMetrics()
+{
+    if (!Particle.connected())
+        return;
+
+    const size_t capa = JSON_OBJECT_SIZE(12);
+    DynamicJsonDocument json(capa);
+    json["time"] = Time.now();
+    if (rawSensors.tentTemperature != -1) {
+        json["air_temperature"] = rawSensors.tentTemperature;
+    }
+    if (rawSensors.tentHumidity != -1) {
+        json["air_humidity"] = rawSensors.tentHumidity;
+    }
+    if (rawSensors.soilMoisture != -1) {
+        json["soil_capacitance"] = rawSensors.soilMoisture;
+        json["soil_moisture"] = sensors.waterLevel;
+    }
+    if (rawSensors.soilTemperature != -1) {
+        json["soil_temperature"] = rawSensors.soilTemperature;
+    }
+    if (state.getDayCount() != -1) {
+        json["grow_days"] = state.getDayCount();
+        json["light_on"] = rawSensors.lightBrightness;
+        json["light_period"] = state.getDayDuration();
+        json["period_progress"] = state.getMinutesInPhotoperiod();
+        json["fan_auto"] = state.getFanAutoMode() ? 1 : 0;
+        json["fan_speed"] = state.getFanSpeed() + 5;
+    }
+
+    String data;
+    serializeJson(json, data);
+    Particle.publish("metrics", data, PRIVATE);
 }
 
 void Tent::fadeGrowLight(String mode, int percent)
@@ -242,6 +289,7 @@ void Tent::fadeGrowLight(String mode, int percent)
     }
     analogWrite(GROW_LIGHT_BRIGHTNESS_PIN, brightness, 25000);
     digitalWrite(GROW_LIGHT_ON_OFF_PIN, HIGH);
+    rawSensors.lightBrightness = brightness / 255.0;
 }
 
 void Tent::dimGrowLight()

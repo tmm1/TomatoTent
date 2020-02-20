@@ -39,6 +39,8 @@ private:
     void displayLightLow();
     void displayLightOff();
 
+    void publishMetrics();
+
 public:
     Tent();
     TentState state;
@@ -50,9 +52,16 @@ public:
         double tentHumidity;
         double soilTemperatureC;
         double soilTemperatureF;
-        double soilMoisture;
         int waterLevel;
     } sensors;
+
+    struct {
+        double lightBrightness;
+        double tentTemperature;
+        double tentHumidity;
+        double soilTemperature;
+        int soilMoisture;
+    } rawSensors;
 
     void setup();
     void start();
