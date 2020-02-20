@@ -94,6 +94,8 @@ void setup()
     System.on(setup_begin, setup_handler);
     System.on(setup_end, setup_finished_handler);
 
+    WiFi.setHostname("TomatoTent-"+System.deviceID());
+
     if (WiFi.hasCredentials()) {
         Particle.connect();
     } else {
