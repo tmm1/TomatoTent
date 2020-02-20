@@ -31,8 +31,24 @@ void apiCmd(WebServer& server, WebServer::ConnectionType type, char* url_tail, b
     switch (type) {
     case WebServer::GET: {
         server.httpSuccess("text/plain");
+        server << "GET /api/info - Get system information about this device\n";
         server << "GET /api/fan - Get fan mode and speed\n";
         server << "PUT /api/fan - Set fan mode and speed\n";
+        break;
+    }
+    }
+}
+
+void apiInfoCmd(WebServer& server, WebServer::ConnectionType type, char* url_tail, bool tail_complete)
+{
+    const int capa = JSON_OBJECT_SIZE(2) + 40;
+    switch (type) {
+    case WebServer::GET: {
+        StaticJsonDocument<capa> json;
+        json["device_id"] = System.deviceID();
+        json["version"] = __system_product_version;
+        server.httpSuccess();
+        serializeJson(json, server);
         break;
     }
     }
@@ -135,6 +151,7 @@ void ApiServer::begin()
 
     setDefaultCommand(&defaultCmd);
     addCommand("api", &apiCmd);
+    addCommand("api/info", &apiInfoCmd);
     addCommand("api/fan", &apiFanCmd);
     addCommand("metrics", &metricsCmd);
 }
