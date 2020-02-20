@@ -22,8 +22,26 @@ inline Print& operator<<(Print& obj, T arg)
 
 void defaultCmd(WebServer& server, WebServer::ConnectionType type, char* url_tail, bool tail_complete)
 {
-    server.httpSuccess("text/plain");
-    server << "TomatoTent v" << __system_product_version;
+    server.httpSuccess("text/html; charset=utf-8");
+    server << R"(<!doctype html>
+<html lang="en">
+<head>
+    <title>TomatoTent</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-fluid" style="padding-top: 1em">
+    <h2>)" << "\xF0\x9F\x8D\x85" << R"( TomatoTent</h2>
+    <ul>
+        <li>View <a href="https://my.tomatotent.com/graphs/)" << System.deviceID() << R"(">graphs</a> for your current grow</li>
+        <li>Collect <a href="/metrics">metrics</a> for custom monitoring and alerting</li>
+        <li>Explore the <a href="/api">API</a> for home automation</li>
+    </ul>
+</div>
+</body>
+</html>)";
 }
 
 void apiCmd(WebServer& server, WebServer::ConnectionType type, char* url_tail, bool tail_complete)
