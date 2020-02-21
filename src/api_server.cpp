@@ -79,7 +79,7 @@ void apiFanCmd(WebServer& server, WebServer::ConnectionType type, char* url_tail
     case WebServer::GET: {
         StaticJsonDocument<capa> json;
         json["mode"] = tent.state.getFanAutoMode() ? "automatic" : "manual";
-        json["speed"] = tent.state.getFanSpeed() + 5;
+        json["speed"] = tent.state.getFanSpeed();
         server.httpSuccess();
         serializeJson(json, server);
         break;
@@ -159,7 +159,7 @@ void metricsCmd(WebServer& server, WebServer::ConnectionType type, char* url_tai
 
         server << "# HELP tomatotent_fan_speed Speed of the fan\n";
         server << "# TYPE tomatotent_fan_speed gauge\n";
-        server << "tomatotent_fan_speed " << (tent.state.getFanSpeed() + 5) << "\n";
+        server << "tomatotent_fan_speed " << (tent.state.getFanSpeed()) << "\n";
     }
 }
 

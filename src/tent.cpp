@@ -270,7 +270,7 @@ void Tent::publishMetrics()
         json["light_period"] = state.getDayDuration();
         json["period_progress"] = state.getMinutesInPhotoperiod();
         json["fan_auto"] = state.getFanAutoMode() ? 1 : 0;
-        json["fan_speed"] = state.getFanSpeed() + 5;
+        json["fan_speed"] = state.getFanSpeed();
     }
 
     String data;
