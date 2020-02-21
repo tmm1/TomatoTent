@@ -399,7 +399,7 @@ void Tent::adjustFan()
 
     } else {
 
-        int fanSpeedPercent = FAN_SPEED_MIN;
+        float fanSpeedPercent = FAN_SPEED_MIN;
         int step = 3;
         
         if(!state.isDay())
