@@ -25,12 +25,23 @@ void WifiScreen::render()
     else
         tft.print("Disconnected");
 
-    tft.setCursor(60, 52);
+    tft.setCursor(18, 57);
     tft.setTextColor(ILI9341_LIGHTGREY);
+    tft.print("https://my.tomatotent.com/graphs/");
+    
+    tft.setCursor(18, 71);
+    tft.setTextSize(2);
+    tft.print(System.deviceID().c_str());
+    
+    tft.setCursor(55, 210);
     tft.setTextSize(1);
+    tft.setTextColor(ILI9341_LIGHTGREY);
+    
     tft.print(String::format("TomatoTent v%d", __system_product_version));
+    
     if (WiFi.ready())
         tft.print(String::format(" on http://%s", WiFi.localIP().toString().c_str()));
+        
 
     buttons.push_back(Button("wifiOnBtn", 30, 100, 125, 38, "On", 50, 8));
     buttons.push_back(Button("wifiOffBtn", 160, 100, 125, 38, "Off", 40, 8));

@@ -7,7 +7,7 @@
 #include "api_server.h"
 
 PRODUCT_ID(10167);
-PRODUCT_VERSION(15);
+PRODUCT_VERSION(16);
 
 Tent tent;
 ScreenManager screenManager;
