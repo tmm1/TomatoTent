@@ -401,8 +401,8 @@ void Tent::adjustFan()
 
         float fanSpeedPercent = FAN_SPEED_MIN;
         int step = 3;
-        
-        if(!state.isDay())
+
+        if (!state.isDay())
             step = 1;
 
         if (sensors.tentTemperatureF > 70) {
@@ -428,18 +428,18 @@ void Tent::adjustFan()
         }
         if (sensors.tentTemperatureF > 91) {
             fanSpeedPercent += step;
-        }        
+        }
         if (sensors.tentTemperatureF > 94) {
             fanSpeedPercent += step;
         }
         if (sensors.tentTemperatureF > 97) {
             fanSpeedPercent += step;
-        }      
+        }
         if (sensors.tentTemperatureF > 100) {
             fanSpeedPercent += 15;
-        }  
-        
-        if(sensors.tentHumidity > 75 && fanSpeedPercent < 25)
+        }
+
+        if (sensors.tentHumidity > 75 && fanSpeedPercent < 25)
             fanSpeedPercent = 25;
 
         //sensor fail

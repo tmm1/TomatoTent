@@ -33,9 +33,12 @@ void defaultCmd(WebServer& server, WebServer::ConnectionType type, char* url_tai
 </head>
 <body>
 <div class="container-fluid" style="padding-top: 1em">
-    <h2>)" << "\xF0\x9F\x8D\x85" << R"( TomatoTent</h2>
+    <h2>)"
+           << "\xF0\x9F\x8D\x85"
+           << R"( TomatoTent</h2>
     <ul>
-        <li>View <a href="https://my.tomatotent.com/graphs/)" << System.deviceID() << R"(">graphs</a> for your current grow</li>
+        <li>View <a href="https://my.tomatotent.com/graphs/)"
+           << System.deviceID() << R"(">graphs</a> for your current grow</li>
         <li>Collect <a href="/metrics">metrics</a> for custom monitoring and alerting</li>
         <li>Explore the <a href="/api">API</a> for home automation</li>
     </ul>
