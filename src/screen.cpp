@@ -79,7 +79,7 @@ void Screen::drawFanStatus()
     tft.setTextSize(2);
     tft.setTextColor(ILI9341_WHITE);
 
-    tft.print(String(String::format("%.0f", tent.state.getFanSpeed() + 5)));
+    tft.print(String(String::format("%.0f", tent.state.getFanSpeed())));
 
     tft.print("%");
 

@@ -85,7 +85,7 @@ float TentState::getFanSpeed()
     return eeprom.fanSpeed;
 }
 
-void TentState::setFanSpeed(float fanSpeed)
+void TentState::setFanSpeed(int fanSpeed)
 {
     eeprom.fanSpeed = fanSpeed;
     save();

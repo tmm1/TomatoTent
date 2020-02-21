@@ -399,34 +399,52 @@ void Tent::adjustFan()
 
     } else {
 
-        float fanSpeedPercent = FAN_SPEED_MIN;
-        float step = 5;
+        int fanSpeedPercent = FAN_SPEED_MIN;
+        int step = 3;
+        
+        if(!state.isDay())
+            step = 1;
 
-        if (sensors.tentTemperatureF > 70 || sensors.tentHumidity > 40) {
+        if (sensors.tentTemperatureF > 70) {
             fanSpeedPercent += step;
         }
-        if (sensors.tentTemperatureF > 72 || sensors.tentHumidity > 50) {
+        if (sensors.tentTemperatureF > 73) {
             fanSpeedPercent += step;
         }
-        if (sensors.tentTemperatureF > 74 || sensors.tentHumidity > 60) {
+        if (sensors.tentTemperatureF > 76) {
             fanSpeedPercent += step;
         }
-        if (sensors.tentTemperatureF > 76 || sensors.tentHumidity > 70) {
+        if (sensors.tentTemperatureF > 79) {
             fanSpeedPercent += step;
         }
-        if (sensors.tentTemperatureF > 78 || sensors.tentHumidity > 80) {
+        if (sensors.tentTemperatureF > 82) {
             fanSpeedPercent += step;
         }
-        if (sensors.tentTemperatureF > 80 || sensors.tentHumidity > 90) {
+        if (sensors.tentTemperatureF > 85) {
             fanSpeedPercent += step;
         }
-        if (sensors.tentTemperatureF > 82 || sensors.tentHumidity > 95) {
+        if (sensors.tentTemperatureF > 88) {
             fanSpeedPercent += step;
         }
-        //for sensor fail
-        if (sensors.tentTemperatureF > 200 || sensors.tentHumidity > 200) {
+        if (sensors.tentTemperatureF > 91) {
+            fanSpeedPercent += step;
+        }        
+        if (sensors.tentTemperatureF > 94) {
+            fanSpeedPercent += step;
+        }
+        if (sensors.tentTemperatureF > 97) {
+            fanSpeedPercent += step;
+        }      
+        if (sensors.tentTemperatureF > 100) {
+            fanSpeedPercent += 15;
+        }  
+        
+        if(sensors.tentHumidity > 75 && fanSpeedPercent < 25)
+            fanSpeedPercent = 25;
+
+        //sensor fail
+        if (sensors.tentTemperatureF > 200 || sensors.tentHumidity > 200)
             fanSpeedPercent = FAN_SPEED_MIN + 15;
-        }
 
         if (fanSpeedPercent != state.getFanSpeed()) {
             state.setFanSpeed(fanSpeedPercent);

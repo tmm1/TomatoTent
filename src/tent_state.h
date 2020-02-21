@@ -56,7 +56,7 @@ public:
     void setFanAutoMode(bool);
 
     float getFanSpeed();
-    void setFanSpeed(float);
+    void setFanSpeed(int);
 
     char getTempUnit(void);
     void setTempUnit(char);
